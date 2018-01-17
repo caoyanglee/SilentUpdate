@@ -61,7 +61,8 @@ UpdateCenter.detach()
 ```
 
 ## 用法
-启动下载
+注意：
+latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
 
 ```kotlin
 UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
