@@ -64,7 +64,7 @@ UpdateCenter.detach()
 启动下载
 
 ```kotlin
- UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
+UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
 ```
 
 ## 自定义配置
