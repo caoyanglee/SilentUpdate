@@ -12,7 +12,10 @@ A library silently & automatically download latest apk to update your App<br>
 4. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog进行提示
 5. **用户点击Dialog或Notification即安装，更新对于用户只有1步，简洁高效**
 
-# 准备工作
+
+####以下为Kotlin的操作，若Java请点击[这里](待会写)
+ 
+## 准备工作 
 1.获取依赖
 
 ```gradle
@@ -45,37 +48,50 @@ dependencies{
 ```
 > 注意：此处的```android:resource="@xml/filepaths"```自己谷歌或直接获取demo文件
 
-4.在Application中进行初始化【kotlin】
+4.在Application中进行初始化
 
 ```kotlin
 UpdateCenter.attach(this)
 ```
 
-5.在应用退出时【kotin】
+5.在应用退出时
 
 ```kotlin
 UpdateCenter.detach()
 ```
 
-# 用法
-启动下载【kotlin】
+## 用法
+启动下载
+
 ```kotlin
  UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
 ```
 
+## 自定义配置
+1.开关显示自带Notification和dialog
+注意：有的同学可能不喜欢自带的Notification和Dialog可以将其关闭
+
+```kotlin
+UpdateCenter.isShowDialog = false//是否显示Dialog
+UpdateCenter.isShowNotification=false//是否显示Notification
+```
+
+2.增加回调
+注意：如果要使用自己的Dialog或Notifigation,得实现回调
+> 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
+> 普通下载完成则调用onDownLoadSuccess(file:file)
 
 
+```kotlin
+UpdateCenter.downloadListener = object : DownloadListener {
 
+    override fun onDownLoadSuccess(file: File) {
+        Log.e("weimu", "下载完成")
+    }
 
+    override fun onFileIsExist(file: File) {
+        Log.e("weimu", "文件已存在")
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+}
+```
