@@ -24,13 +24,16 @@ object FileUtils {
         return file.exists() && file.isFile
     }
 
-    private val FilePreoviderAuthorities = "update.fileprovider"//类名+fileprovider
+    var FilePreoviderAuthorities = "update.fileprovider"//包名+fileprovider
 
     /**
      * 获取文件的Uri
      * 兼容7.0
      */
     fun getUriForFile(context: Context?, file: File?): Uri {
+        //获取当前app的包名
+        FilePreoviderAuthorities = "${UpdateCenter.getCurrentActivity().packageName}.fileprovider"
+
         if (context == null || file == null) {
             throw NullPointerException()
         }

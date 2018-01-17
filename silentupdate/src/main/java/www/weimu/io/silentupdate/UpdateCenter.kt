@@ -34,13 +34,16 @@ object UpdateCenter {
     private lateinit var updateShare: UpdateShare
 
 
+    private var fileDirectory = Environment.getExternalStorageDirectory().toString() + "/" + Environment.DIRECTORY_DOWNLOADS + "/"
+
+
     //以下数据可配置
     var downloadListener: DownloadListener? = null
     var isShowDialog: Boolean = true
     var isShowNotification: Boolean = true
-    var fileDirectory = Environment.getExternalStorageDirectory().toString() + "/" + Environment.DIRECTORY_DOWNLOADS + "/"
 
-    private fun getCurrentActivity() = activityList.peek()
+
+    fun getCurrentActivity() = activityList.peek()
 
     //链接至Application
     fun attach(mContext: Application) {
@@ -165,7 +168,7 @@ object UpdateCenter {
 
     //下载完成
     private fun downloadComplete(intent: Intent) {
-        Log.e("weimu","downloadComplete")
+        Log.e("weimu", "downloadComplete")
         updateShare.saveShareStuff {
             isDownloading = false
         }

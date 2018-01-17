@@ -18,6 +18,8 @@ class AppData : Application() {
         super.onCreate()
         //初始化 step01
         UpdateCenter.attach(this)
+        UpdateCenter.isShowDialog = true
+        UpdateCenter.isShowNotification=true
         UpdateCenter.downloadListener = object : DownloadListener {
 
             override fun onDownLoadSuccess(file: File) {
