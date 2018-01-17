@@ -69,15 +69,15 @@ UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
 ```
 
 ## 自定义配置
-1.开关显示自带Notification和dialog
-注意：有的同学可能不喜欢自带的Notification和Dialog可以将其关闭
+1.开关显示自带Notification和dialog<br>
+注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
 ```kotlin
 UpdateCenter.isShowDialog = false//是否显示Dialog
 UpdateCenter.isShowNotification=false//是否显示Notification
 ```
 
-2.增加回调
+2.实现回调<br>
 注意：如果要使用自己的Dialog或Notifigation,得实现回调
 > 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
 > 普通下载完成则调用onDownLoadSuccess(file:file)
