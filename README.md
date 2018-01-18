@@ -7,7 +7,7 @@ A library silently & automatically download latest apk to update your App<br>
 
 > 注意：此库是由kotlin编写而成<br>
 
-# 静默下载升级的步骤
+# 静默更新应用的步骤
 1. 判断权限【使用者自己实现】
 2. 获取下载链接，判断版本号【使用者自己实现】
 3. 开始下载前，判断升级文件是否存在，**存在**：直接弹Dialog和回调(onFileIsExist) **不存在**：开始下载
