@@ -65,8 +65,7 @@ UpdateCenter.detach()
 ```
 
 ## 用法
-> 注意：
-latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
+> 注意：latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
 
 ```kotlin
 UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
@@ -82,9 +81,9 @@ UpdateCenter.isShowNotification=false//是否显示Notification
 ```
 
 2.实现回调<br>
-注意：如果要使用自己的Dialog或Notifigation,得实现回调
-> 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
-> 普通下载完成则调用onDownLoadSuccess(file:file)
+> 注意：如果要使用自己的Dialog或Notifigation,得实现回调
+* 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
+* 普通下载完成则调用onDownLoadSuccess(file:file)
 
 
 ```kotlin
