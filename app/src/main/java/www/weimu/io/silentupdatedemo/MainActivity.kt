@@ -29,4 +29,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    //类似的程序退出入口
+    override fun onDestroy() {
+        super.onDestroy()
+        AppData.exitApp()
+    }
 }

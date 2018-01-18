@@ -68,14 +68,19 @@ object UpdateCenter {
     //分离Application
     fun detach() {
         val context = getCurrentActivity().applicationContext
-        context.unregisterReceiver(appUpdateReceiver)
+        //appUpdateReceiver有可能没有被初始化  比如：文件已经存在
+        try {
+            context.unregisterReceiver(appUpdateReceiver)
+        } catch (e: Exception) {
+            Log.e("weimu", "receiver ${e.printStackTrace()}")
+        }
         context.saveShareStuff { isDownloading = false }
         activityList.clear()
     }
 
 
     //获取apk  不管是网络还是本地
-    fun obtainLatestApk(apkUrl: String, latestVersion: String) {
+    fun update(apkUrl: String, latestVersion: String) {
         val context = getCurrentActivity().applicationContext
         val path = fileDirectory + "${getAppName()}_v$latestVersion.apk"
 

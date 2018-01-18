@@ -40,12 +40,8 @@ class KotlinDemoActivity : AppCompatActivity() {
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion > currentVersion)
             Toast.makeText(this@KotlinDemoActivity, "开始下载中...", Toast.LENGTH_SHORT).show()
-            UpdateCenter.obtainLatestApk(apkUrl, latestVersion)
+        UpdateCenter.update(apkUrl, latestVersion)
     }
 
-    //类似的程序退出入口
-    override fun onDestroy() {
-        super.onDestroy()
-        AppData.exitApp()
-    }
+
 }

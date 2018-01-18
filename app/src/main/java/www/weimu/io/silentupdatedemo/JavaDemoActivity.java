@@ -54,15 +54,10 @@ public class JavaDemoActivity extends AppCompatActivity {
 
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion.compareTo(currentVersion) > 0) {
-            Toast.makeText(JavaDemoActivity.this,"开始下载中...",Toast.LENGTH_SHORT).show();
-            UpdateCenter.INSTANCE.obtainLatestApk(apkUrl, latestVersion);
+            Toast.makeText(JavaDemoActivity.this, "开始下载中...", Toast.LENGTH_SHORT).show();
+            UpdateCenter.INSTANCE.update(apkUrl, latestVersion);
         }
     }
 
-    //类似的程序退出入口
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AppData.Companion.exitApp();
-    }
+
 }
