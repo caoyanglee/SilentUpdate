@@ -51,57 +51,31 @@ dependencies{
 
 
 4.在Application中进行初始化
-kotlin
+
 ```kotlin
 UpdateCenter.attach(this)
 ```
 
-java
-```java
-UpdateCenter.INSTANCE.attach(this);
-```
-
 5.在应用退出时
 
-kotlin
 ```kotlin
 UpdateCenter.detach()
 ```
 
-java
-```java
-UpdateCenter.INSTANCE.detach();
-```java
-
-
-
 ## 用法
 > 注意：latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
 
-kotlin
 ```kotlin
 UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
 ```
 
-java
-```java
-UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
-```
-
 ## 自定义配置
 1.开关显示自带Notification和dialog<br>
-注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
+> 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
-kotlin
 ```kotlin
 UpdateCenter.isShowDialog = false//是否显示Dialog
 UpdateCenter.isShowNotification=false//是否显示Notification
-```
-
-java
-```
-UpdateCenter.INSTANCE.setShowDialog(false);
-UpdateCenter.INSTANCE.setShowNotification(false);
 ```
 
 2.实现回调<br>
@@ -109,7 +83,6 @@ UpdateCenter.INSTANCE.setShowNotification(false);
 * 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
 * 普通下载完成则调用onDownLoadSuccess(file:file)
 
-kotlin
 ```kotlin
 UpdateCenter.downloadListener = object : DownloadListener {
 
@@ -122,19 +95,4 @@ UpdateCenter.downloadListener = object : DownloadListener {
     }
 
 }
-```
-
-java
-```java
- UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
-     @Override
-     public void onDownLoadSuccess(@NotNull File file) {
-         //下载完成
-     }
-
-     @Override
-     public void onFileIsExist(@NotNull File file) {
-         //文件已经
-     }
- });
 ```
