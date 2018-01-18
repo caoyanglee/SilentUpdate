@@ -2,10 +2,12 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/yongdongji/android/silent-update-lib/images/download.svg) ](https://bintray.com/yongdongji/android/silent-update-lib/_latestVersion)
 
-A library silently & automatically download latest apk to update your App<br>
-静默自动下载最新apk升级应用的库
-
 > 注意：此库是由kotlin编写而成<br>
+
+A library silently & automatically download latest apk to update your App<br>
+静默自动下载最新apk并升级应用
+
+
 
 # 静默更新应用的步骤
 1. 判断权限【使用者自己实现】
