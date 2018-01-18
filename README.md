@@ -10,7 +10,7 @@ A library silently & automatically download latest apk to update your App<br>
 # 静默下载升级的步骤
 1. 判断权限【使用者自己实现】
 2. 获取下载链接，判断版本号【使用者自己实现】
-3. 开始下载前，判断升级文件是否存在，存在：直接弹Dialog和回调(onFileIsExist) 不存在：开始下载
+3. 开始下载前，判断升级文件是否存在，**存在**：直接弹Dialog和回调(onFileIsExist) **不存在**：开始下载
 4. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog进行提示
 5. **用户点击Dialog或Notification即安装，更新对于用户只有1步，简洁高效**
 
