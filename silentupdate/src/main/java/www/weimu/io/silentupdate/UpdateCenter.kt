@@ -11,7 +11,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import www.weimu.io.silentupdate.model.UpdateShare
+import www.weimu.io.silentupdate.model.getUpdateShare
+import www.weimu.io.silentupdate.model.saveShareStuff
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
@@ -26,12 +27,10 @@ import java.util.*
  */
 object UpdateCenter {
     private val activityList = Stack<Activity>()
-    private lateinit var mContext: Application
     private lateinit var downloadManager: DownloadManager
     private lateinit var notificationManager: NotificationManager
     private lateinit var appUpdateReceiver: AppUpdateReceiver
     private lateinit var packageManager: PackageManager
-    private lateinit var updateShare: UpdateShare
 
 
     private var fileDirectory = Environment.getExternalStorageDirectory().toString() + "/" + Environment.DIRECTORY_DOWNLOADS + "/"
@@ -47,15 +46,13 @@ object UpdateCenter {
 
     //链接至Application
     fun attach(mContext: Application) {
-        this.mContext = mContext
         downloadManager = mContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         notificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         packageManager = mContext.packageManager;
-        updateShare = UpdateShare(mContext)
 
         //登记activity
         activityList.clear()
-        this.mContext.registerActivityLifecycleCallbacks(object : WMActivityLifeCycleCallbacks() {
+        mContext.registerActivityLifecycleCallbacks(object : WMActivityLifeCycleCallbacks() {
 
             override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
                 activityList.add(activity)
@@ -70,48 +67,50 @@ object UpdateCenter {
 
     //分离Application
     fun detach() {
-        //this.mContext.unregisterReceiver(appUpdateReceiver)
-        updateShare.saveShareStuff { isDownloading = false }
+        val context = getCurrentActivity().applicationContext
+        context.unregisterReceiver(appUpdateReceiver)
+        context.saveShareStuff { isDownloading = false }
         activityList.clear()
     }
 
 
     //获取apk  不管是网络还是本地
     fun obtainLatestApk(apkUrl: String, latestVersion: String) {
-
-        //绑定广播接收者
-        bindReceiver()
-
+        val context = getCurrentActivity().applicationContext
         val path = fileDirectory + "${getAppName()}_v$latestVersion.apk"
 
         val isExist = FileUtils.isFileExist(path)
         //Logger.e("path=${path}  是否存在=" + isExist)
-        if (isExist && !updateShare.getUpdateShare().isDownloading) {
+        if (isExist && !context.getUpdateShare().isDownloading) {
             if (isShowDialog) showDialog(File(path)) //若存在且下载完成  弹出dialog
             downloadListener?.onFileIsExist(File(path))
         } else {
+            //绑定广播接收者
+            bindReceiver()
             updateApkByHide(apkUrl, latestVersion)//不存在 直接下载
         }
     }
 
     private fun bindReceiver() {
+        val context = getCurrentActivity().applicationContext
         //广播接收者
         appUpdateReceiver = AppUpdateReceiver()
         val filter = IntentFilter()
         filter.addAction("android.intent.action.DOWNLOAD_COMPLETE")
         filter.addAction("android.intent.action.VIEW_DOWNLOADS")
-        this.mContext.registerReceiver(appUpdateReceiver, filter)
+        context.registerReceiver(appUpdateReceiver, filter)
     }
 
     //更新apk hide
     private fun updateApkByHide(apkUrl: String, latestVersion: String?) {
+        val context = getCurrentActivity().applicationContext
         val request = DownloadManager.Request(Uri.parse(apkUrl))
         //设置在什么网络情况下进行下载
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
         //设置通知栏标题
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
         request.setTitle("${getAppName()}_v" + latestVersion)
-        request.setDescription(mContext.getPackageName())
+        request.setDescription(context.packageName)
         request.setAllowedOverRoaming(false)
         request.setVisibleInDownloadsUi(true)
         //设置文件存放目录
@@ -120,7 +119,7 @@ object UpdateCenter {
 
         val id = downloadManager.enqueue(request)
         //存入到share里
-        updateShare.saveShareStuff {
+        context.saveShareStuff {
             apkTaskID = id
             isDownloading = true
         }
@@ -168,13 +167,14 @@ object UpdateCenter {
 
     //下载完成
     private fun downloadComplete(intent: Intent) {
+        val context = getCurrentActivity().applicationContext
         Log.e("weimu", "downloadComplete")
-        updateShare.saveShareStuff {
+        context.saveShareStuff {
             isDownloading = false
         }
         val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
         //判断ID是否一致
-        if (id != updateShare.getUpdateShare().apkTaskID) return
+        if (id != context.getUpdateShare().apkTaskID) return
 
         val uri = Uri.parse(queryDownTaskById(id)).toString()
         try {
@@ -210,10 +210,12 @@ object UpdateCenter {
      * file 文件地址
      */
     private fun showNotification(file: File, content: String = "请点击立即安装~") {
+        val context = getCurrentActivity()
+
         val title = "发现新版本！"
-        val intent = mContext.constructOpenApkItent(file)
-        val pintent = PendingIntent.getActivity(mContext, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val builder = Notification.Builder(mContext)
+        val intent = context.constructOpenApkItent(file)
+        val pintent = PendingIntent.getActivity(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val builder = Notification.Builder(context)
         builder.setSmallIcon(-1)// 设置图标
         builder.setTicker(title)// 手机状态栏的提示----最上面的一条
         builder.setWhen(System.currentTimeMillis())// 设置时间
