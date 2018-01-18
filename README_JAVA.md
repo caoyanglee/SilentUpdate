@@ -61,7 +61,7 @@ UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
 1.开关显示自带Notification和dialog<br>
 > 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
-```
+```java
 UpdateCenter.INSTANCE.setShowDialog(false);
 UpdateCenter.INSTANCE.setShowNotification(false);
 ```
