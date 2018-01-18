@@ -3,6 +3,7 @@ package www.weimu.io.silentupdatedemo
 import android.Manifest
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.tbruyelle.rxpermissions2.RxPermissions
 import www.weimu.io.silentupdate.UpdateCenter
 
@@ -38,6 +39,7 @@ class KotlinDemoActivity : AppCompatActivity() {
 
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion > currentVersion)
+            Toast.makeText(this@KotlinDemoActivity, "开始下载中...", Toast.LENGTH_SHORT).show()
             UpdateCenter.obtainLatestApk(apkUrl, latestVersion)
     }
 
