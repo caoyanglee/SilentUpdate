@@ -1,7 +1,9 @@
 # 静默更新库
+[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Download](https://api.bintray.com/packages/tangsiyuan/maven/myokhttp/images/download.svg) ](https://bintray.com/tangsiyuan/maven/myokhttp/_latestVersion)
+
 A library silently & automatically download latest apk to update your App<br>
 静默自动下载最新apk升级应用的库
-
 
 > 注意：此库是由kotlin编写而成<br>
 
