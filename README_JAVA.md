@@ -80,7 +80,7 @@ UpdateCenter.INSTANCE.setShowNotification(false);
 
      @Override
      public void onFileIsExist(@NotNull File file) {
-         //文件已经
-     }
+         //文件已存在
+     }
  });
 ```
