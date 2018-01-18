@@ -51,17 +51,19 @@ UpdateCenter.INSTANCE.detach();
 
 
 ## 用法
-> 注意：latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
+> 注意：<br>
+apkUrl即服务器提供的apk下载地址<br>
+latestVersion即服务器返回客户端的最新版本号
 
 ```java
-UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
+UpdateCenter.INSTANCE.obtainLatestApk(apkUrl, latestVersion);
 ```
 
 ## 自定义配置
 1.开关显示自带Notification和dialog<br>
 > 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
-```
+```java
 UpdateCenter.INSTANCE.setShowDialog(false);
 UpdateCenter.INSTANCE.setShowNotification(false);
 ```
