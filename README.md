@@ -7,8 +7,6 @@
 A library silently & automatically download latest apk to update your App<br>
 静默自动下载最新apk并升级应用
 
-
-
 # 执行步骤
 1. 判断权限【使用者自己实现】
 2. 获取下载链接，判断版本号【使用者自己实现】
@@ -16,7 +14,7 @@ A library silently & automatically download latest apk to update your App<br>
 4. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog进行提示
 5. **用户点击Dialog或Notification即安装，更新对于用户只有1步，简洁高效**
 
- 
+> 注意：以下为Kotlin的操作，若使用Java请点击[这里](待会写)
 ## 准备工作 
 1.获取依赖
 
