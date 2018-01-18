@@ -8,6 +8,6 @@ import java.io.File
  * Description:
  */
 interface DownloadListener {
-    fun onDownLoadSuccess(file: File)
-    fun onFileIsExist(file: File)
+    fun onDownLoadSuccess(file: File) {}
+    fun onFileIsExist(file: File) {}
 }

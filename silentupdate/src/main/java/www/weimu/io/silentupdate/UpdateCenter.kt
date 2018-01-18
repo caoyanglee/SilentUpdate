@@ -173,7 +173,7 @@ object UpdateCenter {
     //下载完成
     private fun downloadComplete(intent: Intent) {
         val context = getCurrentActivity().applicationContext
-        Log.e("weimu", "downloadComplete")
+//        Log.e("weimu", "downloadComplete")
         context.saveShareStuff {
             isDownloading = false
         }

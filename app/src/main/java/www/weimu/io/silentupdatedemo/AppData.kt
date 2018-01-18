@@ -34,11 +34,11 @@ class AppData : Application() {
         UpdateCenter.downloadListener = object : DownloadListener {
 
             override fun onDownLoadSuccess(file: File) {
-                Log.e("weimu", "下载完成")
+                Log.e("su", "下载完成")
             }
 
             override fun onFileIsExist(file: File) {
-                Log.e("weimu", "文件已存在")
+                Log.e("su", "文件已存在")
             }
 
         }
