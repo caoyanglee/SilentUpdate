@@ -2,20 +2,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/yongdongji/android/silent-update-lib/images/download.svg) ](https://bintray.com/yongdongji/android/silent-update-lib/_latestVersion)
 
-> 注意：此库是由kotlin编写而成<br>
-
-A library silently & automatically download latest apk to update your App<br>
-静默自动下载最新apk并升级应用
-
-# 执行步骤
-1. 判断权限【使用者自己实现】
-2. 获取下载链接，判断版本号【使用者自己实现】
-3. 开始下载前，判断升级文件是否存在，**存在**：直接弹Dialog和回调(onFileIsExist) **不存在**：开始下载
-4. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog进行提示
-5. **用户点击Dialog或Notification即安装，更新对于用户只有1步，简洁高效**
-
-> 注意：以下为Kotlin的操作，若使用Java请点击[这里](https://github.com/CaoyangLee/SilentUpdateDemo/blob/master/README_JAVA.md)
-## 准备工作 
+## 准备工作 【Java】
 1.获取依赖
 
 ```gradle
@@ -52,30 +39,31 @@ dependencies{
 
 4.在Application中进行初始化
 
-```kotlin
-UpdateCenter.attach(this)
+```java
+UpdateCenter.INSTANCE.attach(this);
 ```
 
 5.在应用退出时
 
-```kotlin
-UpdateCenter.detach()
+```java
+UpdateCenter.INSTANCE.detach();
 ```
+
 
 ## 用法
 > 注意：latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
 
-```kotlin
-UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
+```java
+UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
 ```
 
 ## 自定义配置
 1.开关显示自带Notification和dialog<br>
 > 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
-```kotlin
-UpdateCenter.isShowDialog = false//是否显示Dialog
-UpdateCenter.isShowNotification=false//是否显示Notification
+```
+UpdateCenter.INSTANCE.setShowDialog(false);
+UpdateCenter.INSTANCE.setShowNotification(false);
 ```
 
 2.实现回调<br>
@@ -83,16 +71,16 @@ UpdateCenter.isShowNotification=false//是否显示Notification
 * 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
 * 普通下载完成则调用onDownLoadSuccess(file:file)
 
-```kotlin
-UpdateCenter.downloadListener = object : DownloadListener {
+```java
+ UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
+     @Override
+     public void onDownLoadSuccess(@NotNull File file) {
+         //下载完成
+     }
 
-    override fun onDownLoadSuccess(file: File) {
-        //下载完成
-    }
-
-    override fun onFileIsExist(file: File) {
-        //文件已存在
-    }
-
-}
+     @Override
+     public void onFileIsExist(@NotNull File file) {
+         //文件已存在
+     }
+ });
 ```
