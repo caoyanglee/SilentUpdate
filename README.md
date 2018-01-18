@@ -37,6 +37,8 @@ dependencies{
 ```       
 3.增加FileProvider【适配7.0】
 
+> 注意：此处的```android:resource="@xml/filepaths"```自己谷歌或直接获取demo文件
+
 ```xml
 <provider
     android:name="android.support.v4.content.FileProvider"
@@ -48,7 +50,7 @@ dependencies{
         android:resource="@xml/filepaths" />
 </provider>
 ```
-> 注意：此处的```android:resource="@xml/filepaths"```自己谷歌或直接获取demo文件
+
 
 4.在Application中进行初始化
 
@@ -63,7 +65,7 @@ UpdateCenter.detach()
 ```
 
 ## 用法
-注意：
+> 注意：
 latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
 
 ```kotlin
