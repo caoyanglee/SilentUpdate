@@ -51,10 +51,12 @@ UpdateCenter.INSTANCE.detach();
 
 
 ## 用法
-> 注意：latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
+> 注意：<br>
+apkUrl即服务器提供的apk下载地址<br>
+latestVersion即服务器返回客户端的最新版本号
 
 ```java
-UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
+UpdateCenter.INSTANCE.obtainLatestApk(apkUrl, latestVersion);
 ```
 
 ## 自定义配置
