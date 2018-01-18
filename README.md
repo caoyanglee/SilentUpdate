@@ -14,7 +14,7 @@ A library silently & automatically download latest apk to update your App<br>
 4. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog进行提示
 5. **用户点击Dialog或Notification即安装，更新对于用户只有1步，简洁高效**
 
-> 注意：以下为Kotlin的操作，若使用Java请点击[这里](待会写)
+> 注意：以下为Kotlin的操作，若使用Java请点击[这里](https://github.com/CaoyangLee/SilentUpdateDemo/blob/master/README_JAVA.md)
 ## 准备工作 
 1.获取依赖
 
