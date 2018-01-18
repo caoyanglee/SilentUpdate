@@ -46,14 +46,14 @@ public class JavaDemoActivity extends AppCompatActivity {
     //获取下载链接 step2
     public void getLatestApk() {
         //具体的网络请求步骤自己操作
-        String downloadUrl = "https://t.alipayobjects.com/L1/71/100/and/alipay_wap_main.apk";
+        String apkUrl = "https://t.alipayobjects.com/L1/71/100/and/alipay_wap_main.apk";
         //判断版本号
         String latestVersion = "1.1.0";
         String currentVersion = BuildConfig.VERSION_NAME;
 
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion.compareTo(currentVersion) > 0) {
-            UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
+            UpdateCenter.INSTANCE.obtainLatestApk(apkUrl, latestVersion);
         }
     }
 

@@ -31,14 +31,14 @@ class KotlinDemoActivity : AppCompatActivity() {
     //获取下载链接 step2
     fun getLatestApk() {
         //具体的网络请求步骤自己操作
-        val downloadUrl = "https://t.alipayobjects.com/L1/71/100/and/alipay_wap_main.apk"
+        val apkUrl = "https://t.alipayobjects.com/L1/71/100/and/alipay_wap_main.apk"
         //判断版本号
         val latestVersion = "1.1.0"
         val currentVersion = BuildConfig.VERSION_NAME
 
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion > currentVersion)
-            UpdateCenter.obtainLatestApk(downloadUrl, latestVersion)
+            UpdateCenter.obtainLatestApk(apkUrl, latestVersion)
     }
 
     //类似的程序退出入口
