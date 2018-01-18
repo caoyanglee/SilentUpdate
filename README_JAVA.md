@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/yongdongji/android/silent-update-lib/images/download.svg) ](https://bintray.com/yongdongji/android/silent-update-lib/_latestVersion)
 
-## 准备工作 
+## 准备工作 【Java】
 1.获取依赖
 
 ```gradle
@@ -38,23 +38,21 @@ dependencies{
 
 
 4.在Application中进行初始化
-java
+
 ```java
 UpdateCenter.INSTANCE.attach(this);
 ```
 
 5.在应用退出时
 
-java
 ```java
 UpdateCenter.INSTANCE.detach();
-```java
+```
 
 
 ## 用法
 > 注意：latestVersion为字符串，将服务器传给你的latestVersion字符串传入即可
 
-java
 ```java
 UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
 ```
@@ -63,7 +61,6 @@ UpdateCenter.INSTANCE.obtainLatestApk(downloadUrl, latestVersion);
 1.开关显示自带Notification和dialog<br>
 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
-java
 ```
 UpdateCenter.INSTANCE.setShowDialog(false);
 UpdateCenter.INSTANCE.setShowNotification(false);
@@ -74,7 +71,6 @@ UpdateCenter.INSTANCE.setShowNotification(false);
 * 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
 * 普通下载完成则调用onDownLoadSuccess(file:file)
 
-java
 ```java
  UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
      @Override
