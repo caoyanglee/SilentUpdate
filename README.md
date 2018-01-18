@@ -68,7 +68,7 @@ apkUrl即服务器提供的apk下载地址<br>
 latestVersion即服务器返回客户端的最新版本号
 
 ```kotlin
-UpdateCenter.obtainLatestApk(apkUrl, latestVersion)
+UpdateCenter.update(apkUrl, latestVersion)
 ```
 
 ## 自定义配置
