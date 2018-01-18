@@ -42,7 +42,8 @@ object UpdateCenter {
     var isShowNotification: Boolean = true
 
 
-    fun getCurrentActivity() = activityList.peek()
+    private fun getCurrentActivity() = activityList.peek()
+    fun getApplicationContext() = getCurrentActivity().applicationContext
 
     //链接至Application
     fun attach(mContext: Application) {
@@ -67,12 +68,13 @@ object UpdateCenter {
 
     //分离Application
     fun detach() {
-        val context = getCurrentActivity().applicationContext
-        //appUpdateReceiver有可能没有被初始化  比如：文件已经存在
+        val context = getApplicationContext()
+
         try {
+            //appUpdateReceiver有可能没有被初始化  比如：文件已经存在
             context.unregisterReceiver(appUpdateReceiver)
         } catch (e: Exception) {
-            Log.e("weimu", "receiver ${e.printStackTrace()}")
+            Log.e("weimu", "detach ${e.printStackTrace()}")
         }
         context.saveShareStuff { isDownloading = false }
         activityList.clear()
@@ -81,7 +83,7 @@ object UpdateCenter {
 
     //获取apk  不管是网络还是本地
     fun update(apkUrl: String, latestVersion: String) {
-        val context = getCurrentActivity().applicationContext
+        val context = getApplicationContext()
         val path = fileDirectory + "${getAppName()}_v$latestVersion.apk"
 
         val isExist = FileUtils.isFileExist(path)
@@ -97,7 +99,7 @@ object UpdateCenter {
     }
 
     private fun bindReceiver() {
-        val context = getCurrentActivity().applicationContext
+        val context = getApplicationContext()
         //广播接收者
         appUpdateReceiver = AppUpdateReceiver()
         val filter = IntentFilter()
@@ -108,7 +110,7 @@ object UpdateCenter {
 
     //更新apk hide
     private fun updateApkByHide(apkUrl: String, latestVersion: String?) {
-        val context = getCurrentActivity().applicationContext
+        val context = getApplicationContext()
         val request = DownloadManager.Request(Uri.parse(apkUrl))
         //设置在什么网络情况下进行下载
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
@@ -172,7 +174,7 @@ object UpdateCenter {
 
     //下载完成
     private fun downloadComplete(intent: Intent) {
-        val context = getCurrentActivity().applicationContext
+        val context = getApplicationContext()
 //        Log.e("weimu", "downloadComplete")
         context.saveShareStuff {
             isDownloading = false

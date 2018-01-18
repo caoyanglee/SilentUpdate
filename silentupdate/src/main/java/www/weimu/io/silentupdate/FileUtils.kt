@@ -32,7 +32,7 @@ object FileUtils {
      */
     fun getUriForFile(context: Context?, file: File?): Uri {
         //获取当前app的包名
-        FilePreoviderAuthorities = "${UpdateCenter.getCurrentActivity().packageName}.fileprovider"
+        FilePreoviderAuthorities = "${UpdateCenter.getApplicationContext().packageName}.fileprovider"
 
         if (context == null || file == null) {
             throw NullPointerException()

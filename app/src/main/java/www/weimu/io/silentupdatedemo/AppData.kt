@@ -1,6 +1,7 @@
 package www.weimu.io.silentupdatedemo
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import www.weimu.io.silentupdate.DownloadListener
@@ -14,19 +15,9 @@ import kotlin.properties.Delegates
  * Description:
  */
 class AppData : Application() {
-    companion object {
-        var context: AppData by Delegates.notNull()
-
-        fun exitApp() {
-            //退出App的处理 step02
-            UpdateCenter.detach()
-        }
-
-    }
 
     override fun onCreate() {
         super.onCreate()
-        context = this
         //初始化 step01
         UpdateCenter.attach(this)
         UpdateCenter.isShowDialog = true
@@ -45,4 +36,9 @@ class AppData : Application() {
     }
 
 
+}
+
+//吐司通知
+fun Context.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

@@ -1,12 +1,24 @@
 package www.weimu.io.silentupdatedemo
 
-import android.Manifest
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
-import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import android.app.AppOpsManager
+import android.content.pm.ApplicationInfo
 import www.weimu.io.silentupdate.UpdateCenter
+import www.weimu.io.silentupdate.isNotificationEnabled
+import www.weimu.io.silentupdate.openAppInfoPage
+import android.app.NotificationChannel
+import android.os.Build
+import android.support.annotation.RequiresApi
+
 
 /**
  * kotlin的调用方法
@@ -29,9 +41,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    //类似的程序退出入口
-    override fun onDestroy() {
-        super.onDestroy()
-        AppData.exitApp()
+    /**
+     * 点击返回键
+     */
+    override fun onBackPressed() {
+        super.onBackPressed()
+        UpdateCenter.detach()
     }
+
+
 }
