@@ -20,6 +20,7 @@ def projectVersionName = android.defaultConfig.versionName
 def projectPackaging = properties.getProperty("project.packaging")
 def projectSiteUrl = properties.getProperty("project.siteUrl")
 def projectGitUrl = properties.getProperty("project.gitUrl")
+def project_desc = properties.getProperty("project.desc")
 
 def developerId = properties.getProperty("developer.id")
 def developerName = properties.getProperty("developer.name")
@@ -113,9 +114,9 @@ bintray {
     publish = true
     pkg {
         //userOrg = "weimusenlin"//组织名称  如果用组织就填写组织名称
-        repo = "android"//库的名称
+        repo = "maven"//库的名称
         name = projectName
-        desc = 'A library silently & automatically download latest apk to update your App'
+        desc = project_desc
         websiteUrl = projectSiteUrl
         vcsUrl = projectGitUrl
         licenses = ["Apache-2.0"]

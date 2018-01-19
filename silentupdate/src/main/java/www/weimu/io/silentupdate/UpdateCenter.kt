@@ -26,7 +26,7 @@ import java.util.*
  * Description:
  */
 object UpdateCenter {
-    private val activityList = Stack<Activity>()
+    private val activityStack = Stack<Activity>()
     private lateinit var downloadManager: DownloadManager
     private lateinit var notificationManager: NotificationManager
     private lateinit var appUpdateReceiver: AppUpdateReceiver
@@ -42,7 +42,7 @@ object UpdateCenter {
     var isShowNotification: Boolean = true
 
 
-    private fun getCurrentActivity() = activityList.peek()
+    private fun getCurrentActivity() = activityStack.peek()
     fun getApplicationContext() = getCurrentActivity().applicationContext
 
     //链接至Application
@@ -52,15 +52,15 @@ object UpdateCenter {
         packageManager = mContext.packageManager;
 
         //登记activity
-        activityList.clear()
+        activityStack.clear()
         mContext.registerActivityLifecycleCallbacks(object : WMActivityLifeCycleCallbacks() {
 
             override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-                activityList.add(activity)
+                activityStack.add(activity)
             }
 
             override fun onActivityDestroyed(activity: Activity?) {
-                activityList.remove(activity)
+                activityStack.remove(activity)
             }
         })
     }
@@ -68,16 +68,9 @@ object UpdateCenter {
 
     //分离Application
     fun detach() {
+        activityStack.clear()
         val context = getApplicationContext()
-
-        try {
-            //appUpdateReceiver有可能没有被初始化  比如：文件已经存在
-            context.unregisterReceiver(appUpdateReceiver)
-        } catch (e: Exception) {
-            Log.e("weimu", "detach ${e.printStackTrace()}")
-        }
         context.saveShareStuff { isDownloading = false }
-        activityList.clear()
     }
 
 
@@ -175,16 +168,15 @@ object UpdateCenter {
     //下载完成
     private fun downloadComplete(intent: Intent) {
         val context = getApplicationContext()
-//        Log.e("weimu", "downloadComplete")
-        context.saveShareStuff {
-            isDownloading = false
-        }
         val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
         //判断ID是否一致
         if (id != context.getUpdateShare().apkTaskID) return
 
-        val uri = Uri.parse(queryDownTaskById(id)).toString()
+        context.unregisterReceiver(appUpdateReceiver)
+        context.saveShareStuff { isDownloading = false }
+
         try {
+            val uri = Uri.parse(queryDownTaskById(id)).toString()
             //必须try-catch
             val file = File(URI(uri))
             if (isShowNotification) showNotification(file)
