@@ -1,16 +1,13 @@
-package www.weimu.io.silentupdate
+package www.weimu.io.silentupdate.core
 
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 
 /**
- * @project KotLinProject
- * @author 艹羊
- * @date 2017/6/12 上午10:32
- * @description
+ * Activity声明周期监听者
  */
-abstract class WMActivityLifeCycleCallbacks : Application.ActivityLifecycleCallbacks {
+abstract class ActivityLifeListener : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityStarted(activity: Activity?) {}
 

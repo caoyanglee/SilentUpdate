@@ -4,10 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import www.weimu.io.silentupdate.DownloadListener
+import www.weimu.io.silentupdate.core.DownloadListener
 import www.weimu.io.silentupdate.UpdateCenter
 import java.io.File
-import kotlin.properties.Delegates
 
 /**
  * Author:你需要一台永动机

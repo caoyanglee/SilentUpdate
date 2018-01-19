@@ -1,4 +1,4 @@
-package www.weimu.io.silentupdate
+package www.weimu.io.silentupdate.core
 
 import java.io.File
 

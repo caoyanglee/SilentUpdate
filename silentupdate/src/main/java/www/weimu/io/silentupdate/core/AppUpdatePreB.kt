@@ -1,4 +1,4 @@
-package www.weimu.io.silentupdate.model
+package www.weimu.io.silentupdate.core
 
 import android.content.Context
 import www.weimu.io.silentupdate.BuildConfig

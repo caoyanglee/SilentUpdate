@@ -1,4 +1,4 @@
-package www.weimu.io.silentupdate
+package www.weimu.io.silentupdate.core
 
 import android.app.AppOpsManager
 import android.content.Context

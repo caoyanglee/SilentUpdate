@@ -1,19 +1,13 @@
 package www.weimu.io.silentupdatedemo;
 
 import android.Manifest;
-import android.icu.lang.UProperty;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-
 import io.reactivex.functions.Consumer;
-import www.weimu.io.silentupdate.DownloadListener;
 import www.weimu.io.silentupdate.UpdateCenter;
 
 /**

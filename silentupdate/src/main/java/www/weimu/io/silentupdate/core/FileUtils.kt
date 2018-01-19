@@ -1,14 +1,12 @@
-package www.weimu.io.silentupdate
+package www.weimu.io.silentupdate.core
 
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
+import www.weimu.io.silentupdate.UpdateCenter
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 object FileUtils {
@@ -24,7 +22,6 @@ object FileUtils {
         return file.exists() && file.isFile
     }
 
-    var FilePreoviderAuthorities = "update.fileprovider"//包名+fileprovider
 
     /**
      * 获取文件的Uri
@@ -32,14 +29,14 @@ object FileUtils {
      */
     fun getUriForFile(context: Context?, file: File?): Uri {
         //获取当前app的包名
-        FilePreoviderAuthorities = "${UpdateCenter.getApplicationContext().packageName}.fileprovider"
+        val FPAuth = "${UpdateCenter.getApplicationContext().packageName}.fileprovider"
 
         if (context == null || file == null) {
             throw NullPointerException()
         }
         val uri: Uri
         if (Build.VERSION.SDK_INT >= 24) {
-            uri = FileProvider.getUriForFile(context.applicationContext, FilePreoviderAuthorities, file)
+            uri = FileProvider.getUriForFile(context.applicationContext, FPAuth, file)
         } else {
             uri = Uri.fromFile(file)
         }

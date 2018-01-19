@@ -1,6 +1,5 @@
 package www.weimu.io.silentupdate
 
-import android.annotation.SuppressLint
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,16 +9,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
-import www.weimu.io.silentupdate.model.getUpdateShare
-import www.weimu.io.silentupdate.model.saveShareStuff
+import www.weimu.io.silentupdate.core.*
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 
 
-@SuppressLint("StaticFieldLeak")
 /**
  * Author:你需要一台永动机
  * Date:2017/11/22 14:00
@@ -53,7 +49,7 @@ object UpdateCenter {
 
         //登记activity
         activityStack.clear()
-        mContext.registerActivityLifecycleCallbacks(object : WMActivityLifeCycleCallbacks() {
+        mContext.registerActivityLifecycleCallbacks(object : ActivityLifeListener() {
 
             override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
                 activityStack.add(activity)
