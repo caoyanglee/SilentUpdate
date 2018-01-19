@@ -38,8 +38,3 @@ class AppData : Application() {
 
 
 }
-
-//吐司通知
-fun Context.toast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
