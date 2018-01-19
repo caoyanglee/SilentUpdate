@@ -26,7 +26,6 @@ object UpdateCenter {
     private lateinit var downloadManager: DownloadManager
     private lateinit var notificationManager: NotificationManager
     private lateinit var appUpdateReceiver: AppUpdateReceiver
-    private lateinit var packageManager: PackageManager
 
 
     private var fileDirectory = Environment.getExternalStorageDirectory().toString() + "/" + Environment.DIRECTORY_DOWNLOADS + "/"
@@ -39,13 +38,13 @@ object UpdateCenter {
 
 
     private fun getCurrentActivity() = activityStack.peek()
-    fun getApplicationContext() = getCurrentActivity().applicationContext
+    private fun getApplicationContext() = getCurrentActivity().applicationContext
 
     //链接至Application
     fun attach(mContext: Application) {
         downloadManager = mContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         notificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        packageManager = mContext.packageManager;
+
 
         //登记activity
         activityStack.clear()
@@ -73,7 +72,7 @@ object UpdateCenter {
     //获取apk  不管是网络还是本地
     fun update(apkUrl: String, latestVersion: String) {
         val context = getApplicationContext()
-        val path = fileDirectory + "${getAppName()}_v$latestVersion.apk"
+        val path = fileDirectory + "${context.getAppName()}_v$latestVersion.apk"
 
         val isExist = isFileExist(path)
         //Logger.e("path=${path}  是否存在=" + isExist)
@@ -105,13 +104,13 @@ object UpdateCenter {
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
         //设置通知栏标题
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
-        request.setTitle("${getAppName()}_v" + latestVersion)
+        request.setTitle("${context.getAppName()}_v" + latestVersion)
         request.setDescription(context.packageName)
         request.setAllowedOverRoaming(false)
         request.setVisibleInDownloadsUi(true)
         //设置文件存放目录
         //request.setDestinationInExternalFilesDir(AppData.getContext(), "download", "youudo_v" + version + ".apk");
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${getAppName()}_v$latestVersion.apk")
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${context.getAppName()}_v$latestVersion.apk")
 
         val id = downloadManager.enqueue(request)
         //存入到share里
@@ -149,7 +148,7 @@ object UpdateCenter {
     }
 
     //广播接收者
-    class AppUpdateReceiver : BroadcastReceiver() {
+    private class AppUpdateReceiver : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
@@ -202,12 +201,12 @@ object UpdateCenter {
     /**
      * 更新notification
      *
-     * file 文件地址
      */
-    private fun showNotification(file: File, content: String = "请点击立即安装~") {
+    private fun showNotification(file: File) {
         val context = getCurrentActivity()
 
         val title = "发现新版本！"
+        val content: String = "请点击立即安装~"
         val intent = context.constructOpenApkItent(file)
         val pintent = PendingIntent.getActivity(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val builder = Notification.Builder(context)
@@ -222,21 +221,6 @@ object UpdateCenter {
         notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL// 点击后自动取消
         //显示
         notificationManager.notify(UUID.randomUUID().hashCode(), notification)
-    }
-
-
-    /*
-     * 获取程序的名字
-     */
-    private fun getAppName(): String? {
-
-        try {
-            val info = packageManager.getApplicationInfo(getCurrentActivity().packageName, 0)
-            return info.loadLabel(packageManager).toString()
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        return null
     }
 
 

@@ -3,6 +3,7 @@ package www.weimu.io.silentupdate.core
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -86,7 +87,7 @@ fun Any.isFileExist(filePath: String): Boolean {
  */
 fun Context.getUriForFile(file: File?): Uri {
     //获取当前app的包名
-    val FPAuth = "${UpdateCenter.getApplicationContext().packageName}.fileprovider"
+    val FPAuth = "$packageName.fileprovider"
 
     if (file == null) throw NullPointerException()
 
@@ -97,6 +98,18 @@ fun Context.getUriForFile(file: File?): Uri {
         uri = Uri.fromFile(file)
     }
     return uri
+}
+
+//获取应用的名字
+fun Context.getAppName(): String? {
+    val pm: PackageManager = packageManager;
+    try {
+        val info = pm.getApplicationInfo(this.packageName, 0)
+        return info.loadLabel(pm).toString()
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
+    return "updateApk"
 }
 
 
