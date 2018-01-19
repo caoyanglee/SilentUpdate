@@ -26,7 +26,7 @@ A library silently & automatically download latest apk to update your App<br>
 allprojects {
     repositories {
         ......        
-        maven { url  "https://dl.bintray.com/yongdongji/maven" }
+        maven { url  "https://dl.bintray.com/yongdongji/android" }
     }
 }
 ```

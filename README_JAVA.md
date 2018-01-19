@@ -7,7 +7,7 @@
 allprojects {
     repositories {
         ......        
-        maven { url  "https://dl.bintray.com/yongdongji/maven" }
+        maven { url  "https://dl.bintray.com/yongdongji/android" }
     }
 }
 ```
