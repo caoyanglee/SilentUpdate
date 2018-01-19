@@ -48,8 +48,8 @@ UpdateCenter.INSTANCE.detach();
 
 ## 用法
 > 注意：<br>
-apkUrl即服务器提供的apk下载地址<br>
-latestVersion即服务器返回客户端的最新版本号
+apkUrl：服务器提供的apk下载地址<br>
+latestVersion：服务器返回客户端的最新版本号
 
 ```java
 UpdateCenter.INSTANCE.update(apkUrl, latestVersion);
