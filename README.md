@@ -20,7 +20,7 @@ A library silently & automatically download latest apk to update your App<br>
 
 ```gradle
 dependencies{
-    compile 'www.weimu.io:silent-update-lib:0.1.0'
+    compile 'www.weimu.io:silent-update-lib:0.1.1'
 }
 ```
 
