@@ -19,9 +19,7 @@ A library silently & automatically download latest apk to update your App<br>
 1.获取依赖
 
 ```gradle
-dependencies{
-    compile 'www.weimu.io:silent-update-lib:0.1.1'
-}
+compile 'www.weimu.io:silent-update-lib:0.1.1'
 ```
 
 2.增加权限
