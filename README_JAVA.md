@@ -1,8 +1,20 @@
 ## 准备工作 【Java】
 1.获取依赖
 
+**project的build.gradle**
+
+```
+allprojects {
+    repositories {
+        ......        
+        maven { url  "https://dl.bintray.com/yongdongji/maven" }
+    }
+}
+```
+**app的build.gradle**
+
 ```gradle
-compile 'www.weimu.io:silent-update-lib:0.1.1'
+compile 'www.weimu.io:silentupdate:0.1.0@aar'
 ```
 
 2.增加权限

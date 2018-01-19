@@ -190,8 +190,8 @@ object UpdateCenter {
         val activity = getCurrentActivity()
         AlertDialog.Builder(activity)
                 .setCancelable(true)
-                .setTitle("软件更新")
-                .setMessage("新版本已下载完成,请立即安装更新！")
+                .setTitle("发现新版本！")
+                .setMessage("请点击立即安装~")
                 .setPositiveButton("立即安装", { dialog, which ->
                     activity.openApkByFilePath(file)
                 })

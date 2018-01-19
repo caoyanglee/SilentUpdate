@@ -1,6 +1,6 @@
 # 静默更新应用库
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Download](https://api.bintray.com/packages/yongdongji/android/silent-update-lib/images/download.svg) ](https://bintray.com/yongdongji/android/silent-update-lib/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/yongdongji/maven/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/maven/silentupdate/_latestVersion)
 
 > 注意：此库是由kotlin编写而成<br>
 
@@ -20,8 +20,20 @@ A library silently & automatically download latest apk to update your App<br>
 ## 准备工作 
 1.获取依赖
 
+**project的build.gradle**
+
+```
+allprojects {
+    repositories {
+        ......        
+        maven { url  "https://dl.bintray.com/yongdongji/maven" }
+    }
+}
+```
+**app的build.gradle**
+
 ```gradle
-compile 'www.weimu.io:silent-update-lib:0.1.1'
+compile 'www.weimu.io:silentupdate:0.1.0@aar'
 ```
 
 2.增加权限
