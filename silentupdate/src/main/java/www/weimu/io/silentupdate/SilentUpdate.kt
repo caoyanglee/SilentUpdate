@@ -16,12 +16,7 @@ import java.net.URISyntaxException
 import java.util.*
 
 
-/**
- * Author:你需要一台永动机
- * Date:2017/11/22 14:00
- * Description:
- */
-object UpdateCenter {
+object SilentUpdate {
     private val activityStack = Stack<Activity>()
     private lateinit var downloadManager: DownloadManager
     private lateinit var notificationManager: NotificationManager

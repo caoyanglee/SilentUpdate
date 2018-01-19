@@ -32,6 +32,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.0.2'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
-//    implementation project(':silentupdate')
-    compile 'www.weimu.io:silentupdate:0.1.0@aar'
+    implementation project(':silentupdate')
+//    compile 'www.weimu.io:silentupdate:0.1.0@aar'
 }

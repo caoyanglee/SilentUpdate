@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;
-import www.weimu.io.silentupdate.UpdateCenter;
+import www.weimu.io.silentupdate.SilentUpdate;
 
 /**
  * Java的调用方式
@@ -49,7 +49,7 @@ public class JavaDemoActivity extends AppCompatActivity {
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion.compareTo(currentVersion) > 0) {
             Toast.makeText(JavaDemoActivity.this, "开始下载中...", Toast.LENGTH_SHORT).show();
-            UpdateCenter.INSTANCE.update(apkUrl, latestVersion);
+            SilentUpdate.INSTANCE.update(apkUrl, latestVersion);
         }
     }
 

@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import www.weimu.io.silentupdate.core.DownloadListener
-import www.weimu.io.silentupdate.UpdateCenter
+import www.weimu.io.silentupdate.SilentUpdate
 import java.io.File
 
 /**
@@ -18,12 +18,12 @@ class AppData : Application() {
     override fun onCreate() {
         super.onCreate()
         //初始化 step01
-        UpdateCenter.attach(this)
+        SilentUpdate.attach(this)
         //自定义操作
-        UpdateCenter.isShowDialog = true
-        UpdateCenter.isShowNotification = true
+        SilentUpdate.isShowDialog = true
+        SilentUpdate.isShowNotification = true
         //设置回调
-        UpdateCenter.downloadListener = object : DownloadListener {
+        SilentUpdate.downloadListener = object : DownloadListener {
 
             override fun onDownLoadSuccess(file: File) {
                 Log.e("su", "下载完成")
