@@ -25,6 +25,8 @@
             </intent-filter>
         </activity>
 
+        <!--如果项目已有FileProvider，则不用重复导入-->
+        <!--authorities的名称：{包名.fileprovider}-->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -36,7 +38,7 @@
         </provider>
 
         <activity android:name=".KotlinDemoActivity" />
-        <activity android:name=".JavaDemoActivity"></activity>
+        <activity android:name=".JavaDemoActivity" />
     </application>
 
 </manifest>
