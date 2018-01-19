@@ -27,10 +27,12 @@ compile 'www.weimu.io:silent-update-lib:0.1.1'
 2.增加权限
 
 ```xml
-<uses-permission android:name="android.permission.INTERNET" /><!--联网权限-->
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!--存储权限-->
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /><!--存储权限-->
-<uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" /><!--Notification权限-->
+<!-- 联网权限 -->
+<uses-permission android:name="android.permission.INTERNET" />
+<!-- 存储权限 -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<!-- 通知权限 -->
+<uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
 ```       
 3.增加FileProvider【适配7.0】
