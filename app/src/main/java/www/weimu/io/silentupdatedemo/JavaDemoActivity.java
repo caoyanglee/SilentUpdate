@@ -41,7 +41,7 @@ public class JavaDemoActivity extends AppCompatActivity {
     //获取下载链接 step2
     public void getLatestApk() {
         //具体的网络请求步骤自己操作
-        String apkUrl = "https://t.alipayobjects.com/L1/71/100/and/alipay_wap_main.apk";
+        String apkUrl = "http://download.moji001.com/download/MojiWeather-V7.0300.02-release-c8888.apk";
         //判断版本号
         String latestVersion = "1.1.0";
         String currentVersion = BuildConfig.VERSION_NAME;
