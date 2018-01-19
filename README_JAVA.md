@@ -66,8 +66,9 @@ UpdateCenter.INSTANCE.setShowNotification(false);
 
 2.实现回调<br>
 > 注意：如果要使用自己的Dialog或Notifigation,得实现回调
-* 执行下载任务之前都会判断更新文件是否已经存在，若已存在,调用onFileIsExist(file:File)，不在进行下载操作<br>
-* 普通下载完成则调用onDownLoadSuccess(file:file)
+
+* 执行下载任务之前都会判断更新文件是否存在，**存在：**调用`onFileIsExist(file: File)`，不再进行下载操作
+* 下载完成则调用`onDownLoadSuccess(file: File)`
 
 ```java
  UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
