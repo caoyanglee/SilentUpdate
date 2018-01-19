@@ -31,9 +31,10 @@ allprojects {
 }
 ```
 **app的build.gradle**
+[ ![Download](https://api.bintray.com/packages/yongdongji/android/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/android/silentupdate/_latestVersion)
 
 ```gradle
-compile 'www.weimu.io:silentupdate:0.1.0@aar'
+compile 'www.weimu.io:silentupdate:{version_code}@aar'
 ```
 
 2.增加权限
