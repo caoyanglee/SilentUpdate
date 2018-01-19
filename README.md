@@ -1,6 +1,6 @@
 # 静默更新应用库
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[ ![Download](https://api.bintray.com/packages/yongdongji/maven/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/maven/silentupdate/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/yongdongji/android/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/android/silentupdate/_latestVersion)
 
 > 注意：此库是由kotlin编写而成<br>
 

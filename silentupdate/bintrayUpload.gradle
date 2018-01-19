@@ -28,6 +28,7 @@ def developerEmail = properties.getProperty("developer.email")
 
 def bintrayUser = properties.getProperty("bintray.user")
 def bintrayApikey = properties.getProperty("bintray.apikey")
+def bintrayrepo = properties.getProperty("bintray.repo")
 
 def javadocName = properties.getProperty("javadoc.name")
 
@@ -114,7 +115,7 @@ bintray {
     publish = true
     pkg {
         //userOrg = "weimusenlin"//组织名称  如果用组织就填写组织名称
-        repo = "maven"//库的名称
+        repo = bintrayrepo
         name = projectName
         desc = project_desc
         websiteUrl = projectSiteUrl
