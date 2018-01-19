@@ -71,7 +71,7 @@ UpdateCenter.INSTANCE.setShowNotification(false);
 * 下载完成则调用`onDownLoadSuccess(file: File)`
 
 ```java
- UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
+UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
      @Override
      public void onDownLoadSuccess(@NotNull File file) {
          //下载完成
@@ -81,5 +81,5 @@ UpdateCenter.INSTANCE.setShowNotification(false);
      public void onFileIsExist(@NotNull File file) {
          //文件已存在
      }
- });
+});
 ```
