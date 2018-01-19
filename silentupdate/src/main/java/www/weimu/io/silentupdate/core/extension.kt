@@ -6,6 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.support.v4.content.FileProvider
+import android.text.TextUtils
+import www.weimu.io.silentupdate.UpdateCenter
 import java.io.File
 
 
@@ -22,7 +25,7 @@ fun Context.constructOpenApkItent(file: File): Intent {
     if (Build.VERSION.SDK_INT >= 24) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)//7.0有效
     }
-    val uri = FileUtils.getUriForFile(this, file)
+    val uri = getUriForFile(file)
     intent.setDataAndType(uri, "application/vnd.android.package-archive")
     return intent
 }
@@ -65,5 +68,35 @@ fun Context.openAppInfoPage(targetPackageName: String = packageName) {
     startActivity(intent)
 }
 
+
+//是否存在文件
+fun Any.isFileExist(filePath: String): Boolean {
+    if (TextUtils.isEmpty(filePath)) {
+        return false
+    }
+
+    val file = File(filePath)
+    return file.exists() && file.isFile
+}
+
+
+/**
+ * 获取文件的Uri
+ * 兼容7.0
+ */
+fun Context.getUriForFile(file: File?): Uri {
+    //获取当前app的包名
+    val FPAuth = "${UpdateCenter.getApplicationContext().packageName}.fileprovider"
+
+    if (file == null) throw NullPointerException()
+
+    val uri: Uri
+    if (Build.VERSION.SDK_INT >= 24) {
+        uri = FileProvider.getUriForFile(this.applicationContext, FPAuth, file)
+    } else {
+        uri = Uri.fromFile(file)
+    }
+    return uri
+}
 
 

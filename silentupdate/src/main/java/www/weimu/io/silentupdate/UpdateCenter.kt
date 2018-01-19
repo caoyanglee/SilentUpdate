@@ -64,9 +64,9 @@ object UpdateCenter {
 
     //分离Application
     fun detach() {
-        activityStack.clear()
         val context = getApplicationContext()
         context.saveShareStuff { isDownloading = false }
+        activityStack.clear()
     }
 
 
@@ -75,7 +75,7 @@ object UpdateCenter {
         val context = getApplicationContext()
         val path = fileDirectory + "${getAppName()}_v$latestVersion.apk"
 
-        val isExist = FileUtils.isFileExist(path)
+        val isExist = isFileExist(path)
         //Logger.e("path=${path}  是否存在=" + isExist)
         if (isExist && !context.getUpdateShare().isDownloading) {
             if (isShowDialog) showDialog(File(path)) //若存在且下载完成  弹出dialog
