@@ -4,12 +4,12 @@ import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
-import www.weimu.io.silentupdate.UpdateCenter
 import java.io.File
 
 
@@ -112,4 +112,16 @@ fun Context.getAppName(): String? {
     return "updateApk"
 }
 
+//是否连接Wifi
+fun Context.isConnectWifi(): Boolean {
+    val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = cm.activeNetworkInfo
+    if (networkInfo != null && networkInfo.isConnected) {
+        val type = networkInfo.type
+        if (type == ConnectivityManager.TYPE_WIFI) {
+            return true
+        }
+    }
+    return false
+}
 

@@ -38,10 +38,10 @@ class KotlinDemoActivity : AppCompatActivity() {
         val currentVersion = BuildConfig.VERSION_NAME
 
         //将服务器传给你的最新版本号字段给latestVersion
-        if (latestVersion > currentVersion)
+        if (latestVersion > currentVersion) {
             Toast.makeText(this@KotlinDemoActivity, "开始下载中...", Toast.LENGTH_SHORT).show()
-        UpdateCenter.update(apkUrl, latestVersion)
+            UpdateCenter.update(apkUrl, latestVersion)
+        }
     }
-
 
 }

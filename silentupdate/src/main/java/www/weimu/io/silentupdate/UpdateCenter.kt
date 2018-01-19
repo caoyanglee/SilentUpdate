@@ -68,21 +68,21 @@ object UpdateCenter {
         activityStack.clear()
     }
 
-
     //获取apk  不管是网络还是本地
     fun update(apkUrl: String, latestVersion: String) {
         val context = getApplicationContext()
-        val path = fileDirectory + "${context.getAppName()}_v$latestVersion.apk"
+        val fileName = "${context.getAppName()}_v$latestVersion.apk"
+        val path = fileDirectory + fileName
 
         val isExist = isFileExist(path)
         //Logger.e("path=${path}  是否存在=" + isExist)
         if (isExist && !context.getUpdateShare().isDownloading) {
             if (isShowDialog) showDialog(File(path)) //若存在且下载完成  弹出dialog
             downloadListener?.onFileIsExist(File(path))
-        } else {
+        } else if (context.isConnectWifi()) {
             //绑定广播接收者
             bindReceiver()
-            updateApkByHide(apkUrl, latestVersion)//不存在 直接下载
+            updateApkByHide(apkUrl, fileName)//不存在 直接下载
         }
     }
 
@@ -97,20 +97,20 @@ object UpdateCenter {
     }
 
     //更新apk hide
-    private fun updateApkByHide(apkUrl: String, latestVersion: String?) {
+    private fun updateApkByHide(apkUrl: String, fileName: String?) {
         val context = getApplicationContext()
         val request = DownloadManager.Request(Uri.parse(apkUrl))
         //设置在什么网络情况下进行下载
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
         //设置通知栏标题
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
-        request.setTitle("${context.getAppName()}_v" + latestVersion)
+        request.setTitle(fileName)
         request.setDescription(context.packageName)
         request.setAllowedOverRoaming(false)
         request.setVisibleInDownloadsUi(true)
         //设置文件存放目录
         //request.setDestinationInExternalFilesDir(AppData.getContext(), "download", "youudo_v" + version + ".apk");
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${context.getAppName()}_v$latestVersion.apk")
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
 
         val id = downloadManager.enqueue(request)
         //存入到share里
