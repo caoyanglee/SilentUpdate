@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -36,7 +35,7 @@ object SilentUpdate {
     private fun getApplicationContext() = getCurrentActivity().applicationContext
 
     //链接至Application
-    fun attach(mContext: Application) {
+    fun init(mContext: Application) {
         downloadManager = mContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         notificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -56,30 +55,38 @@ object SilentUpdate {
     }
 
 
-    //分离Application
-    fun detach() {
-        val context = getApplicationContext()
-        context.saveShareStuff { isDownloading = false }
-        activityStack.clear()
-    }
-
     //获取apk  不管是网络还是本地
     fun update(apkUrl: String, latestVersion: String) {
         val context = getApplicationContext()
         val fileName = "${context.getAppName()}_v$latestVersion.apk"
         val path = fileDirectory + fileName
 
-        val isExist = isFileExist(path)
-        //Logger.e("path=${path}  是否存在=" + isExist)
-        if (isExist && !context.getUpdateShare().isDownloading) {
-            if (isShowDialog) showDialog(File(path)) //若存在且下载完成  弹出dialog
-            downloadListener?.onFileIsExist(File(path))
+        val taskId = context.getUpdateShare().apkTaskID
+        loge("taskID=$taskId")
+        if (isFileExist(path)) {
+            loge("文件已经存在")
+            if (isDownTaskSuccess(taskId)) {
+                loge("任务已经下载完成")
+                //状态：完成
+                if (isShowDialog) showDialog(File(path)) //若存在且下载完成  弹出dialog
+                downloadListener?.onFileIsExist(File(path))
+            } else if (isDownTaskPause(taskId) && context.isConnectWifi()) {
+                loge("任务已经暂停")
+                //启动下载
+                loge("继续下载")
+                updateApkByHide(apkUrl, fileName)
+            }else if (isDownTaskProcessing(taskId)){
+                loge("任务正在执行当中")
+            }
         } else if (context.isConnectWifi()) {
+            loge("开始下载")
             //绑定广播接收者
             bindReceiver()
-            updateApkByHide(apkUrl, fileName)//不存在 直接下载
+            //不存在 直接下载
+            updateApkByHide(apkUrl, fileName)
         }
     }
+
 
     private fun bindReceiver() {
         val context = getApplicationContext()
@@ -89,12 +96,16 @@ object SilentUpdate {
         filter.addAction("android.intent.action.DOWNLOAD_COMPLETE")
         filter.addAction("android.intent.action.VIEW_DOWNLOADS")
         context.registerReceiver(appUpdateReceiver, filter)
+
     }
 
     //更新apk hide
     private fun updateApkByHide(apkUrl: String, fileName: String?) {
         val context = getApplicationContext()
-        val request = DownloadManager.Request(Uri.parse(apkUrl))
+        val uri = Uri.parse(apkUrl)
+        loge("url=${apkUrl}")
+        loge("uri=${uri}")
+        val request = DownloadManager.Request(uri)
         //设置在什么网络情况下进行下载
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
         //设置通知栏标题
@@ -111,12 +122,12 @@ object SilentUpdate {
         //存入到share里
         context.saveShareStuff {
             apkTaskID = id
-            isDownloading = true
         }
     }
 
 
     //通过下载id 找到对应的文件地址
+    @Deprecated("查询下载任务的状态")
     private fun queryDownTaskById(id: Long): String? {
         var filePath: String? = null
         val query = DownloadManager.Query()
@@ -129,14 +140,47 @@ object SilentUpdate {
             val title = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE))
             val address = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
             filePath = address
-            val statuss = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+            val status = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
             val size = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
             val sizeTotal = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
             val map = HashMap<String, String>()
-            map.put("downid", downId)
-            map.put("title", title)
-            map.put("address", address)
-            map.put("sizeTotal", sizeTotal)
+        }
+        cursor.close()
+        return filePath
+    }
+
+
+    //查询任务的状体
+    private fun queryTaskStatus(id: Long): String {
+        val query = DownloadManager.Query()
+        query.setFilterById(id)
+        val cursor = downloadManager.query(query)
+        while (cursor.moveToNext()) {
+            val status = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+            return status
+        }
+        cursor.close()
+        return ""
+    }
+
+    //下载任务是否结束
+    private fun isDownTaskProcessing(id: Long) = queryTaskStatus(id) == "192"
+
+    //下载任务是否暂停
+    private fun isDownTaskPause(id: Long) = queryTaskStatus(id) == "193"
+
+    //下载任务是否成功
+    private fun isDownTaskSuccess(id: Long) = queryTaskStatus(id) == "200"
+
+
+    //通过下载id获取 文件地址
+    private fun getFilePathByTaskId(id: Long): String? {
+        var filePath: String? = null
+        val query = DownloadManager.Query()
+        query.setFilterById(id)
+        val cursor = downloadManager.query(query)
+        while (cursor.moveToNext()) {
+            filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
         }
         cursor.close()
         return filePath
@@ -148,6 +192,7 @@ object SilentUpdate {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {
+                    loge("下载完成")
                     downloadComplete(intent)
                 }
             }
@@ -161,12 +206,11 @@ object SilentUpdate {
         val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
         //判断ID是否一致
         if (id != context.getUpdateShare().apkTaskID) return
-
+        loge("注销接收者")
         context.unregisterReceiver(appUpdateReceiver)
-        context.saveShareStuff { isDownloading = false }
 
         try {
-            val uri = Uri.parse(queryDownTaskById(id)).toString()
+            val uri = Uri.parse(getFilePathByTaskId(id)).toString()
             //必须try-catch
             val file = File(URI(uri))
             if (isShowNotification) showNotification(file)

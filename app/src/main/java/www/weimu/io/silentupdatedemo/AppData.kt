@@ -18,7 +18,7 @@ class AppData : Application() {
     override fun onCreate() {
         super.onCreate()
         //初始化 step01
-        SilentUpdate.attach(this)
+        SilentUpdate.init(this)
         //自定义操作
         SilentUpdate.isShowDialog = true
         SilentUpdate.isShowNotification = true

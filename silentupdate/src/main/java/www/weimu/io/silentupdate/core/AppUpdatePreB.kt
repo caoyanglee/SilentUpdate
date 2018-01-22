@@ -10,34 +10,26 @@ import www.weimu.io.silentupdate.BuildConfig
  */
 //对应downloadManager
 //是否正在下载
-data class AppUpdatePreB(var apkTaskID: Long, var isDownloading: Boolean)
+data class AppUpdatePreB(var apkTaskID: Long)
 
 
 private val SHARE_DOWNLOAD_ID = "download_id"
-private val SHARE_IS_DOWNLOADING = "is_downloading"
 
 fun Context.clearUpdateShare() {
     val sp = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
-    sp.edit()
-            .remove(SHARE_DOWNLOAD_ID)
-            .remove(SHARE_IS_DOWNLOADING)
-            .apply()
+    sp.edit().remove(SHARE_DOWNLOAD_ID).apply()
 }
 
 fun Context.setUpdateShare(share: AppUpdatePreB) {
     val sp = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
-    sp.edit()
-            .putLong(SHARE_DOWNLOAD_ID, share.apkTaskID)
-            .putBoolean(SHARE_IS_DOWNLOADING, share.isDownloading)
-            .apply()
+    sp.edit().putLong(SHARE_DOWNLOAD_ID, share.apkTaskID).apply()
 }
 
 fun Context.getUpdateShare(): AppUpdatePreB {
     val sp = getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
     val apkTaskID = sp.getLong(SHARE_DOWNLOAD_ID, -1L)
-    val isDownloading = sp.getBoolean(SHARE_IS_DOWNLOADING, false)
 
-    val apShare = AppUpdatePreB(apkTaskID, isDownloading)
+    val apShare = AppUpdatePreB(apkTaskID)
     return apShare
 }
 

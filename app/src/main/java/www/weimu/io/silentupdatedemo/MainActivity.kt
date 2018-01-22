@@ -28,13 +28,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    /**
-     * 点击返回键
-     */
-    override fun onBackPressed() {
-        super.onBackPressed()
-        SilentUpdate.detach()
-    }
-
-
 }

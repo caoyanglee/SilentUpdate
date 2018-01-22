@@ -10,6 +10,7 @@ import android.os.Build
 import android.provider.Settings
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
+import android.util.Log
 import java.io.File
 
 
@@ -72,12 +73,21 @@ fun Context.openAppInfoPage(targetPackageName: String = packageName) {
 
 //是否存在文件
 fun Any.isFileExist(filePath: String): Boolean {
-    if (TextUtils.isEmpty(filePath)) {
-        return false
-    }
-
+    if (TextUtils.isEmpty(filePath)) return false
     val file = File(filePath)
     return file.exists() && file.isFile
+}
+
+//删除文件
+fun Any.deleteFile(filePath: String): Boolean {
+    if (TextUtils.isEmpty(filePath)) return false
+    val file = File(filePath)
+    if (file.exists() && file.isFile) return file.delete()
+    return false
+}
+
+fun Any.loge(message: String) {
+    Log.e("weimu", message)
 }
 
 
