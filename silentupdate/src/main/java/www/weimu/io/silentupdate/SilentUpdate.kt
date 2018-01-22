@@ -54,9 +54,19 @@ object SilentUpdate {
         })
     }
 
-
-    //获取apk  不管是网络还是本地
+    //核心操作
     fun update(apkUrl: String, latestVersion: String) {
+        val context = getApplicationContext()
+        if (context.isConnectWifi()) {
+            updateByWifi(apkUrl, latestVersion)
+        } else {
+            updateByMobile(apkUrl, latestVersion)
+        }
+    }
+
+
+    //升级操作 WIFI的情况下
+    private fun updateByWifi(apkUrl: String, latestVersion: String) {
         val context = getApplicationContext()
         val fileName = "${context.getAppName()}_v$latestVersion.apk"
         val path = fileDirectory + fileName
@@ -70,24 +80,57 @@ object SilentUpdate {
                 //状态：完成
                 if (isShowDialog) showDialog(File(path)) //若存在且下载完成  弹出dialog
                 downloadListener?.onFileIsExist(File(path))
-            } else if (isDownTaskPause(taskId) && context.isConnectWifi()) {
+            } else if (isDownTaskPause(taskId)) {
                 loge("任务已经暂停")
                 //启动下载
                 loge("继续下载")
-                updateApkByHide(apkUrl, fileName)
-            }else if (isDownTaskProcessing(taskId)){
+                updateApkByWifi(apkUrl, fileName)
+            } else if (isDownTaskProcessing(taskId)) {
                 loge("任务正在执行当中")
             }
-        } else if (context.isConnectWifi()) {
+        } else {
             loge("开始下载")
             //绑定广播接收者
             bindReceiver()
             //不存在 直接下载
-            updateApkByHide(apkUrl, fileName)
+            updateApkByWifi(apkUrl, fileName)
         }
     }
 
 
+    //升级操作  流量的情况下
+    private fun updateByMobile(apkUrl: String, latestVersion: String) {
+        val context = getApplicationContext()
+        val fileName = "${context.getAppName()}_v$latestVersion.apk"
+        val path = fileDirectory + fileName
+
+        val taskId = context.getUpdateShare().apkTaskID
+        loge("taskID=$taskId")
+        if (isFileExist(path)) {
+            loge("文件已经存在")
+            if (isDownTaskSuccess(taskId)) {
+                loge("任务已经下载完成")
+                //状态：完成
+                if (isShowDialog) showDialog(File(path)) //若存在且下载完成  弹出dialog
+                downloadListener?.onFileIsExist(File(path))
+            } else if (isDownTaskPause(taskId)) {
+                loge("任务已经暂停")
+                //启动下载
+                loge("继续下载")
+                showUpdateTip(apkUrl,fileName)
+            } else if (isDownTaskProcessing(taskId)) {
+                loge("任务正在执行当中")
+            }
+        } else {
+            loge("开始下载")
+            //绑定广播接收者
+            bindReceiver()
+            //不存在 直接下载
+            showUpdateTip(apkUrl,fileName)
+        }
+    }
+
+    //绑定广播接收者
     private fun bindReceiver() {
         val context = getApplicationContext()
         //广播接收者
@@ -99,8 +142,8 @@ object SilentUpdate {
 
     }
 
-    //更新apk hide
-    private fun updateApkByHide(apkUrl: String, fileName: String?) {
+    //更新apk Wifi
+    private fun updateApkByWifi(apkUrl: String, fileName: String?) {
         val context = getApplicationContext()
         val uri = Uri.parse(apkUrl)
         loge("url=${apkUrl}")
@@ -110,6 +153,33 @@ object SilentUpdate {
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
         //设置通知栏标题
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+        request.setTitle(fileName)
+        request.setDescription(context.packageName)
+        request.setAllowedOverRoaming(false)
+        request.setVisibleInDownloadsUi(true)
+        //设置文件存放目录
+        //request.setDestinationInExternalFilesDir(AppData.getContext(), "download", "youudo_v" + version + ".apk");
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+
+        val id = downloadManager.enqueue(request)
+        //存入到share里
+        context.saveShareStuff {
+            apkTaskID = id
+        }
+    }
+
+
+    //更新apk mobile
+    private fun updateApkByMobile(apkUrl: String, fileName: String?) {
+        val context = getApplicationContext()
+        val uri = Uri.parse(apkUrl)
+        loge("url=${apkUrl}")
+        loge("uri=${uri}")
+        val request = DownloadManager.Request(uri)
+        //设置在什么网络情况下进行下载
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+        //设置通知栏标题
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
         request.setTitle(fileName)
         request.setDescription(context.packageName)
         request.setAllowedOverRoaming(false)
@@ -213,8 +283,13 @@ object SilentUpdate {
             val uri = Uri.parse(getFilePathByTaskId(id)).toString()
             //必须try-catch
             val file = File(URI(uri))
-            if (isShowNotification) showNotification(file)
-            if (isShowDialog) showDialog(file)
+            if (context.isConnectWifi()){
+                if (isShowNotification) showNotification(file)
+                if (isShowDialog) showDialog(file)
+            }else{
+                context.openApkByFilePath(file)
+            }
+
             downloadListener?.onDownLoadSuccess(file)
 
         } catch (e: URISyntaxException) {
@@ -222,8 +297,28 @@ object SilentUpdate {
         }
     }
 
+
     /**
-     * 显示更新dialog
+     * 状态：流量
+     * 显示Dialog：提示用户下载
+     */
+    private fun showUpdateTip(apkUrl: String, fileName: String?) {
+        val activity = getCurrentActivity()
+        AlertDialog.Builder(activity)
+                .setCancelable(true)
+                .setTitle("发现新版本！")
+                .setMessage("请点击下载更新~")
+                .setPositiveButton("更新", { dialog, which ->
+                    updateApkByMobile(apkUrl, fileName)
+                })
+                .setNegativeButton("取消", null)
+                .show()
+    }
+
+
+    /**
+     * 状态：WIFI
+     * 显示Dialog:提示用户安装
      */
     private fun showDialog(file: File) {
         val activity = getCurrentActivity()
@@ -236,6 +331,7 @@ object SilentUpdate {
                 })
                 .show()
     }
+
 
     /**
      * 更新notification

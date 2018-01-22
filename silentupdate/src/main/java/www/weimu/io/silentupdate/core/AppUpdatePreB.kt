@@ -12,7 +12,6 @@ import www.weimu.io.silentupdate.BuildConfig
 //是否正在下载
 data class AppUpdatePreB(var apkTaskID: Long)
 
-
 private val SHARE_DOWNLOAD_ID = "download_id"
 
 fun Context.clearUpdateShare() {
