@@ -7,7 +7,10 @@ import java.io.File
  * Date:2018/1/17 16:00
  * Description:
  */
-interface DownloadListener {
-    fun onDownLoadSuccess(file: File) {}
-    fun onFileIsExist(file: File) {}
+interface UpdateListener {
+    //下载完成
+    fun onDownLoadSuccess(file: File)
+
+    //文件已存在
+    fun onFileIsExist(file: File)
 }

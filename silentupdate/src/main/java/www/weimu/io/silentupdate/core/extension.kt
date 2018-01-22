@@ -11,16 +11,17 @@ import android.provider.Settings
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.util.Log
+import www.weimu.io.silentupdate.BuildConfig
 import java.io.File
 
 
 //直接打开APK
-fun Context.openApkByFilePath(file: File) {
+internal fun Context.openApkByFilePath(file: File) {
     startActivity(constructOpenApkItent(file))
 }
 
 //构造打开APK的Intent
-fun Context.constructOpenApkItent(file: File): Intent {
+internal fun Context.constructOpenApkItent(file: File): Intent {
     val intent = Intent()
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     intent.action = android.content.Intent.ACTION_VIEW
@@ -33,7 +34,7 @@ fun Context.constructOpenApkItent(file: File): Intent {
 }
 
 //通知开关是否打开
-fun Context.isNotificationEnabled(): Boolean {
+internal fun Context.isNotificationEnabled(): Boolean {
     val CHECK_OP_NO_THROW = "checkOpNoThrow"
     val OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION"
     val mAppOps = this.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
@@ -63,7 +64,7 @@ fun Context.isNotificationEnabled(): Boolean {
 }
 
 //app信息界面 -- 修改权限  --修改通知开关
-fun Context.openAppInfoPage(targetPackageName: String = packageName) {
+internal fun Context.openAppInfoPage(targetPackageName: String = packageName) {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
     val uri = Uri.fromParts("package", targetPackageName, null)
     intent.data = uri
@@ -72,22 +73,16 @@ fun Context.openAppInfoPage(targetPackageName: String = packageName) {
 
 
 //是否存在文件
-fun Any.isFileExist(filePath: String): Boolean {
+internal fun Any.isFileExist(filePath: String): Boolean {
     if (TextUtils.isEmpty(filePath)) return false
     val file = File(filePath)
     return file.exists() && file.isFile
 }
 
-//删除文件
-fun Any.deleteFile(filePath: String): Boolean {
-    if (TextUtils.isEmpty(filePath)) return false
-    val file = File(filePath)
-    if (file.exists() && file.isFile) return file.delete()
-    return false
-}
 
-fun Any.loge(message: String) {
-    Log.e("weimu", message)
+internal fun Any.loge(message: String) {
+    if (BuildConfig.DEBUG)
+        Log.e("weimu", message)
 }
 
 
@@ -95,7 +90,7 @@ fun Any.loge(message: String) {
  * 获取文件的Uri
  * 兼容7.0
  */
-fun Context.getUriForFile(file: File?): Uri {
+internal fun Context.getUriForFile(file: File?): Uri {
     //获取当前app的包名
     val FPAuth = "$packageName.fileprovider"
 
@@ -111,7 +106,7 @@ fun Context.getUriForFile(file: File?): Uri {
 }
 
 //获取应用的名字
-fun Context.getAppName(): String? {
+internal fun Context.getAppName(): String? {
     val pm: PackageManager = packageManager;
     try {
         val info = pm.getApplicationInfo(this.packageName, 0)
@@ -123,13 +118,13 @@ fun Context.getAppName(): String? {
 }
 
 //是否连接Wifi
-fun Context.isConnectWifi(): Boolean {
+internal fun Context.isConnectWifi(): Boolean {
     val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val networkInfo = cm.activeNetworkInfo
     if (networkInfo != null && networkInfo.isConnected) {
         val type = networkInfo.type
         if (type == ConnectivityManager.TYPE_WIFI) {
-            return true
+            return false
         }
     }
     return false

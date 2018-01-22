@@ -1,11 +1,10 @@
 package www.weimu.io.silentupdatedemo
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import www.weimu.io.silentupdate.core.DownloadListener
+import www.weimu.io.silentupdate.core.UpdateListener
 import www.weimu.io.silentupdate.SilentUpdate
+import www.weimu.io.silentupdate.core.loge
 import java.io.File
 
 /**
@@ -19,21 +18,19 @@ class AppData : Application() {
         super.onCreate()
         //初始化 step01
         SilentUpdate.init(this)
-        //自定义操作
-        SilentUpdate.isShowDialog = true
-        SilentUpdate.isShowNotification = true
         //设置回调
-        SilentUpdate.downloadListener = object : DownloadListener {
-
-            override fun onDownLoadSuccess(file: File) {
-                Log.e("su", "下载完成")
-            }
-
-            override fun onFileIsExist(file: File) {
-                Log.e("su", "文件已存在")
-            }
-
-        }
+//        SilentUpdate.updateListener = object : UpdateListener {
+//
+//            override fun onDownLoadSuccess(file: File) {
+//                loge("")
+//                Log.e("weimu", "下载完成")
+//            }
+//
+//            override fun onFileIsExist(file: File) {
+//                Log.e("su", "文件已存在")
+//            }
+//
+//        }
     }
 
 

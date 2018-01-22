@@ -7,7 +7,7 @@ import android.os.Bundle
 /**
  * Activity声明周期监听者
  */
-abstract class ActivityLifeListener : Application.ActivityLifecycleCallbacks {
+internal abstract class ActivityLifeListener : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityStarted(activity: Activity?) {}
 
