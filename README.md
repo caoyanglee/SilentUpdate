@@ -68,7 +68,7 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 4.在Application中进行初始化
 
 ```kotlin
-UpdateCenter.attach(this)
+UpdateCenter.init(this)
 ```
 
 ## 用法

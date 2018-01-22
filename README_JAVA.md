@@ -49,7 +49,7 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 4.在Application中进行初始化
 
 ```java
-UpdateCenter.INSTANCE.attach(this);
+UpdateCenter.INSTANCE.init(this);
 ```
 
 
