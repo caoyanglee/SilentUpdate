@@ -67,7 +67,7 @@ UpdateCenter.INSTANCE.update(apkUrl, latestVersion);
 > 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
 ```java
-UpdateCenter.INSTANCE.setUseDefaultHint(true);//是否使用默认提示 包括Dialog和Notification
+UpdateCenter.INSTANCE.setUseDefaultHint(false);//是否使用默认提示 包括Dialog和Notification
 ```
 
 2.实现回调<br>

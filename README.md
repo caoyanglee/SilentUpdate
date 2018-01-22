@@ -12,11 +12,11 @@ A library silently & automatically download latest apk to update your App<br>
 2. 获取下载链接，判断版本号【使用者自己实现】
 3. 开始下载前，判断升级文件是否存在，**存在**：显示安装文件Dialog和回调(onFileIsExist) 
 
-一：Wifi的情况
+一：Wifi的情况<br>
 4. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog
 5. 用户点击Dialog或Notification即跳转到安装界面
 
-二：流量的情况
+二：流量的情况<br>
 4. 显示提示用户下载更新app的Dialog，用户点击更新后，开始下载操作，此时通知栏会显示下载进度
 5. 下载完成后，接收回调(onDownLoadSuccess)并跳转安装界面
 
@@ -90,7 +90,7 @@ UpdateCenter.update(apkUrl, latestVersion)
 > 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
 ```kotlin
-UpdateCenter.isUseDefaultHint = true//是否使用默认提示 包括Dialog和Notification
+UpdateCenter.isUseDefaultHint = false//是否使用默认提示 包括Dialog和Notification
 ```
 
 2.实现回调<br>
