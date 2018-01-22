@@ -52,12 +52,6 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 UpdateCenter.INSTANCE.attach(this);
 ```
 
-5.在应用退出时
-
-```java
-UpdateCenter.INSTANCE.detach();
-```
-
 
 ## 用法
 > 注意：<br>

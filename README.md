@@ -71,12 +71,6 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 UpdateCenter.attach(this)
 ```
 
-5.在应用退出时
-
-```kotlin
-UpdateCenter.detach()
-```
-
 ## 用法
 > 注意：<br>
 apkUrl：服务器提供的apk下载地址<br>
