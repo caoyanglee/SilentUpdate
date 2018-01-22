@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import www.weimu.io.silentupdate.SilentUpdate
+import www.weimu.io.silentupdate.core.AppUpdatePreB
 
 
 /**

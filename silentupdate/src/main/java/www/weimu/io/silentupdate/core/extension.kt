@@ -107,7 +107,7 @@ internal fun Context.getUriForFile(file: File?): Uri {
 
 //获取应用的名字
 internal fun Context.getAppName(): String? {
-    val pm: PackageManager = packageManager;
+    val pm: PackageManager = packageManager
     try {
         val info = pm.getApplicationInfo(this.packageName, 0)
         return info.loadLabel(pm).toString()
@@ -115,6 +115,18 @@ internal fun Context.getAppName(): String? {
         e.printStackTrace()
     }
     return "updateApk"
+}
+
+//获取app的图片
+fun Context.getAppIcon(): Int {
+    val pm: PackageManager = packageManager
+    try {
+        val info = pm.getApplicationInfo(this.packageName, 0)
+        return info.icon
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
+    return -1
 }
 
 //是否连接Wifi

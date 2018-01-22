@@ -1,7 +1,11 @@
 package www.weimu.io.silentupdate
 
 import android.app.*
+import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import www.weimu.io.silentupdate.core.*
 import www.weimu.io.silentupdate.strategy.MobileStrategy
 import www.weimu.io.silentupdate.strategy.Strategy
@@ -36,8 +40,9 @@ object SilentUpdate {
                 activityStack.remove(activity)
             }
         })
-
     }
+
+
 
     //核心操作
     fun update(apkUrl: String, latestVersion: String) {

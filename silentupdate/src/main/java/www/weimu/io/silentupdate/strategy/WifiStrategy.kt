@@ -4,8 +4,12 @@ import android.app.Application
 import android.app.DownloadManager
 import android.app.Notification
 import android.app.PendingIntent
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.support.v4.app.NotificationCompat
+import www.weimu.io.silentupdate.R
 import www.weimu.io.silentupdate.SilentUpdate
 import www.weimu.io.silentupdate.core.*
 import java.io.File
@@ -88,17 +92,22 @@ internal class WifiStrategy(context: Application) : Strategy(context) {
         val context = SilentUpdate.getCurrentActivity()
 
         val title = "发现新版本！"
-        val content: String = "请点击立即安装~"
+        val content = "请点击立即安装~"
         val intent = context.constructOpenApkItent(file)
         val pintent = PendingIntent.getActivity(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val builder = Notification.Builder(context)
-        builder.setSmallIcon(-1)// 设置图标
+        val builder = NotificationCompat.Builder(context)
+        builder.setSmallIcon(R.drawable.ic_get_app_white_24dp)// 设置小图标
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.resources, context.getAppIcon()))//设置大图标
         builder.setTicker(title)// 手机状态栏的提示----最上面的一条
         builder.setWhen(System.currentTimeMillis())// 设置时间
         builder.setContentTitle(title)// 设置标题
         builder.setContentText(content)// 设置通知的内容
         builder.setContentIntent(pintent)// 点击后的意图
         builder.setDefaults(Notification.DEFAULT_ALL)// 设置提示全部
+        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//锁屏通知
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(Const.NOTIFICATION_CHANNEL_ID)
+        }
         val notification = builder.build()// 4.1以上要用才起作用
         notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL// 点击后自动取消
         //显示

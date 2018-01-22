@@ -1,20 +1,17 @@
 package www.weimu.io.silentupdate.strategy
 
-import android.app.AlertDialog
-import android.app.Application
-import android.app.DownloadManager
-import android.app.NotificationManager
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.support.annotation.RequiresApi
 import www.weimu.io.silentupdate.SilentUpdate
-import www.weimu.io.silentupdate.core.getUpdateShare
-import www.weimu.io.silentupdate.core.loge
-import www.weimu.io.silentupdate.core.openApkByFilePath
-import www.weimu.io.silentupdate.core.saveShareStuff
+import www.weimu.io.silentupdate.core.*
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
@@ -33,13 +30,38 @@ internal abstract class Strategy(context: Application) {
     init {
         notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        //增加通知频道【兼容8.0】
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(context)
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(context: Application) {
+        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        // 通知渠道的id
+        // 用户可以看到的通知渠道的名字.
+        val name = "${context.getAppName()}更新专用"
+        // 用户可以看到的通知渠道的描述
+        val description = "${context.getAppName()}更新专用"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val mChannel = NotificationChannel(Const.NOTIFICATION_CHANNEL_ID, name, importance)
+        // 配置通知渠道的属性
+        mChannel.description = description
+        // 设置通知出现时的闪灯（如果 android 设备支持的话）
+        mChannel.enableLights(true)
+        mChannel.lightColor = Color.RED
+        // 设置通知出现时的震动（如果 android 设备支持的话）
+        mChannel.enableVibration(true)
+        mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+        //最后在notificationmanager中创建该通知渠道
+        mNotificationManager.createNotificationChannel(mChannel);
     }
 
     //更新
     abstract fun update(apkUrl: String, latestVersion: String)
 
-    //下载完成
-//    abstract fun downloadComplete(intent: Intent)
 
     //下载完成后
     abstract fun afterDownLoadComplete(file: File)
@@ -97,7 +119,7 @@ internal abstract class Strategy(context: Application) {
 
 
     //查询任务的状体
-    protected fun queryTaskStatus(id: Long): String {
+    private fun queryTaskStatus(id: Long): String {
         val query = DownloadManager.Query()
         query.setFilterById(id)
         val cursor = downloadManager.query(query)
@@ -120,7 +142,7 @@ internal abstract class Strategy(context: Application) {
 
 
     //通过下载id获取 文件地址
-    protected fun getFilePathByTaskId(id: Long): String? {
+    private fun getFilePathByTaskId(id: Long): String? {
         var filePath: String? = null
         val query = DownloadManager.Query()
         query.setFilterById(id)
@@ -186,7 +208,7 @@ internal abstract class Strategy(context: Application) {
     }
 
     /**
-     * 状态：WIFI
+     * 状态：文件已经存在或Wifi情况下下载完成
      * 显示Dialog:提示用户安装
      */
     protected fun showInstallDialog(file: File) {
