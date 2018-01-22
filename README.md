@@ -12,7 +12,7 @@ A library silently & automatically download latest apk to update your App<br>
 2. 获取下载链接，判断版本号【使用者自己实现】
 3. 开始下载前，判断升级文件是否存在，**存在**：显示安装文件Dialog和回调(onFileIsExist) 
 
-一：Wifi的情况<br>
+一：Wifi的情况【静默】<br>
 
 4. 下载时,是静默状态，不会有通知栏显示进度
 5. 下载完成,接收回调(onDownLoadSuccess),显示Notification和Dialog
