@@ -176,11 +176,10 @@ internal abstract class Strategy(context: Application) {
             val uri = Uri.parse(getFilePathByTaskId(id)).toString()
             //必须try-catch
             val file = File(URI(uri))
-            if (SilentUpdate.updateListener == null) {
+            if (SilentUpdate.isUseDefaultHint)
                 afterDownLoadComplete(file)
-            } else {
-                SilentUpdate.updateListener?.onDownLoadSuccess(file)
-            }
+
+            SilentUpdate.updateListener?.onDownLoadSuccess(file)
         } catch (e: URISyntaxException) {
             e.printStackTrace()
         }

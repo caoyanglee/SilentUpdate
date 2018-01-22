@@ -14,7 +14,7 @@ import java.util.*
 /**
  * Wifi的情况
  */
-internal class WifiStrategy (context: Application) : Strategy(context) {
+internal class WifiStrategy(context: Application) : Strategy(context) {
 
 
     //升级操作 WIFI的情况下
@@ -24,17 +24,15 @@ internal class WifiStrategy (context: Application) : Strategy(context) {
         val path = Const.fileDirectory + fileName
 
         val taskId = context.getUpdateShare().apkTaskID
+        loge("==============")
         loge("taskID=$taskId")
         if (isFileExist(path)) {
             loge("【文件已经存在】")
             if (isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")
                 //状态：完成
-                if (SilentUpdate.updateListener != null) {
-                    SilentUpdate.updateListener?.onFileIsExist(File(path))
-                } else {
-                    showInstallDialog(File(path)) //若存在且下载完成  弹出dialog
-                }
+                if (SilentUpdate.isUseDefaultHint) showInstallDialog(File(path)) //弹出dialog
+                SilentUpdate.updateListener?.onFileIsExist(File(path))
             } else if (isDownTaskPause(taskId)) {
                 loge("任务已经暂停")
                 //启动下载

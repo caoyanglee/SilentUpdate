@@ -14,7 +14,8 @@ object SilentUpdate {
     private lateinit var strategy: Strategy
 
     //以下数据可配置
-    var updateListener: UpdateListener? = null
+    var updateListener: UpdateListener? = null//更新回调
+    var isUseDefaultHint = true//是否使用默认提示 包括Dialog和Notification
 
     internal fun getCurrentActivity() = activityStack.peek()
     internal fun getApplicationContext() = getCurrentActivity().applicationContext

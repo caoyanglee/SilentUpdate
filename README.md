@@ -7,13 +7,19 @@
 A library silently & automatically download latest apk to update your App<br>
 静默自动下载最新apk并升级应用
 
-# 执行步骤
+# 双策略执行步骤
 1. 判断权限【使用者自己实现】
 2. 获取下载链接，判断版本号【使用者自己实现】
-3. 开始下载前，判断升级文件是否存在，**存在**：直接弹Dialog和回调(onFileIsExist) 
-4. 判断网络是否为WIFI，**是**：开始下载
-5. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog
-6. **用户点击Dialog或Notification即安装，更新对于用户只有1步，简洁高效**
+3. 开始下载前，判断升级文件是否存在，**存在**：显示安装文件Dialog和回调(onFileIsExist) 
+
+一：Wifi的情况
+4. 下载完成后，接收回调(onDownLoadSuccess),显示Notification和Dialog
+5. 用户点击Dialog或Notification即跳转到安装界面
+
+二：流量的情况
+4. 显示提示用户下载更新app的Dialog，用户点击更新后，开始下载操作，此时通知栏会显示下载进度
+5. 下载完成后，接收回调(onDownLoadSuccess)并跳转安装界面
+
 
 > 注意：以下为Kotlin的操作，若使用Java请点击[这里](https://github.com/CaoyangLee/SilentUpdateDemo/blob/master/README_JAVA.md)
 
@@ -46,7 +52,6 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <!-- 通知权限 -->
 <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-
 ```       
 3.增加FileProvider【适配7.0】
 
@@ -85,12 +90,12 @@ UpdateCenter.update(apkUrl, latestVersion)
 > 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
 ```kotlin
-UpdateCenter.isShowDialog = false//是否显示Dialog
-UpdateCenter.isShowNotification=false//是否显示Notification
+UpdateCenter.isUseDefaultHint = true//是否使用默认提示 包括Dialog和Notification
 ```
 
 2.实现回调<br>
-> 注意：如果要使用自己的Dialog或Notifigation,得实现回调
+> 注意：默认情况下，【下载完成】或【文件已存在】都会有默认的Notification和Dialog提示。
+若用户想自定义提示，请实现以下接口并配合【自定义配置】的第一步<br>
 
 * 执行下载任务之前都会判断更新文件是否存在，**存在**：调用`onFileIsExist(file: File)`，不再进行下载操作
 * 下载完成则调用`onDownLoadSuccess(file: File)`

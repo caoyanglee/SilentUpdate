@@ -67,12 +67,12 @@ UpdateCenter.INSTANCE.update(apkUrl, latestVersion);
 > 注意：有的同学可能不喜欢自带的Notification和Dialog，可以将其关闭
 
 ```java
-UpdateCenter.INSTANCE.setShowDialog(false);
-UpdateCenter.INSTANCE.setShowNotification(false);
+UpdateCenter.INSTANCE.setUseDefaultHint(true);//是否使用默认提示 包括Dialog和Notification
 ```
 
 2.实现回调<br>
-> 注意：如果要使用自己的Dialog或Notifigation,得实现回调
+> 注意：默认情况下，【下载完成】或【文件已存在】都会有默认的Notification和Dialog提示。
+若用户想自定义提示，请实现以下接口并配合【自定义配置】的第一步<br>
 
 * 执行下载任务之前都会判断更新文件是否存在，**存在**：调用`onFileIsExist(file: File)`，不再进行下载操作
 * 下载完成则调用`onDownLoadSuccess(file: File)`

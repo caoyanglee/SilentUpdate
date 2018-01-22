@@ -124,7 +124,7 @@ internal fun Context.isConnectWifi(): Boolean {
     if (networkInfo != null && networkInfo.isConnected) {
         val type = networkInfo.type
         if (type == ConnectivityManager.TYPE_WIFI) {
-            return false
+            return true
         }
     }
     return false

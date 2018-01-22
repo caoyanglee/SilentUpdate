@@ -27,11 +27,8 @@ internal class MobileStrategy(context: Application) : Strategy(context) {
             if (isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")
                 //状态：完成
-                if (SilentUpdate.updateListener != null) {
-                    SilentUpdate.updateListener?.onFileIsExist(File(path))
-                } else {
-                    showInstallDialog(File(path)) //若存在且下载完成  弹出dialog
-                }
+                if (SilentUpdate.isUseDefaultHint) showInstallDialog(File(path)) //弹出dialog
+                SilentUpdate.updateListener?.onFileIsExist(File(path))
             } else if (isDownTaskPause(taskId)) {
                 loge("任务已经暂停")
                 //启动下载
