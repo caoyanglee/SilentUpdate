@@ -59,7 +59,7 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 ```       
 3.增加FileProvider【适配7.0】
 
-> 注意：此处的```android:resource="@xml/filepaths"```自己谷歌或直接获取demo文件
+> 注意：此处的```android:resource="@xml/filepaths"```自己谷歌或直接获取[demo文件](https://github.com/CaoyangLee/SilentUpdate/blob/master/app/src/main/res/xml/filepaths.xml)
 
 ```xml
 <provider
