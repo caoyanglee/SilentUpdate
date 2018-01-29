@@ -14,7 +14,10 @@ allprojects {
 **app的build.gradle**
 [ ![Download](https://api.bintray.com/packages/yongdongji/android/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/android/silentupdate/_latestVersion)
 
+> 注意：默认使用kotlin1.2.20版本的库
+
 ```gradle
+compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.20"
 compile 'www.weimu.io:silentupdate:{version_code}@aar'
 ```
 
