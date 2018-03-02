@@ -31,6 +31,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.20"
 }
+//记得加上这个
 apply from: "bintrayUpload.gradle"
 
 
