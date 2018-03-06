@@ -79,7 +79,7 @@ internal fun Any.isFileExist(filePath: String): Boolean {
     return file.exists() && file.isFile
 }
 
-
+//log
 internal fun Any.loge(message: String) {
     if (BuildConfig.DEBUG)
         Log.e("weimu", message)
@@ -97,7 +97,7 @@ internal fun Context.getUriForFile(file: File?): Uri {
     if (file == null) throw NullPointerException()
 
     val uri: Uri
-    if (Build.VERSION.SDK_INT >= 24) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         uri = FileProvider.getUriForFile(this.applicationContext, FPAuth, file)
     } else {
         uri = Uri.fromFile(file)

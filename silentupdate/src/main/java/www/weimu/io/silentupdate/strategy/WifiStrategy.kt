@@ -25,7 +25,7 @@ internal class WifiStrategy(context: Application) : Strategy(context) {
     override fun update(apkUrl: String, latestVersion: String) {
         val context = SilentUpdate.getApplicationContext()
         val fileName = "${context.getAppName()}_v$latestVersion.apk"
-        val path = Const.fileDirectory + fileName
+        val path = Const.UPDATE_FILE_DIR + fileName
 
         val taskId = context.getUpdateShare().apkTaskID
         loge("==============")
