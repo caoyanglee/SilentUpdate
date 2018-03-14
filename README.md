@@ -4,6 +4,10 @@
 
 > 注意：此库是由kotlin编写而成<br>
 
+
+## 演示
+![](https://github.com/CaoyangLee/SilentUpdate/blob/master/gif/gif_demo.gif)
+
 A library silently & automatically download latest apk to update your App<br>
 静默自动下载最新apk并升级应用
 
