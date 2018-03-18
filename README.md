@@ -20,11 +20,11 @@ A library silently & automatically download latest apk to update your App<br>
 
 4. 下载时,是静默状态，不会有通知栏显示进度
 5. 下载完成,接收回调(onDownLoadSuccess),显示Notification和Dialog
-6. 用户点击Dialog或Notification即跳转到安装界面
+6. 用户点击DownloadSuccessDialog或Notification即跳转到安装界面
 
 二：流量的情况【用户自行操作】<br>
 
-4. 显示提示用户下载更新app的Dialog，用户点击更新后，开始下载操作，
+4. 显示更新app的UpdateDialog，用户点击更新后，开始下载操作
 5. 下载时,通知栏会显示下载进度
 5. 下载完成后，接收回调(onDownLoadSuccess)并跳转安装界面
 
