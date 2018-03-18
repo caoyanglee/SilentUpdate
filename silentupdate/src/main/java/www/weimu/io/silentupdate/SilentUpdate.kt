@@ -10,6 +10,7 @@ import www.weimu.io.silentupdate.core.*
 import www.weimu.io.silentupdate.strategy.MobileStrategy
 import www.weimu.io.silentupdate.strategy.Strategy
 import www.weimu.io.silentupdate.strategy.WifiStrategy
+import java.io.File
 import java.util.*
 
 
@@ -43,10 +44,15 @@ object SilentUpdate {
     }
 
 
-
     //核心操作
     fun update(apkUrl: String, latestVersion: String) {
         strategy.update(apkUrl, latestVersion)
+    }
+
+    //若不使用默认的Dialog 使用者需要配合自定义Dialog和此方法来 打开apk安装界面
+    //打开Apk安装界面
+    fun openApkInstallPage(apkFile: File) {
+        getApplicationContext().openApkByFilePath(apkFile)
     }
 
 }

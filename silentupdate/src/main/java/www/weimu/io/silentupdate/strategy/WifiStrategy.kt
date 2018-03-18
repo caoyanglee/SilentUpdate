@@ -54,32 +54,6 @@ internal class WifiStrategy(context: Application) : Strategy(context) {
         }
     }
 
-    //更新apk Wifi
-    private fun addRequest(apkUrl: String, fileName: String?) {
-        val context = SilentUpdate.getApplicationContext()
-        val uri = Uri.parse(apkUrl)
-        loge("url=${apkUrl}")
-        loge("uri=${uri}")
-        val request = DownloadManager.Request(uri)
-        //设置在什么网络情况下进行下载
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
-        //设置通知栏标题
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
-        request.setTitle(fileName)
-        request.setDescription(context.packageName)
-        request.setAllowedOverRoaming(false)
-        request.setVisibleInDownloadsUi(true)
-        //设置文件存放目录
-        //request.setDestinationInExternalFilesDir(AppData.getContext(), "download", "youudo_v" + version + ".apk");
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-
-        val id = downloadManager.enqueue(request)
-        //存入到share里
-        context.saveShareStuff {
-            apkTaskID = id
-        }
-    }
-
     //下载完成后
     override fun afterDownLoadComplete(file: File) {
         showInstallNotification(file)

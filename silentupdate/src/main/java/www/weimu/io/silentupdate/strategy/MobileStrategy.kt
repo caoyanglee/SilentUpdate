@@ -63,8 +63,8 @@ internal class MobileStrategy(context: Application) : Strategy(context) {
         val activity = SilentUpdate.getCurrentActivity()
         AlertDialog.Builder(activity)
                 .setCancelable(true)
-                .setTitle("发现新版本！")
-                .setMessage("请点击下载更新~")
+                .setTitle("提示！")
+                .setMessage("发现新版本！请点击立即更新。")
                 .setPositiveButton("更新", { dialog, which ->
                     addRequest(apkUrl, fileName, true)
                 })

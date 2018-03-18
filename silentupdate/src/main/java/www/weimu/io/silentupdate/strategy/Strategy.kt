@@ -67,17 +67,17 @@ internal abstract class Strategy(context: Application) {
     abstract fun afterDownLoadComplete(file: File)
 
 
-    //更新apk Wifi
-    protected fun addRequest(apkUrl: String, fileName: String?, isShowNotification: Boolean = false) {
+    //更新apk Wifi&Mobile
+    protected fun addRequest(apkUrl: String, fileName: String?, isMobileMode: Boolean = false) {
         val context = SilentUpdate.getApplicationContext()
         val uri = Uri.parse(apkUrl)
         loge("url=${apkUrl}")
         loge("uri=${uri}")
         val request = DownloadManager.Request(uri)
         //设置在什么网络情况下进行下载
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+        request.setAllowedNetworkTypes(if (isMobileMode) DownloadManager.Request.NETWORK_MOBILE else DownloadManager.Request.NETWORK_WIFI)
         //设置通知栏标题
-        request.setNotificationVisibility(if (isShowNotification) DownloadManager.Request.VISIBILITY_VISIBLE else DownloadManager.Request.VISIBILITY_HIDDEN)
+        request.setNotificationVisibility(if (isMobileMode) DownloadManager.Request.VISIBILITY_VISIBLE else DownloadManager.Request.VISIBILITY_HIDDEN)
         request.setTitle(fileName)
         request.setDescription(context.packageName)
         request.setAllowedOverRoaming(false)
@@ -215,8 +215,8 @@ internal abstract class Strategy(context: Application) {
         val activity = SilentUpdate.getCurrentActivity()
         AlertDialog.Builder(activity)
                 .setCancelable(true)
-                .setTitle("发现新版本！")
-                .setMessage("请点击立即安装~")
+                .setTitle("提示")
+                .setMessage("发现新版本！请点击立即安装。")
                 .setPositiveButton("立即安装", { dialog, which ->
                     activity.openApkByFilePath(file)
                 })
