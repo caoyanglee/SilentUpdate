@@ -84,11 +84,13 @@ UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
      @Override
      public void onDownLoadSuccess(@NotNull File file) {
          //下载完成
+         SilentUpdate.INSTANCE.openApkInstallPage(file);//当取消默认的dialog时
      }
 
      @Override
      public void onFileIsExist(@NotNull File file) {
          //文件已存在
+         SilentUpdate.INSTANCE.openApkInstallPage(file);//当取消默认的dialog时
      }
 });
 ```
