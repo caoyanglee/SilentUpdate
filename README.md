@@ -115,10 +115,12 @@ UpdateCenter.downloadListener = object : DownloadListener {
 
     override fun onDownLoadSuccess(file: File) {
         //下载完成
+        SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
     }
 
     override fun onFileIsExist(file: File) {
         //文件已存在
+        SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
     }
 
 }
