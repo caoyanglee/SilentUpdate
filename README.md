@@ -12,8 +12,8 @@ A library silently & automatically download latest apk to update your App<br>
 ![](https://github.com/CaoyangLee/SilentUpdate/blob/master/gif/gif_demo.gif)
 
 # 双策略执行步骤
-1. 判断权限【使用者】
-2. 获取下载链接，判断版本号【使用者自己实现】
+1. 判断权限【使用者实现】
+2. 获取下载链接，判断版本号【使用者实现】
 3. 开始下载前，判断升级文件是否存在，**存在**：显示安装文件Dialog和回调(onFileIsExist) 
 
 一：Wifi的情况【静默】<br>
@@ -22,7 +22,7 @@ A library silently & automatically download latest apk to update your App<br>
 5. 下载完成,接收回调(onDownLoadSuccess),显示Notification和Dialog
 6. 用户点击Dialog或Notification即跳转到安装界面
 
-二：流量的情况<br>
+二：流量的情况【用户自行操作】<br>
 
 4. 显示提示用户下载更新app的Dialog，用户点击更新后，开始下载操作，
 5. 下载时,通知栏会显示下载进度
