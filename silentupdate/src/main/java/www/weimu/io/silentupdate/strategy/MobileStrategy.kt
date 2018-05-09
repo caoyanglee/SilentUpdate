@@ -36,6 +36,8 @@ internal class MobileStrategy(context: Application) : Strategy(context) {
                 addRequest(apkUrl, fileName, true)
             } else if (isDownTaskProcessing(taskId)) {
                 loge("任务正在执行当中")
+            }else{
+                if (SilentUpdate.isUseDefaultHint) showInstallDialog(File(path)) //弹出dialog
             }
         } else {
             loge("开始下载")
