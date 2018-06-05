@@ -17,21 +17,22 @@ class AppData : Application() {
         super.onCreate()
         //初始化 step01
         SilentUpdate.init(this)
+        //是否显示 用户默认弹窗
+        SilentUpdate.isUseDefaultHint = true
         //设置回调
-        SilentUpdate.isUseDefaultHint = false
-        SilentUpdate.updateListener = object : UpdateListener {
-
-            override fun onDownLoadSuccess(file: File) {
-                Log.e("weimu", "updateListener 下载完成")
-                SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
-            }
-
-            override fun onFileIsExist(file: File) {
-                Log.e("weimu", "updateListener 文件已存在")
-                SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
-            }
-
-        }
+//        SilentUpdate.updateListener = object : UpdateListener {
+//
+//            override fun onDownLoadSuccess(file: File) {
+//                Log.e("weimu", "updateListener 下载完成")
+//                SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
+//            }
+//
+//            override fun onFileIsExist(file: File) {
+//                Log.e("weimu", "updateListener 文件已存在")
+//                SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
+//            }
+//
+//        }
     }
 
 

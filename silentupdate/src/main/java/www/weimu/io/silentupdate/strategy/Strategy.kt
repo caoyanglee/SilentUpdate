@@ -203,7 +203,7 @@ internal abstract class Strategy(context: Application) {
 
             SilentUpdate.updateListener?.onDownLoadSuccess(file)
         } catch (e: URISyntaxException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         }
     }
 

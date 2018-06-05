@@ -23,6 +23,7 @@ object SilentUpdate {
     var isUseDefaultHint = true//是否使用默认提示 包括Dialog和Notification
 
     internal fun getCurrentActivity() = activityStack.peek()
+
     internal fun getApplicationContext() = getCurrentActivity().applicationContext
 
     //链接至Application
