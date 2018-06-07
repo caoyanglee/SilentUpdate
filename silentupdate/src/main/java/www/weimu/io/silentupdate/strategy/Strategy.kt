@@ -212,15 +212,18 @@ internal abstract class Strategy(context: Application) {
      * 显示Dialog:提示用户安装
      */
     protected fun showInstallDialog(file: File) {
-        val activity = SilentUpdate.getCurrentActivity()
-        AlertDialog.Builder(activity)
-                .setCancelable(true)
-                .setTitle("提示")
-                .setMessage("发现新版本！请点击立即安装。")
-                .setPositiveButton("立即安装", { dialog, which ->
-                    activity.openApkByFilePath(file)
-                })
-                .show()
+        SilentUpdate.getCurrentActivity()?.apply {
+            AlertDialog.Builder(this)
+                    .setCancelable(true)
+                    .setTitle("提示")
+                    .setMessage("发现新版本！请点击立即安装。")
+                    .setPositiveButton("立即安装", { dialog, which ->
+                        openApkByFilePath(file)
+                    })
+                    .show()
+        }
+
+
     }
 
 

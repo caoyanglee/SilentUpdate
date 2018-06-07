@@ -65,29 +65,30 @@ internal class WifiStrategy(context: Application) : Strategy(context) {
 
     //更新Notification
     private fun showInstallNotification(file: File) {
-        val context = SilentUpdate.getCurrentActivity()
-
-        val title = "发现新版本！"
-        val content = "请点击立即安装~"
-        val intent = context.constructOpenApkItent(file)
-        val pintent = PendingIntent.getActivity(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val builder = NotificationCompat.Builder(context)
-        builder.setSmallIcon(R.drawable.ic_get_app_white_24dp)// 设置小图标
-        builder.setLargeIcon(BitmapFactory.decodeResource(context.resources, context.getAppIcon()))//设置大图标
-        builder.setTicker(title)// 手机状态栏的提示----最上面的一条
-        builder.setWhen(System.currentTimeMillis())// 设置时间
-        builder.setContentTitle(title)// 设置标题
-        builder.setContentText(content)// 设置通知的内容
-        builder.setContentIntent(pintent)// 点击后的意图
-        builder.setDefaults(Notification.DEFAULT_ALL)// 设置提示全部
-        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//锁屏通知
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(Const.NOTIFICATION_CHANNEL_ID)
+        SilentUpdate.getCurrentActivity()?.apply {
+            val title = "发现新版本！"
+            val content = "请点击立即安装~"
+            val intent = constructOpenApkItent(file)
+            val pintent = PendingIntent.getActivity(this, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val builder = NotificationCompat.Builder(this)
+            builder.setSmallIcon(R.drawable.ic_get_app_white_24dp)// 设置小图标
+            builder.setLargeIcon(BitmapFactory.decodeResource(this.resources, this.getAppIcon()))//设置大图标
+            builder.setTicker(title)// 手机状态栏的提示----最上面的一条
+            builder.setWhen(System.currentTimeMillis())// 设置时间
+            builder.setContentTitle(title)// 设置标题
+            builder.setContentText(content)// 设置通知的内容
+            builder.setContentIntent(pintent)// 点击后的意图
+            builder.setDefaults(Notification.DEFAULT_ALL)// 设置提示全部
+            builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//锁屏通知
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder.setChannelId(Const.NOTIFICATION_CHANNEL_ID)
+            }
+            val notification = builder.build()// 4.1以上要用才起作用
+            notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL// 点击后自动取消
+            //显示
+            notificationManager.notify(UUID.randomUUID().hashCode(), notification)
         }
-        val notification = builder.build()// 4.1以上要用才起作用
-        notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL// 点击后自动取消
-        //显示
-        notificationManager.notify(UUID.randomUUID().hashCode(), notification)
+
     }
 
 

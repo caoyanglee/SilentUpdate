@@ -36,7 +36,7 @@ internal class MobileStrategy(context: Application) : Strategy(context) {
                 addRequest(apkUrl, fileName, true)
             } else if (isDownTaskProcessing(taskId)) {
                 loge("任务正在执行当中")
-            }else{
+            } else {
                 if (SilentUpdate.isUseDefaultHint) showInstallDialog(File(path)) //弹出dialog
             }
         } else {
@@ -62,16 +62,18 @@ internal class MobileStrategy(context: Application) : Strategy(context) {
      * 显示Dialog：提示用户下载
      */
     private fun showUpdateTip(apkUrl: String, fileName: String?) {
-        val activity = SilentUpdate.getCurrentActivity()
-        AlertDialog.Builder(activity)
-                .setCancelable(true)
-                .setTitle("提示！")
-                .setMessage("发现新版本！请点击立即更新。")
-                .setPositiveButton("更新", { dialog, which ->
-                    addRequest(apkUrl, fileName, true)
-                })
-                .setNegativeButton("稍后", null)
-                .show()
+        SilentUpdate.getCurrentActivity()?.apply {
+            AlertDialog.Builder(this)
+                    .setCancelable(true)
+                    .setTitle("提示！")
+                    .setMessage("发现新版本！请点击立即更新。")
+                    .setPositiveButton("更新", { dialog, which ->
+                        addRequest(apkUrl, fileName, true)
+                    })
+                    .setNegativeButton("稍后", null)
+                    .show()
+        }
+
     }
 
 
