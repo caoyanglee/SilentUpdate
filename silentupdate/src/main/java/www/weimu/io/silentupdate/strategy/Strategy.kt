@@ -168,8 +168,12 @@ internal abstract class Strategy(context: Application) {
 
     //取消绑定广播接收者
     protected fun unbindReceiver() {
-        val context = SilentUpdate.getApplicationContext()
-        context.unregisterReceiver(appUpdateReceiver)
+        try {
+            val context = SilentUpdate.getApplicationContext()
+            context.unregisterReceiver(appUpdateReceiver)
+        } catch (e: Exception) {
+
+        }
     }
 
     //广播接收者
@@ -192,6 +196,7 @@ internal abstract class Strategy(context: Application) {
         //判断ID是否一致
         if (id != context.getUpdateShare().apkTaskID) return
         loge("注销接收者")
+
         unbindReceiver()
 
         try {
