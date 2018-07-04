@@ -22,12 +22,11 @@ internal fun Context.openApkByFilePath(file: File) {
 
 //构造打开APK的Intent
 internal fun Context.constructOpenApkItent(file: File): Intent {
-    val intent = Intent()
-    intent.action = android.content.Intent.ACTION_VIEW
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION//7.0有效
-    }else{
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)//7.0有效
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)//7.0有效
     }
     val uri = getUriForFile(file)
     intent.setDataAndType(uri, "application/vnd.android.package-archive")
