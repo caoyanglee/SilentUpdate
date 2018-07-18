@@ -52,7 +52,7 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 4.在Application中进行初始化
 
 ```java
-UpdateCenter.INSTANCE.init(this);
+SilentUpdate.INSTANCE.init(this);
 ```
 
 
@@ -62,14 +62,14 @@ apkUrl：服务器提供的apk下载地址<br>
 latestVersion：服务器返回客户端的最新版本号
 
 ```java
-UpdateCenter.INSTANCE.update(apkUrl, latestVersion);
+SilentUpdate.INSTANCE.update(apkUrl, latestVersion);
 ```
 
 ## 自定义配置
 1.开关显示自带Notification和dialog<br>
 
 ```java
-UpdateCenter.INSTANCE.setUseDefaultHint(false);//是否使用默认提示 包括Dialog和Notification
+SilentUpdate.INSTANCE.setUseDefaultHint(false);//是否使用默认提示 包括Dialog和Notification
 ```
 
 2.设置提示默认Dialog的时间间隔
@@ -85,7 +85,7 @@ SilentUpdate.INSTANCE.setIntervalDay(7);//不设置的话，默认7天
 * 下载完成则调用`onDownLoadSuccess(file: File)`
 
 ```java
-UpdateCenter.INSTANCE.setDownloadListener(new DownloadListener() {
+SilentUpdate.INSTANCE.setDownloadListener(new DownloadListener() {
      @Override
      public void onDownLoadSuccess(@NotNull File file) {
          //下载完成

@@ -84,7 +84,7 @@ compile 'www.weimu.io:silentupdate:{version_code}@aar'
 4.在Application中进行初始化
 
 ```kotlin
-UpdateCenter.init(this)
+SilentUpdate.init(this)
 ```
 
 ## 用法
@@ -93,20 +93,20 @@ apkUrl：服务器提供的apk下载地址<br>
 latestVersion：服务器返回客户端的最新版本号
 
 ```kotlin
-UpdateCenter.update(apkUrl, latestVersion)
+SilentUpdate.update(apkUrl, latestVersion)
 ```
 
 ## 自定义配置
 1.开关显示自带Notification和dialog<br>
 
 ```kotlin
-UpdateCenter.isUseDefaultHint = false//是否使用默认提示 包括Dialog和Notification
+SilentUpdate.isUseDefaultHint = false//是否使用默认提示 包括Dialog和Notification
 ```
 
 2.设置提示默认Dialog的时间间隔
 
 ```kotlin
- SilentUpdate.intervalDay = 7//不设置的话，默认7天
+SilentUpdate.intervalDay = 7//不设置的话，默认7天
 ```
 
 3.实现回调<br>
@@ -117,7 +117,7 @@ UpdateCenter.isUseDefaultHint = false//是否使用默认提示 包括Dialog和N
 * 下载完成则调用`onDownLoadSuccess(file: File)`
 
 ```kotlin
-UpdateCenter.downloadListener = object : DownloadListener {
+SilentUpdate.downloadListener = object : DownloadListener {
 
     override fun onDownLoadSuccess(file: File) {
         //下载完成
