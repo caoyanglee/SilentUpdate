@@ -47,10 +47,10 @@ allprojects {
 **app的build.gradle**
 [ ![Download](https://api.bintray.com/packages/yongdongji/android/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/android/silentupdate/_latestVersion)
 
-> 注意：默认使用kotlin1.2.30版本的库
+> 注意：默认使用kotlin1.2.51版本的库
 
 ```gradle
-compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.30"
+compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51"
 compile 'www.weimu.io:silentupdate:{version_code}@aar'
 ```
 
@@ -103,7 +103,13 @@ UpdateCenter.update(apkUrl, latestVersion)
 UpdateCenter.isUseDefaultHint = false//是否使用默认提示 包括Dialog和Notification
 ```
 
-2.实现回调<br>
+2.设置提示默认Dialog的时间间隔
+
+```kotlin
+ SilentUpdate.intervalDay = 7//不设置的话，默认7天
+```
+
+3.实现回调<br>
 > 注意：默认情况下，【下载完成】或【文件已存在】都会有默认的Notification和Dialog提示。<br>
 若想自定义提示，请实现以下接口并配合【自定义配置】的第一步
 
@@ -125,3 +131,4 @@ UpdateCenter.downloadListener = object : DownloadListener {
 
 }
 ```
+

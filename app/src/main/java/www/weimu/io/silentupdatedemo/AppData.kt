@@ -20,7 +20,7 @@ class AppData : Application() {
         //是否显示 用户默认弹窗
         SilentUpdate.isUseDefaultHint = true
         ///间隔弹窗提示时间-默认7天后提醒-仅仅适用于【isUseDefaultHint=true】
-        SilentUpdate.intervalDay = 1
+        SilentUpdate.intervalDay = 7
         //设置回调
         SilentUpdate.updateListener = object : UpdateListener {
 
