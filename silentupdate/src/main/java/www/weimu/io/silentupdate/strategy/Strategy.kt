@@ -22,12 +22,13 @@ import java.util.*
  * Date:2018/1/22 13:49
  * Description:
  */
-internal abstract class Strategy(context: Application) {
+internal abstract class Strategy : StrategyAction {
     protected var notificationManager: NotificationManager
     protected var downloadManager: DownloadManager
     private lateinit var appUpdateReceiver: AppUpdateReceiver
 
     init {
+        val context = SilentUpdate.getApplicationContext()
         notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         //增加通知频道【兼容8.0】
@@ -36,9 +37,16 @@ internal abstract class Strategy(context: Application) {
         }
     }
 
+    //检查更新的URL
+    override fun checkUpdateUrl(url: String) {
+        if (!url.contains("http") && !url.contains("https")) {
+            throw IllegalArgumentException("url must start with http or https")
+        }
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(context: Application) {
+    private fun createNotificationChannel(context: Context) {
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         // 通知渠道的id
         // 用户可以看到的通知渠道的名字.
@@ -203,10 +211,11 @@ internal abstract class Strategy(context: Application) {
             val uri = Uri.parse(getFilePathByTaskId(id)).toString()
             //必须try-catch
             val file = File(URI(uri))
-            if (SilentUpdate.isUseDefaultHint)
+            if (SilentUpdate.isUseDefaultHint) {
                 afterDownLoadComplete(file)
-
-            SilentUpdate.updateListener?.onDownLoadSuccess(file)
+            } else {
+                SilentUpdate.updateListener?.onDownLoadSuccess(file)
+            }
         } catch (e: URISyntaxException) {
             //e.printStackTrace()
         }
@@ -217,17 +226,23 @@ internal abstract class Strategy(context: Application) {
      * 显示Dialog:提示用户安装
      */
     protected fun showInstallDialog(file: File) {
-        SilentUpdate.getCurrentActivity()?.apply {
-            AlertDialog.Builder(this)
-                    .setCancelable(true)
-                    .setTitle("提示")
-                    .setMessage("发现新版本！请点击立即安装。")
-                    .setPositiveButton("立即安装", { dialog, which ->
-                        openApkByFilePath(file)
-                    })
-                    .show()
+        val dialogTime = SPCenter.getDialogTime()
+        if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
+            SilentUpdate.getCurrentActivity()?.apply {
+                AlertDialog.Builder(this)
+                        .setCancelable(false)
+                        .setTitle("提示")
+                        .setMessage("发现新版本！请点击立即安装。")
+                        .setPositiveButton("立即安装") { dialog, which ->
+                            openApkByFilePath(file)
+                        }
+                        .setNegativeButton("稍后") { dialog, which ->
+                            //记录
+                            SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                        }
+                        .show()
+            }
         }
-
 
     }
 

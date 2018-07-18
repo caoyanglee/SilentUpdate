@@ -18,11 +18,30 @@ import java.util.*
 /**
  * Wifi的情况
  */
-internal class WifiStrategy(context: Application) : Strategy(context) {
+internal class WifiStrategy : Strategy {
+
+    companion object {
+        private var strategy: Strategy? = null
+
+
+        fun getDefault(): Strategy {
+            if (strategy == null) {
+                synchronized(Strategy::class.java) {
+                    if (strategy == null) {
+                        strategy = WifiStrategy()
+                    }
+                }
+            }
+            return strategy!!
+        }
+    }
+
+    private constructor()
 
 
     //升级操作 WIFI的情况下
     override fun update(apkUrl: String, latestVersion: String) {
+        checkUpdateUrl(apkUrl)
         val context = SilentUpdate.getApplicationContext()
         val fileName = "${context.getAppName()}_v$latestVersion.apk"
         val path = Const.UPDATE_FILE_DIR + fileName
@@ -35,8 +54,11 @@ internal class WifiStrategy(context: Application) : Strategy(context) {
             if (isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")
                 //状态：完成
-                if (SilentUpdate.isUseDefaultHint) showInstallDialog(File(path)) //弹出dialog
-                SilentUpdate.updateListener?.onFileIsExist(File(path))
+                if (SilentUpdate.isUseDefaultHint) {
+                    showInstallDialog(File(path)) //弹出dialog
+                } else {
+                    SilentUpdate.updateListener?.onFileIsExist(File(path))
+                }
             } else if (isDownTaskPause(taskId)) {
                 loge("任务已经暂停")
                 //启动下载
@@ -44,8 +66,12 @@ internal class WifiStrategy(context: Application) : Strategy(context) {
                 addRequest(apkUrl, fileName, false)
             } else if (isDownTaskProcessing(taskId)) {
                 loge("任务正在执行当中")
-            }else{
-                if (SilentUpdate.isUseDefaultHint) showInstallDialog(File(path)) //弹出dialog
+            } else {
+                if (SilentUpdate.isUseDefaultHint) {
+                    showInstallDialog(File(path)) //弹出dialog
+                } else {
+                    SilentUpdate.updateListener?.onFileIsExist(File(path))
+                }
             }
         } else {
             loge("开始下载")

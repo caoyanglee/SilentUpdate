@@ -13,6 +13,7 @@ import android.text.TextUtils
 import android.util.Log
 import www.weimu.io.silentupdate.BuildConfig
 import java.io.File
+import java.util.*
 
 
 //直接打开APK
@@ -33,35 +34,6 @@ internal fun Context.constructOpenApkItent(file: File): Intent {
     return intent
 }
 
-//通知开关是否打开
-internal fun Context.isNotificationEnabled(): Boolean {
-    val CHECK_OP_NO_THROW = "checkOpNoThrow"
-    val OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION"
-    val mAppOps = this.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-    val appInfo = this.applicationInfo
-    val pkg = this.applicationContext.packageName
-    val uid = appInfo.uid
-    var appOpsClass: Class<*>? = null
-    /* Context.APP_OPS_MANAGER */
-    try {
-        appOpsClass = Class.forName(AppOpsManager::class.java.name)
-        val checkOpNoThrowMethod = appOpsClass!!.getMethod(CHECK_OP_NO_THROW, Integer.TYPE, Integer.TYPE,
-                String::class.java)
-        val opPostNotificationValue = appOpsClass.getDeclaredField(OP_POST_NOTIFICATION)
-        val value = opPostNotificationValue.get(Int::class.java) as Int
-        return checkOpNoThrowMethod.invoke(mAppOps, value, uid, pkg) as Int == AppOpsManager.MODE_ALLOWED
-    } catch (e: ClassNotFoundException) {
-        e.printStackTrace()
-    } catch (e: NoSuchMethodException) {
-        e.printStackTrace()
-    } catch (e: NoSuchFieldException) {
-        e.printStackTrace()
-    } catch (e: IllegalAccessException) {
-        e.printStackTrace()
-    }
-
-    return false
-}
 
 //app信息界面 -- 修改权限  --修改通知开关
 internal fun Context.openAppInfoPage(targetPackageName: String = packageName) {
@@ -81,8 +53,7 @@ internal fun Any.isFileExist(filePath: String): Boolean {
 
 //log
 internal fun Any.loge(message: String) {
-    if (BuildConfig.DEBUG)
-        Log.e("weimu", message)
+    if (BuildConfig.DEBUG) Log.e("weimu", message)
 }
 
 
@@ -118,7 +89,7 @@ internal fun Context.getAppName(): String? {
 }
 
 //获取app的图片
-fun Context.getAppIcon(): Int {
+internal fun Context.getAppIcon(): Int {
     val pm: PackageManager = packageManager
     try {
         val info = pm.getApplicationInfo(this.packageName, 0)
@@ -138,6 +109,19 @@ internal fun Context.isConnectWifi(): Boolean {
         if (type == ConnectivityManager.TYPE_WIFI) {
             return true
         }
+    }
+    return false
+}
+
+
+//比价时间
+internal fun Long.moreThanDays(day: Int): Boolean {
+    val currentTime = Calendar.getInstance().time.time
+    val recordTime = this
+    if (recordTime == 0L) return true
+    val differ = currentTime - recordTime
+    if (differ > 1000 * 60 * 60 * 24 * day) {
+        return true
     }
     return false
 }
