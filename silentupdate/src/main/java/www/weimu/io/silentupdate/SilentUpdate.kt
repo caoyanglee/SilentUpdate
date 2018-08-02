@@ -28,7 +28,7 @@ object SilentUpdate {
         try {
             targetActivity = activityStack.peek()
         } catch (e: Exception) {
-
+            //
         }
         return targetActivity
     }

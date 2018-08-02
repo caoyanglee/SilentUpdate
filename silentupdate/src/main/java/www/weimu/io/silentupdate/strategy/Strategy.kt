@@ -94,10 +94,15 @@ internal abstract class Strategy : StrategyAction {
         //request.setDestinationInExternalFilesDir(AppData.getContext(), "download", "youudo_v" + version + ".apk");
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
 
-        val id = downloadManager.enqueue(request)
-        //存入到share里
-        context.saveShareStuff {
-            apkTaskID = id
+        val id: Long
+        try {
+            id = downloadManager.enqueue(request)
+            //存入到share里
+            context.saveShareStuff {
+                apkTaskID = id
+            }
+        } catch (e: Exception) {
+            //e.printStackTrace()
         }
     }
 
