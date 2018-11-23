@@ -21,7 +21,7 @@ class KotlinDemoActivity : AppCompatActivity() {
     //检查权限 step1
     private fun checkPermission() {
         RxPermissions(this)
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe { granted ->
                     if (granted)
                         getLatestApk()
@@ -32,7 +32,7 @@ class KotlinDemoActivity : AppCompatActivity() {
     //获取下载链接 step2
     fun getLatestApk() {
         //具体的网络请求步骤自己操作
-        val apkUrl = "http://msoftdl.360.cn/mobile/shouji360/360safesis/360clear_beta_6.2.5.1047.apk"
+        val apkUrl = "http://static.xmwzfy.com/wzfy_client_v1.0.1_jiagu_sign.apk"
         //判断版本号
         val latestVersion = "1.1.0"
         val currentVersion = BuildConfig.VERSION_NAME
