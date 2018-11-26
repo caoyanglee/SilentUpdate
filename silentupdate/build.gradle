@@ -1,11 +1,16 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+// JitPack Maven
+apply plugin: 'com.github.dcendents.android-maven'
+// Your Group
+group='com.github.caoyanglee'
+
 android {
     compileSdkVersion 27
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "0.2.1"
@@ -23,11 +28,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //universal-lib
+    compile 'com.github.caoyanglee:Universal:1.0.5'
+
 }
 //记得加上这个
-apply from: "bintrayUpload.gradle"
+//apply from: "bintrayUpload.gradle"
 
 
 

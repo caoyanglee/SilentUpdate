@@ -1,6 +1,5 @@
 package www.weimu.io.silentupdate.core
 
-import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
