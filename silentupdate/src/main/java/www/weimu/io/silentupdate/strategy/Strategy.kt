@@ -155,13 +155,13 @@ internal abstract class Strategy : StrategyAction {
 
 
     //通过下载id获取 文件地址
-    private fun getFilePathByTaskId(id: Long): String? {
-        var filePath: String? = null
+    private fun getFilePathByTaskId(id: Long): String {
+        var filePath = ""
         val query = DownloadManager.Query()
         query.setFilterById(id)
         val cursor = downloadManager.query(query)
         while (cursor.moveToNext()) {
-            filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+            filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))?:""
         }
         cursor.close()
         return filePath
@@ -214,6 +214,10 @@ internal abstract class Strategy : StrategyAction {
 
         try {
             val uri = Uri.parse(getFilePathByTaskId(id)).toString()
+            if (uri.isBlank()) {
+                loge("下载了无效文件，请确定url是否可以成功请求")
+                return
+            }
             //必须try-catch
             val file = File(URI(uri))
             if (SilentUpdate.isUseDefaultHint) {
@@ -221,8 +225,8 @@ internal abstract class Strategy : StrategyAction {
             } else {
                 SilentUpdate.updateListener?.onDownLoadSuccess(file)
             }
-        } catch (e: URISyntaxException) {
-            //e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

@@ -57,10 +57,11 @@ object SilentUpdate {
     fun update(apkUrl: String, latestVersion: String) {
         //策略模式
         val context = getApplicationContext()
-        strategy = if (context.isConnectWifi())
-            WifiStrategy.getDefault()
-        else
-            MobileStrategy.getDefault()
+
+        strategy = when {
+            context.isConnectWifi() -> WifiStrategy.getDefault()
+            else -> MobileStrategy.getDefault()
+        }
         strategy.update(apkUrl, latestVersion)
     }
 
