@@ -110,9 +110,8 @@ SilentUpdate.intervalDay = 7//不设置的话，默认7天
 
 2.替换默认的弹窗<br>
 > 注意：执行下载任务之前都会判断更新文件是否存在,流量模式是调用**下载**Dialog，流量模式，文件已存在的情况是调用**安装**Dialog<br>
-若想自定义提示，请实现以下接口并配合【自定义配置】的第一步
 
-很多时候下载Diloag和安装Dialog的样式是一样的，所以可以共用一个DialogTipAction~
+很多时候下载Diloag和安装Dialog的样式是一样的，所以可以共用一个DialogTipAction :)
 
 ```kotlin
 //下载提示 -> 流量模式
