@@ -40,18 +40,17 @@ A library silently & automatically download latest apk to update your App<br>
 allprojects {
     repositories {
         ......        
-        maven { url  "https://dl.bintray.com/yongdongji/android" }
+        maven { url 'https://jitpack.io' }
     }
 }
 ```
 **app的build.gradle**
 [![](https://jitpack.io/v/caoyanglee/SilentUpdate.svg)](https://jitpack.io/#caoyanglee/SilentUpdate)
 
-> 注意：默认使用kotlin1.2.51版本的库
+> 注意：默认使用kotlin1.3.10版本的库
 
 ```gradle
-compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51"
-compile 'www.weimu.io:silentupdate:{version_code}@aar'
+implementation 'com.github.caoyanglee:SilentUpdate:0.2.2'
 ```
 
 2.增加权限
