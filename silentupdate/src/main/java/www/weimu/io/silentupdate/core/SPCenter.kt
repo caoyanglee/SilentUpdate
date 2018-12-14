@@ -11,6 +11,7 @@ import www.weimu.io.silentupdate.SilentUpdate
  */
 internal object SPCenter {
 
+    //Dialog的显示间距
     private val DIALOG_TIME = "dialogTime"
 
     private val sp by lazy { SilentUpdate.getApplicationContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE) }
@@ -28,6 +29,26 @@ internal object SPCenter {
     //清除存储时间
     fun clearDialogTime() {
         sp.edit().remove(DIALOG_TIME).apply()
+    }
+
+
+    //更新的内容
+    private val UPDATE_CONTENT = "updateContent"
+
+
+    //获取存储时间
+    fun getUpdateContent(): String {
+        return sp.getString(UPDATE_CONTENT, "")
+    }
+
+    //修改存储时间
+    fun modifyUpdateContent(content: String) {
+        sp.edit().putString(UPDATE_CONTENT, content).apply()
+    }
+
+    //清除存储时间
+    fun clearUpdateContent() {
+        sp.edit().remove(UPDATE_CONTENT).apply()
     }
 
 }

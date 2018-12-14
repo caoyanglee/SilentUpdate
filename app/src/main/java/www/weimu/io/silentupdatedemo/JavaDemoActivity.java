@@ -49,7 +49,7 @@ public class JavaDemoActivity extends AppCompatActivity {
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion.compareTo(currentVersion) > 0) {
             Toast.makeText(JavaDemoActivity.this, "开始下载中...", Toast.LENGTH_SHORT).show();
-            SilentUpdate.INSTANCE.update(apkUrl, latestVersion);
+            SilentUpdate.INSTANCE.update(apkUrl, latestVersion,"这是一次服务器的更新");
         }
     }
 

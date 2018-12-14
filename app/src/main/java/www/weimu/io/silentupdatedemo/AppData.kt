@@ -1,39 +1,50 @@
 package www.weimu.io.silentupdatedemo
 
+import android.app.AlertDialog
 import android.app.Application
-import android.util.Log
+import android.content.Context
+import com.weimu.universalib.OriginAppData
 import www.weimu.io.silentupdate.SilentUpdate
-import www.weimu.io.silentupdate.core.UpdateListener
-import java.io.File
+import www.weimu.io.silentupdate.core.dialog.DialogTipAction
 
 /**
  * Author:你需要一台永动机
  * Date:2018/1/17 13:59
  * Description:
  */
-class AppData : Application() {
+class AppData : OriginAppData() {
+    override fun isDebug(): Boolean = BuildConfig.DEBUG
 
     override fun onCreate() {
         super.onCreate()
         //初始化 step01
         SilentUpdate.init(this)
-        //是否显示 用户默认弹窗
-        SilentUpdate.isUseDefaultHint = true
-        ///间隔弹窗提示时间-默认7天后提醒-仅仅适用于【isUseDefaultHint=true】
+        ///间隔弹窗提示时间- 默认7天后提醒
         SilentUpdate.intervalDay = 7
-        //设置回调
-        SilentUpdate.updateListener = object : UpdateListener {
-
-            override fun onDownLoadSuccess(file: File) {
-                Log.e("weimu", "updateListener 下载完成")
-                //SilentUpdate.installApk(file)//当取消默认的dialog时
+        //下载提示 -> 流量模式
+        SilentUpdate.downLoadTipDialog = object : DialogTipAction {
+            override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+                AlertDialog.Builder(context)
+                        .setCancelable(false)
+                        .setTitle("提示")
+                        .setMessage("下载提示弹窗 自定义 $updateContent")
+                        .setPositiveButton("立即更新") { dialog, which -> positiveClick() }
+                        .setNegativeButton("稍后") { dialog, which -> negativeClick() }
+                        .show()
             }
 
-            override fun onFileIsExist(file: File) {
-                Log.e("weimu", "updateListener 文件已存在")
-                //SilentUpdate.installApk(file)//当取消默认的dialog时
+        }
+        //安装提示 -> 无线模式，文件已存在
+        SilentUpdate.installTipDialog = object : DialogTipAction {
+            override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+                AlertDialog.Builder(context)
+                        .setCancelable(false)
+                        .setTitle("提示")
+                        .setMessage("安装提示弹窗 自定义 $updateContent")
+                        .setPositiveButton("立即安装") { dialog, which -> positiveClick() }
+                        .setNegativeButton("稍后") { dialog, which -> negativeClick() }
+                        .show()
             }
-
         }
     }
 

@@ -1,5 +1,6 @@
 package www.weimu.io.silentupdate.strategy
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Application
 import android.os.Handler
@@ -12,7 +13,7 @@ import java.util.*
 /**
  * 流量的情况
  */
-internal class MobileStrategy : Strategy {
+internal class MobileStrategy private constructor() : Strategy() {
 
 
     companion object {
@@ -30,8 +31,6 @@ internal class MobileStrategy : Strategy {
         }
     }
 
-    private constructor()
-
 
     //升级操作 流量的情况下
     override fun update(apkUrl: String, latestVersion: String) {
@@ -47,12 +46,7 @@ internal class MobileStrategy : Strategy {
             loge("文件已经存在")
             if (isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")
-                //状态：完成
-                if (SilentUpdate.isUseDefaultHint) {
-                    showInstallDialog(File(path)) //弹出dialog
-                } else {
-                    SilentUpdate.updateListener?.onFileIsExist(File(path))
-                }
+                showInstallDialog(File(path)) //弹出dialog
             } else if (isDownTaskPause(taskId)) {
                 loge("任务已经暂停")
                 //启动下载
@@ -61,11 +55,7 @@ internal class MobileStrategy : Strategy {
             } else if (isDownTaskProcessing(taskId)) {
                 loge("任务正在执行当中")
             } else {
-                if (SilentUpdate.isUseDefaultHint) {
-                    showInstallDialog(File(path)) //弹出dialog
-                } else {
-                    SilentUpdate.updateListener?.onFileIsExist(File(path))
-                }
+                showInstallDialog(File(path)) //弹出dialog
             }
         } else {
             loge("开始下载")
@@ -76,6 +66,48 @@ internal class MobileStrategy : Strategy {
         }
     }
 
+
+    /**
+     * 状态：流量
+     * 显示Dialog：提示用户下载
+     */
+    private fun showUpdateTip(apkUrl: String, fileName: String) {
+        val dialogTime = SPCenter.getDialogTime()
+        if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
+            SilentUpdate.getCurrentActivity()?.apply {
+                //判断是否有自定义的下载弹窗
+                if (SilentUpdate.downLoadTipDialog != null) {
+                    SilentUpdate.downLoadTipDialog?.show(
+                            context = this,
+                            updateContent = SPCenter.getUpdateContent(),
+                            positiveClick = { addRequest(apkUrl, fileName, true) },
+                            negativeClick = {
+                                //记录
+                                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                            })
+                } else {
+                    showDownloadDialog(apkUrl, fileName)
+                }
+            }
+        }
+    }
+
+    private fun Activity.showDownloadDialog(apkUrl: String, fileName: String) {
+        AlertDialog.Builder(this)
+                .setCancelable(false)
+                .setTitle("提示")
+                .setMessage("发现新版本！请点击立即更新。")
+                .setPositiveButton("更新") { dialog, which ->
+                    addRequest(apkUrl, fileName, true)
+                }
+                .setNegativeButton("稍后") { dialog, which ->
+                    //记录
+                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                }
+                .show()
+    }
+
+
     //下载完成后
     override fun afterDownLoadComplete(file: File) {
         val context = SilentUpdate.getApplicationContext()
@@ -83,31 +115,5 @@ internal class MobileStrategy : Strategy {
             context.openApkByFilePath(file)
         }, 200)
     }
-
-
-    /**
-     * 状态：流量
-     * 显示Dialog：提示用户下载
-     */
-    private fun showUpdateTip(apkUrl: String, fileName: String?) {
-        val dialogTime = SPCenter.getDialogTime()
-        if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
-            SilentUpdate.getCurrentActivity()?.apply {
-                AlertDialog.Builder(this)
-                        .setCancelable(false)
-                        .setTitle("提示")
-                        .setMessage("发现新版本！请点击立即更新。")
-                        .setPositiveButton("更新") { dialog, which ->
-                            addRequest(apkUrl, fileName, true)
-                        }
-                        .setNegativeButton("稍后") { dialog, which ->
-                            //记录
-                            SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                        }
-                        .show()
-            }
-        }
-    }
-
 
 }

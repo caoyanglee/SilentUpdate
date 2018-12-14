@@ -161,7 +161,7 @@ internal abstract class Strategy : StrategyAction {
         query.setFilterById(id)
         val cursor = downloadManager.query(query)
         while (cursor.moveToNext()) {
-            filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))?:""
+            filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)) ?: ""
         }
         cursor.close()
         return filePath
@@ -220,11 +220,7 @@ internal abstract class Strategy : StrategyAction {
             }
             //必须try-catch
             val file = File(URI(uri))
-            if (SilentUpdate.isUseDefaultHint) {
-                afterDownLoadComplete(file)
-            } else {
-                SilentUpdate.updateListener?.onDownLoadSuccess(file)
-            }
+            afterDownLoadComplete(file)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -235,21 +231,34 @@ internal abstract class Strategy : StrategyAction {
      * 显示Dialog:提示用户安装
      */
     protected fun showInstallDialog(file: File) {
+        //判断是否在时间间隔内
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
             SilentUpdate.getCurrentActivity()?.apply {
-                AlertDialog.Builder(this)
-                        .setCancelable(false)
-                        .setTitle("提示")
-                        .setMessage("发现新版本！请点击立即安装。")
-                        .setPositiveButton("立即安装") { dialog, which ->
-                            openApkByFilePath(file)
-                        }
-                        .setNegativeButton("稍后") { dialog, which ->
-                            //记录
-                            SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                        }
-                        .show()
+                if (SilentUpdate.installTipDialog != null) {
+                    SilentUpdate.installTipDialog?.show(
+                            context = this,
+                            updateContent = SPCenter.getUpdateContent(),
+                            positiveClick = { openApkByFilePath(file) },
+                            negativeClick = {
+                                //记录
+                                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                            })
+                } else {
+
+                    AlertDialog.Builder(this)
+                            .setCancelable(false)
+                            .setTitle("提示")
+                            .setMessage("发现新版本！请点击立即安装。")
+                            .setPositiveButton("立即安装") { dialog, which ->
+                                openApkByFilePath(file)
+                            }
+                            .setNegativeButton("稍后") { dialog, which ->
+                                //记录
+                                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                            }
+                            .show()
+                }
             }
         }
 

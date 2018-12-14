@@ -21,7 +21,7 @@ class KotlinDemoActivity : AppCompatActivity() {
     //检查权限 step1
     private fun checkPermission() {
         RxPermissions(this)
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe { granted ->
                     if (granted)
                         getLatestApk()
@@ -40,7 +40,7 @@ class KotlinDemoActivity : AppCompatActivity() {
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion > currentVersion) {
             Toast.makeText(this@KotlinDemoActivity, "开始下载中...", Toast.LENGTH_SHORT).show()
-            SilentUpdate.update(apkUrl, latestVersion)
+            SilentUpdate.update(apkUrl, latestVersion, "快点更新")
         }
     }
 

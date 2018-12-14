@@ -9,8 +9,8 @@ import java.io.File
  */
 interface UpdateListener {
     //下载完成
-    fun onDownLoadSuccess(file: File)
+    fun onDownLoadSuccess(file: File, updateContent: String)
 
     //文件已存在
-    fun onFileIsExist(file: File)
+    fun onFileIsExist(file: File, updateContent: String)
 }

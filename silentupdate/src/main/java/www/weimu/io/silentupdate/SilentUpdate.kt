@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import www.weimu.io.silentupdate.core.*
+import www.weimu.io.silentupdate.core.dialog.DialogTipAction
 import www.weimu.io.silentupdate.strategy.MobileStrategy
 import www.weimu.io.silentupdate.strategy.Strategy
 import www.weimu.io.silentupdate.strategy.WifiStrategy
@@ -18,24 +19,30 @@ object SilentUpdate {
     private lateinit var strategy: Strategy
     private lateinit var applicationContext: WeakReference<Context>
 
+
     //以下数据可配置
-    var updateListener: UpdateListener? = null//更新回调
-    var isUseDefaultHint = true//是否使用默认提示 包括Dialog和Notification
+
+    var downLoadTipDialog: DialogTipAction? = null//自定义 下载Dialog -> 流量模式
+    var installTipDialog: DialogTipAction? = null//自定义  安装Dialog -> 无线模式,文件已存在
     var intervalDay = 7//间隔弹窗提示时间-默认7天后提醒-仅仅适用于【isUseDefaultHint=true】
+
 
     internal fun getCurrentActivity(): Activity? {
         var targetActivity: Activity? = null
         try {
             targetActivity = activityStack.peek()
         } catch (e: Exception) {
-            //
+            //do nothing
         }
         return targetActivity
     }
 
     internal fun getApplicationContext() = applicationContext.get()!!
 
-    //链接至Application
+    /**
+     * 静默更新的初始化
+     * @param App的上下文
+     */
     fun init(context: Application) {
         applicationContext = WeakReference(context.applicationContext)
         //登记activity
@@ -53,23 +60,35 @@ object SilentUpdate {
     }
 
 
-    //核心操作
-    fun update(apkUrl: String, latestVersion: String) {
+    /**
+     * 更新操作
+     * - 流量模式
+     * - WIFI模式
+     * @param apkUrl app的下载地址
+     * @param latestVersion 最新的版本号
+     */
+    fun update(apkUrl: String, latestVersion: String, updateContent: String = "") {
+        SPCenter.modifyUpdateContent(updateContent)
         //策略模式
         val context = getApplicationContext()
 
         strategy = when {
+            //WIFI
             context.isConnectWifi() -> WifiStrategy.getDefault()
+            //流量
             else -> MobileStrategy.getDefault()
         }
         strategy.update(apkUrl, latestVersion)
     }
 
-    //若不使用默认的Dialog 使用者需要配合自定义Dialog和此方法来 打开apk安装界面
-    //打开Apk安装界面
-    fun installApk(apkFile: File) {
-        getApplicationContext().openApkByFilePath(apkFile)
+    /**
+     * 清除sp缓存数据
+     */
+    fun clearCache() {
+        SPCenter.clearDialogTime()
+        SPCenter.clearUpdateContent()
     }
+
 
 }
 
