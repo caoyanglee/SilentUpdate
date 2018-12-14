@@ -50,18 +50,23 @@ allprojects {
 > 注意：默认使用kotlin1.3.10版本的库
 
 ```gradle
-implementation 'com.github.caoyanglee:SilentUpdate:0.2.2'
+implementation 'com.github.caoyanglee:SilentUpdate:0.2.3'
 ```
 
 2.增加权限
 
 ```xml
-<!-- 联网权限 -->
+<!-- 链接网络 -->
 <uses-permission android:name="android.permission.INTERNET" />
+<!-- 检查网络状态 -->
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <!-- 存储权限 -->
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <!-- 通知权限 -->
 <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+<!-- 兼容8.0 -->
+<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 ```       
 3.增加FileProvider【适配7.0】
 
@@ -90,44 +95,50 @@ SilentUpdate.init(this)
 > 注意：<br>
 apkUrl：服务器提供的apk下载地址<br>
 latestVersion：服务器返回客户端的最新版本号
+updateContent:服务器返回客户端的更新内容
 
 ```kotlin
-SilentUpdate.update(apkUrl, latestVersion)
+SilentUpdate.update(apkUrl, latestVersion,updateContent)
 ```
 
 ## 自定义配置
-1.开关显示自带Notification和dialog<br>
-
-```kotlin
-SilentUpdate.isUseDefaultHint = false//是否使用默认提示 包括Dialog和Notification
-```
-
-2.设置提示默认Dialog的时间间隔
+1.设置提示默认Dialog的时间间隔
 
 ```kotlin
 SilentUpdate.intervalDay = 7//不设置的话，默认7天
 ```
 
-3.实现回调<br>
-> 注意：默认情况下，【下载完成】或【文件已存在】都会有默认的Notification和Dialog提示。<br>
+2.替换默认的弹窗<br>
+> 注意：执行下载任务之前都会判断更新文件是否存在,流量模式是调用**下载**Dialog，流量模式，文件已存在的情况是调用**安装**Dialog<br>
 若想自定义提示，请实现以下接口并配合【自定义配置】的第一步
 
-* 执行下载任务之前都会判断更新文件是否存在，**存在**：调用`onFileIsExist(file: File)`，不再进行下载操作
-* 下载完成则调用`onDownLoadSuccess(file: File)`
+很多时候下载Diloag和安装Dialog的样式是一样的，所以可以共用一个DialogTipAction~
 
 ```kotlin
-SilentUpdate.downloadListener = object : DownloadListener {
-
-    override fun onDownLoadSuccess(file: File) {
-        //下载完成
-        SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
+//下载提示 -> 流量模式
+SilentUpdate.downLoadTipDialog = object : DialogTipAction {
+    override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+        AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setTitle("提示")
+                .setMessage("下载提示弹窗 自定义 $updateContent")
+                .setPositiveButton("立即更新") { dialog, which -> positiveClick() }
+                .setNegativeButton("稍后") { dialog, which -> negativeClick() }
+                .show()
     }
 
-    override fun onFileIsExist(file: File) {
-        //文件已存在
-        SilentUpdate.openApkInstallPage(file)//当取消默认的dialog时
+}
+//安装提示 -> 无线模式，文件已存在
+SilentUpdate.installTipDialog = object : DialogTipAction {
+    override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+        AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setTitle("提示")
+                .setMessage("安装提示弹窗 自定义 $updateContent")
+                .setPositiveButton("立即安装") { dialog, which -> positiveClick() }
+                .setNegativeButton("稍后") { dialog, which -> negativeClick() }
+                .show()
     }
-
 }
 ```
 
