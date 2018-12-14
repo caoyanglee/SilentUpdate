@@ -1,7 +1,7 @@
 # 静默更新应用库
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[ ![Download](https://api.bintray.com/packages/yongdongji/android/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/android/silentupdate/_latestVersion)
-[![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
+[![](https://jitpack.io/v/caoyanglee/SilentUpdate.svg)](https://jitpack.io/#caoyanglee/SilentUpdate)
+[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
 > 注意：此库是由kotlin编写而成<br>
 
@@ -40,18 +40,17 @@ A library silently & automatically download latest apk to update your App<br>
 allprojects {
     repositories {
         ......        
-        maven { url  "https://dl.bintray.com/yongdongji/android" }
+        maven { url 'https://jitpack.io' }
     }
 }
 ```
 **app的build.gradle**
-[ ![Download](https://api.bintray.com/packages/yongdongji/android/silentupdate/images/download.svg) ](https://bintray.com/yongdongji/android/silentupdate/_latestVersion)
+[![](https://jitpack.io/v/caoyanglee/SilentUpdate.svg)](https://jitpack.io/#caoyanglee/SilentUpdate)
 
-> 注意：默认使用kotlin1.2.51版本的库
+> 注意：默认使用kotlin1.3.10版本的库
 
 ```gradle
-compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.51"
-compile 'www.weimu.io:silentupdate:{version_code}@aar'
+implementation 'com.github.caoyanglee:SilentUpdate:0.2.2'
 ```
 
 2.增加权限
