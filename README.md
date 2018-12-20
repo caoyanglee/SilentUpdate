@@ -50,7 +50,7 @@ allprojects {
 > 注意：默认使用kotlin1.3.10版本的库
 
 ```gradle
-implementation 'com.github.caoyanglee:SilentUpdate:0.2.3'
+implementation 'com.github.caoyanglee:SilentUpdate:{latestVersion}'
 ```
 
 2.增加权限
