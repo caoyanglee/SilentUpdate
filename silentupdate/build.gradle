@@ -29,7 +29,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //通用包
-    compile'com.github.caoyanglee:universal:1.0.8'
+    compile'com.github.caoyanglee:universal:1.1.1'
 
 }
 //记得加上这个

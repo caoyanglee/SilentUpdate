@@ -82,6 +82,16 @@ object SilentUpdate {
     }
 
     /**
+     * 主动更新 同流量模式
+     * 检查本地文件，没有直接显示下载弹窗
+     */
+    fun activeUpdate(apkUrl: String, latestVersion: String, updateContent: String = "") {
+        SPCenter.modifyUpdateContent(updateContent)
+        //策略模式
+        MobileStrategy.getDefault().update(apkUrl, latestVersion)
+    }
+
+    /**
      * 清除sp缓存数据
      */
     fun clearCache() {
