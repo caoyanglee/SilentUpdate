@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import com.weimu.universalib.ktx.isConnectWifi
 import www.weimu.io.silentupdate.core.*
 import www.weimu.io.silentupdate.core.dialog.DialogTipAction
 import www.weimu.io.silentupdate.strategy.MobileStrategy

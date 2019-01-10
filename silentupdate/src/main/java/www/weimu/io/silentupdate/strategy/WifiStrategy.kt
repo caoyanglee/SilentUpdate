@@ -1,13 +1,9 @@
 package www.weimu.io.silentupdate.strategy
 
-import android.app.Application
-import android.app.DownloadManager
 import android.app.Notification
 import android.app.PendingIntent
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.support.v4.app.NotificationCompat
 import www.weimu.io.silentupdate.R
 import www.weimu.io.silentupdate.SilentUpdate
@@ -89,7 +85,7 @@ internal class WifiStrategy private constructor() : Strategy() {
                 val intent = constructOpenApkItent(file)
                 val pintent = PendingIntent.getActivity(this, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
                 val builder = NotificationCompat.Builder(this)
-                builder.setSmallIcon(R.drawable.ic_get_app_white_24dp)// 设置小图标
+                builder.setSmallIcon(R.drawable.ic_get_app_white)// 设置小图标
                 builder.setLargeIcon(BitmapFactory.decodeResource(this.resources, this.getAppIcon()))//设置大图标
                 builder.setTicker(title)// 手机状态栏的提示----最上面的一条
                 builder.setWhen(System.currentTimeMillis())// 设置时间

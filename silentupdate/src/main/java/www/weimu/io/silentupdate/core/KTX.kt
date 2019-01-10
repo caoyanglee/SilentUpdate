@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.util.Log
+import com.weimu.universalib.OriginAppData
 import www.weimu.io.silentupdate.BuildConfig
 import java.io.File
 import java.util.*
@@ -34,15 +35,6 @@ internal fun Context.constructOpenApkItent(file: File): Intent {
 }
 
 
-//app信息界面 -- 修改权限  --修改通知开关
-internal fun Context.openAppInfoPage(targetPackageName: String = packageName) {
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    val uri = Uri.fromParts("package", targetPackageName, null)
-    intent.data = uri
-    startActivity(intent)
-}
-
-
 //是否存在文件
 internal fun Any.isFileExist(filePath: String): Boolean {
     if (TextUtils.isEmpty(filePath)) return false
@@ -52,7 +44,7 @@ internal fun Any.isFileExist(filePath: String): Boolean {
 
 //log
 internal fun Any.loge(message: String) {
-    if (BuildConfig.DEBUG) Log.e("weimu", message)
+    if (BuildConfig.DEBUG) Log.e("silentUpdate", message)
 }
 
 
@@ -97,19 +89,6 @@ internal fun Context.getAppIcon(): Int {
         e.printStackTrace()
     }
     return -1
-}
-
-//是否连接Wifi
-internal fun Context.isConnectWifi(): Boolean {
-    val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkInfo = cm.activeNetworkInfo
-    if (networkInfo != null && networkInfo.isConnected) {
-        val type = networkInfo.type
-        if (type == ConnectivityManager.TYPE_WIFI) {
-            return true
-        }
-    }
-    return false
 }
 
 
