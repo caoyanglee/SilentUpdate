@@ -34,7 +34,11 @@ internal class MobileStrategy private constructor() : Strategy() {
 
     //升级操作 流量的情况下
     override fun update(apkUrl: String, latestVersion: String) {
-        checkUpdateUrl(apkUrl)
+        try {
+            checkUpdateUrl(apkUrl)
+        } catch (e: Exception) {
+            return
+        }
         val context = SilentUpdate.getApplicationContext()
         val fileName = "${context.getAppName()}_v$latestVersion.apk"
         val path = Const.UPDATE_FILE_DIR + fileName
