@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import www.weimu.io.silentupdate.SilentUpdate;
 
@@ -25,8 +26,8 @@ public class JavaDemoActivity extends AppCompatActivity {
 
     //检查权限 step1
     private void checkPermission() {
-        new RxPermissions(this)
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        Disposable d = new RxPermissions(this)
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean granted) throws Exception {
@@ -41,7 +42,7 @@ public class JavaDemoActivity extends AppCompatActivity {
     //获取下载链接 step2
     public void getLatestApk() {
         //具体的网络请求步骤自己操作
-        String apkUrl = "http://www.ifun.net:7070/HeatingSystem/downloadApk";
+        String apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk";
         //判断版本号
         String latestVersion = "1.0.1";
         String currentVersion = BuildConfig.VERSION_NAME;
@@ -49,7 +50,7 @@ public class JavaDemoActivity extends AppCompatActivity {
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion.compareTo(currentVersion) > 0) {
             Toast.makeText(JavaDemoActivity.this, "开始下载中...", Toast.LENGTH_SHORT).show();
-            SilentUpdate.INSTANCE.update(apkUrl, latestVersion,"这是一次服务器的更新");
+            SilentUpdate.INSTANCE.update(apkUrl, latestVersion, "这是一次服务器的更新");
         }
     }
 

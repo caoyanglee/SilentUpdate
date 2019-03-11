@@ -20,7 +20,7 @@ class KotlinDemoActivity : AppCompatActivity() {
 
     //检查权限 step1
     private fun checkPermission() {
-        RxPermissions(this)
+        val d = RxPermissions(this)
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe { granted ->
                     if (granted)
@@ -32,7 +32,7 @@ class KotlinDemoActivity : AppCompatActivity() {
     //获取下载链接 step2
     fun getLatestApk() {
         //具体的网络请求步骤自己操作
-        val apkUrl = "http://static.xmwzfy.com/wzfy_client_v1.0.1_jiagu_sign.apk"
+        val apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk"
         //判断版本号
         val latestVersion = "1.1.0"
         val currentVersion = BuildConfig.VERSION_NAME
