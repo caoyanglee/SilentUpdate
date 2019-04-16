@@ -3,8 +3,7 @@ package www.weimu.io.silentupdatedemo
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.weimu.universalib.ktx.clearAllCache
-import com.weimu.universalib.ktx.toast
+import com.weimu.universalview.ktx.toast
 import kotlinx.android.synthetic.main.activity_main.*
 import www.weimu.io.silentupdate.SilentUpdate
 

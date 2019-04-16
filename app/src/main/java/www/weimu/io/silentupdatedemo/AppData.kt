@@ -1,9 +1,8 @@
 package www.weimu.io.silentupdatedemo
 
 import android.app.AlertDialog
-import android.app.Application
 import android.content.Context
-import com.weimu.universalib.OriginAppData
+import com.weimu.universalview.OriginAppData
 import www.weimu.io.silentupdate.SilentUpdate
 import www.weimu.io.silentupdate.core.dialog.DialogTipAction
 

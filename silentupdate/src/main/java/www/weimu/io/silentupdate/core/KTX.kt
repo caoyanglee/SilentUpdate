@@ -3,16 +3,15 @@ package www.weimu.io.silentupdate.core
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.util.Log
-import com.weimu.universalib.OriginAppData
+import com.weimu.universalib.ktx.getUri4File
 import www.weimu.io.silentupdate.BuildConfig
 import java.io.File
+import java.lang.Exception
 import java.util.*
 
 
@@ -29,8 +28,15 @@ internal fun Context.constructOpenApkItent(file: File): Intent {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)//7.0有效
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)//7.0有效
     }
-    val uri = getUriForFile(file)
-    intent.setDataAndType(uri, "application/vnd.android.package-archive")
+
+    //防止有的系统 强制关闭安装未知来源的app 导致的crash
+    try {
+        val uri = getUri4File(file)
+        intent.setDataAndType(uri, "application/vnd.android.package-archive")
+    } catch (e: Exception) {
+        //doNothing
+    }
+
     return intent
 }
 
@@ -45,26 +51,6 @@ internal fun Any.isFileExist(filePath: String): Boolean {
 //log
 internal fun Any.loge(message: String) {
     if (BuildConfig.DEBUG) Log.e("silentUpdate", message)
-}
-
-
-/**
- * 获取文件的Uri
- * 兼容7.0
- */
-internal fun Context.getUriForFile(file: File?): Uri {
-    //获取当前app的包名
-    val FPAuth = "$packageName.fileprovider"
-
-    if (file == null) throw NullPointerException()
-
-    val uri: Uri
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        uri = FileProvider.getUriForFile(this.applicationContext, FPAuth, file)
-    } else {
-        uri = Uri.fromFile(file)
-    }
-    return uri
 }
 
 //获取应用的名字

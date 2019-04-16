@@ -28,8 +28,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //universal-lib
-    api "com.github.caoyanglee:universal:$rootProject.universal_lib"
+    //universal-ui
+    api "com.github.caoyanglee:universalui:$rootProject.universal_ui"
 
 }
 //记得加上这个
