@@ -9,7 +9,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import www.weimu.io.silentupdate.SilentUpdate;
+import com.pmm.silentupdate.SilentUpdate;
 
 /**
  * Java的调用方式

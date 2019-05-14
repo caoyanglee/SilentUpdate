@@ -2,6 +2,6 @@
 <paths>
     <!-- external-path:sd ；path:你的应用保存文件的根目录；name随便定义-->
     <external-path
-        path="."
-        name="external_storage_root" />
+        name="external_storage_root"
+        path="." />
 </paths>

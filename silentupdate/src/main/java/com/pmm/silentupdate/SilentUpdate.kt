@@ -1,16 +1,16 @@
-package www.weimu.io.silentupdate
+package com.pmm.silentupdate
 
 import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import com.pmm.silentupdate.core.ActivityLifeListener
+import com.pmm.silentupdate.core.SPCenter
+import com.pmm.silentupdate.core.dialog.DialogTipAction
+import com.pmm.silentupdate.strategy.MobileStrategy
+import com.pmm.silentupdate.strategy.Strategy
+import com.pmm.silentupdate.strategy.WifiStrategy
 import com.weimu.universalib.ktx.isConnectWifi
-import www.weimu.io.silentupdate.core.*
-import www.weimu.io.silentupdate.core.dialog.DialogTipAction
-import www.weimu.io.silentupdate.strategy.MobileStrategy
-import www.weimu.io.silentupdate.strategy.Strategy
-import www.weimu.io.silentupdate.strategy.WifiStrategy
-import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
 

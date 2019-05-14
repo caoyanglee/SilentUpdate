@@ -1,8 +1,8 @@
-package www.weimu.io.silentupdate.core
+package com.pmm.silentupdate.core
 
 import android.content.Context
-import www.weimu.io.silentupdate.BuildConfig
-import www.weimu.io.silentupdate.SilentUpdate
+import com.pmm.silentupdate.BuildConfig
+import com.pmm.silentupdate.SilentUpdate
 
 /**
  * Author:你需要一台永动机

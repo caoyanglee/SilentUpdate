@@ -1,4 +1,4 @@
-package www.weimu.io.silentupdate.strategy
+package com.pmm.silentupdate.strategy
 
 /**
  * Author:你需要一台永动机

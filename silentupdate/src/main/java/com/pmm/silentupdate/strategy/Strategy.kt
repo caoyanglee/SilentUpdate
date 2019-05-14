@@ -1,6 +1,9 @@
-package www.weimu.io.silentupdate.strategy
+package com.pmm.silentupdate.strategy
 
-import android.app.*
+import android.app.AlertDialog
+import android.app.DownloadManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,11 +13,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.support.annotation.RequiresApi
-import www.weimu.io.silentupdate.SilentUpdate
-import www.weimu.io.silentupdate.core.*
+import com.pmm.silentupdate.SilentUpdate
+import com.pmm.silentupdate.core.*
 import java.io.File
 import java.net.URI
-import java.net.URISyntaxException
 import java.util.*
 
 /**

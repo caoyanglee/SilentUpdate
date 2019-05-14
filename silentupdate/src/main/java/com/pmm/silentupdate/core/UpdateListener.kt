@@ -1,4 +1,4 @@
-package www.weimu.io.silentupdate.core
+package com.pmm.silentupdate.core
 
 import java.io.File
 

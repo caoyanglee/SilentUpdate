@@ -1,23 +1,27 @@
-package www.weimu.io.silentupdate.core
+package com.pmm.silentupdate.core
 
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.util.Log
+import com.pmm.silentupdate.BuildConfig
 import com.weimu.universalib.ktx.getUri4File
-import www.weimu.io.silentupdate.BuildConfig
 import java.io.File
-import java.lang.Exception
 import java.util.*
 
 
 //直接打开APK
 internal fun Context.openApkByFilePath(file: File) {
-    startActivity(constructOpenApkItent(file))
+    //防止有的系统 强制关闭安装未知来源的app 导致的crash
+    try {
+        startActivity(constructOpenApkItent(file))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        //doNothing
+    }
+
 }
 
 //构造打开APK的Intent
@@ -28,15 +32,8 @@ internal fun Context.constructOpenApkItent(file: File): Intent {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)//7.0有效
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)//7.0有效
     }
-
-    //防止有的系统 强制关闭安装未知来源的app 导致的crash
-    try {
-        val uri = getUri4File(file)
-        intent.setDataAndType(uri, "application/vnd.android.package-archive")
-    } catch (e: Exception) {
-        //doNothing
-    }
-
+    val uri = getUri4File(file)
+    intent.setDataAndType(uri, "application/vnd.android.package-archive")
     return intent
 }
 

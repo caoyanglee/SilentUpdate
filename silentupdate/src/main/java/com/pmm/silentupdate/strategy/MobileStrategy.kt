@@ -1,11 +1,10 @@
-package www.weimu.io.silentupdate.strategy
+package com.pmm.silentupdate.strategy
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Application
 import android.os.Handler
-import www.weimu.io.silentupdate.SilentUpdate
-import www.weimu.io.silentupdate.core.*
+import com.pmm.silentupdate.SilentUpdate
+import com.pmm.silentupdate.core.*
 import java.io.File
 import java.util.*
 

@@ -1,7 +1,7 @@
-package www.weimu.io.silentupdate.core
+package com.pmm.silentupdate.core
 
 import android.content.Context
-import www.weimu.io.silentupdate.BuildConfig
+import com.pmm.silentupdate.BuildConfig
 
 
 //对应downloadManager

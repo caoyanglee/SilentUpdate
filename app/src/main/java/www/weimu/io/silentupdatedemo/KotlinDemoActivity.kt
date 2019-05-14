@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.tbruyelle.rxpermissions2.RxPermissions
-import www.weimu.io.silentupdate.SilentUpdate
+import com.pmm.silentupdate.SilentUpdate
 
 /**
  * kotlin的调用方式

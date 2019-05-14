@@ -1,4 +1,4 @@
-package www.weimu.io.silentupdate.core.dialog
+package com.pmm.silentupdate.core.dialog
 
 import android.content.Context
 import java.io.File
