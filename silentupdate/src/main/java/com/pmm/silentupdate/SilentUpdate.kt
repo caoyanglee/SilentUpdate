@@ -10,7 +10,7 @@ import com.pmm.silentupdate.core.dialog.DialogTipAction
 import com.pmm.silentupdate.strategy.MobileStrategy
 import com.pmm.silentupdate.strategy.Strategy
 import com.pmm.silentupdate.strategy.WifiStrategy
-import com.weimu.universalib.ktx.isConnectWifi
+import com.weimu.universalview.ktx.isConnectWifi
 import java.lang.ref.WeakReference
 import java.util.*
 
