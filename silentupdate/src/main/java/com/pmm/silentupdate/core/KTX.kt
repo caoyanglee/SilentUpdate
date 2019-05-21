@@ -7,7 +7,7 @@ import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import com.pmm.silentupdate.BuildConfig
-import com.weimu.universalib.ktx.getUri4File
+import com.weimu.universalview.ktx.getUri4File
 import java.io.File
 import java.util.*
 
