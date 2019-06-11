@@ -5,11 +5,14 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import com.pmm.silentupdate.core.ActivityLifeListener
+import com.pmm.silentupdate.core.Const
 import com.pmm.silentupdate.core.SPCenter
-import com.pmm.silentupdate.core.dialog.DialogTipAction
+import com.pmm.silentupdate.core.DialogTipAction
 import com.pmm.silentupdate.strategy.MobileStrategy
 import com.pmm.silentupdate.strategy.Strategy
 import com.pmm.silentupdate.strategy.WifiStrategy
+import com.weimu.universalview.helper.FileHelper
+import com.weimu.universalview.ktx.getAppName
 import com.weimu.universalview.ktx.isConnectWifi
 import java.lang.ref.WeakReference
 import java.util.*
@@ -22,7 +25,6 @@ object SilentUpdate {
 
 
     //以下数据可配置
-
     var downLoadTipDialog: DialogTipAction? = null//自定义 下载Dialog -> 流量模式
     var installTipDialog: DialogTipAction? = null//自定义  安装Dialog -> 无线模式,文件已存在
     var intervalDay = 7//间隔弹窗提示时间-默认7天后提醒-仅仅适用于【isUseDefaultHint=true】
@@ -98,6 +100,15 @@ object SilentUpdate {
     fun clearCache() {
         SPCenter.clearDialogTime()
         SPCenter.clearUpdateContent()
+    }
+
+    /**
+     * 删除apk 手动删除 已安装的apk
+     * @param version 版本
+     */
+    fun deleteApk(version: String): Boolean {
+        val path = "${Const.UPDATE_FILE_DIR}${getApplicationContext().getAppName()}_v$version.apk"
+        return FileHelper.deleteFile(path)
     }
 
 

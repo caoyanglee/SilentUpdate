@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import com.weimu.universalview.OriginAppData
 import com.pmm.silentupdate.SilentUpdate
-import com.pmm.silentupdate.core.dialog.DialogTipAction
+import com.pmm.silentupdate.core.DialogTipAction
 
 /**
  * Author:你需要一台永动机

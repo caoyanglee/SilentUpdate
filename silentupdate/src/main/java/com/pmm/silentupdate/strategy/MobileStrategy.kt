@@ -5,6 +5,10 @@ import android.app.AlertDialog
 import android.os.Handler
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
+import com.weimu.universalview.ktx.getAppName
+import com.weimu.universalview.ktx.isFileExist
+import com.weimu.universalview.ktx.moreThanDays
+import com.weimu.universalview.ktx.openApkByFilePath
 import java.io.File
 import java.util.*
 
@@ -45,7 +49,7 @@ internal class MobileStrategy private constructor() : Strategy() {
         val taskId = context.getUpdateShare().apkTaskID
         loge("==============")
         loge("taskID=$taskId")
-        if (isFileExist(path)) {
+        if (File(path).isFileExist()) {
             loge("文件已经存在")
             if (isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")

@@ -5,9 +5,10 @@ import android.app.PendingIntent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.support.v4.app.NotificationCompat
-import com.pmm.silentupdate.R
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
+import com.weimu.universalview.helper.FileHelper
+import com.weimu.universalview.ktx.*
 import java.io.File
 import java.util.*
 
@@ -46,7 +47,7 @@ internal class WifiStrategy private constructor() : Strategy() {
         val taskId = context.getUpdateShare().apkTaskID
         loge("==============")
         loge("taskID=$taskId")
-        if (isFileExist(path)) {
+        if (File(path).isFileExist()) {
             loge("【文件已经存在】")
             if (isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")
@@ -83,29 +84,31 @@ internal class WifiStrategy private constructor() : Strategy() {
         //判断是否在时间间隔内
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
-            SilentUpdate.getCurrentActivity()?.apply {
-                val title = "发现新版本！"
-                val content = "请点击立即安装~"
-                val intent = constructOpenApkItent(file)
-                val pintent = PendingIntent.getActivity(this, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                val builder = NotificationCompat.Builder(this)
-                builder.setSmallIcon(android.R.drawable.stat_sys_download_done)// 设置小图标
-                builder.setLargeIcon(BitmapFactory.decodeResource(this.resources, this.getAppIcon()))//设置大图标
-                builder.setTicker(title)// 手机状态栏的提示----最上面的一条
-                builder.setWhen(System.currentTimeMillis())// 设置时间
-                builder.setContentTitle(title)// 设置标题
-                builder.setContentText(content)// 设置通知的内容
-                builder.setContentIntent(pintent)// 点击后的意图
-                builder.setDefaults(Notification.DEFAULT_ALL)// 设置提示全部
-                builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//锁屏通知
+            val activity = SilentUpdate.getCurrentActivity() ?: return
+            val title = "发现新版本！"
+            val content = "请点击立即安装~"
+            val intent = activity.constructOpenApkItent(file)
+            val pIntent = PendingIntent.getActivity(activity, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+            val builder = NotificationCompat.Builder(activity).apply {
+                this.setSmallIcon(android.R.drawable.stat_sys_download_done)// 设置小图标
+                this.setLargeIcon(BitmapFactory.decodeResource(activity.resources, activity.getAppIcon()))//设置大图标
+                this.setTicker(title)// 手机状态栏的提示----最上面的一条
+                this.setWhen(System.currentTimeMillis())// 设置时间
+                this.setContentTitle(title)// 设置标题
+                this.setContentText(content)// 设置通知的内容
+                this.setContentIntent(pIntent)// 点击后的意图
+                this.setDefaults(Notification.DEFAULT_ALL)// 设置提示全部
+                this.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//锁屏通知
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    builder.setChannelId(Const.NOTIFICATION_CHANNEL_ID)
+                    this.setChannelId(Const.NOTIFICATION_CHANNEL_ID)
                 }
-                val notification = builder.build()// 4.1以上要用才起作用
-                notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL// 点击后自动取消
-                //显示
-                notificationManager.notify(UUID.randomUUID().hashCode(), notification)
             }
+
+            val notification = builder.build()// 4.1以上要用才起作用
+            notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL// 点击后自动取消
+            //显示
+            notificationManager.notify(UUID.randomUUID().hashCode(), notification)
         }
 
 

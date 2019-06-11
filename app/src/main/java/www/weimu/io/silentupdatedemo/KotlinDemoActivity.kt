@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.widget.Toast
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.pmm.silentupdate.SilentUpdate
+import com.weimu.universalview.core.BaseB
+import com.weimu.universalview.helper.RxSchedulers
+import io.reactivex.Observable
 
 /**
  * kotlin的调用方式
@@ -29,19 +32,26 @@ class KotlinDemoActivity : AppCompatActivity() {
                 }
     }
 
-    //获取下载链接 step2
-    fun getLatestApk() {
-        //具体的网络请求步骤自己操作
-        val apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk"
-        //判断版本号
-        val latestVersion = "1.1.0"
-        val currentVersion = BuildConfig.VERSION_NAME
+    class CheckVersionResultPO(
+            val apkUrl: String,
+            val latestVersion: String
+    ) : BaseB()
 
-        //将服务器传给你的最新版本号字段给latestVersion
-        if (latestVersion > currentVersion) {
-            Toast.makeText(this@KotlinDemoActivity, "开始下载中...", Toast.LENGTH_SHORT).show()
-            SilentUpdate.update(apkUrl, latestVersion, "快点更新")
-        }
+    //获取下载链接 step2
+    private fun getLatestApk() {
+        //具体的网络请求步骤自己操作
+        val d = Observable.just(CheckVersionResultPO(
+                apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk",
+                latestVersion = "1.1.1"
+        )).compose(RxSchedulers.toMain())
+                .subscribe {
+                    //判断版本号
+                    if (it.latestVersion > BuildConfig.VERSION_NAME) {
+                        Toast.makeText(this@KotlinDemoActivity, "开始下载中...", Toast.LENGTH_SHORT).show()
+                        SilentUpdate.update(it.apkUrl, it.latestVersion, "快点更新")
+                    }
+                }
     }
+
 
 }

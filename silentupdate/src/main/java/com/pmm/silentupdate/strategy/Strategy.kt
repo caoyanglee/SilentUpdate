@@ -15,6 +15,9 @@ import android.os.Environment
 import android.support.annotation.RequiresApi
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
+import com.weimu.universalview.ktx.getAppName
+import com.weimu.universalview.ktx.moreThanDays
+import com.weimu.universalview.ktx.openApkByFilePath
 import java.io.File
 import java.net.URI
 import java.util.*

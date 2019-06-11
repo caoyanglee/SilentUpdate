@@ -1,4 +1,4 @@
-package com.pmm.silentupdate.core.dialog
+package com.pmm.silentupdate.core
 
 import android.content.Context
 import java.io.File
