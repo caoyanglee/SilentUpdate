@@ -139,8 +139,7 @@ internal abstract class Strategy : StrategyAction {
         query.setFilterById(id)
         val cursor = downloadManager.query(query)
         while (cursor.moveToNext()) {
-            val status = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-            return status
+            return cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
         }
         cursor.close()
         return ""
