@@ -52,7 +52,8 @@ class KotlinDemoActivity : AppCompatActivity() {
                         SilentUpdate.update {
                             this.apkUrl = it.apkUrl
                             this.latestVersion = it.latestVersion
-                            this.msg = "这是自定义的内容哦"
+                            this.msg = "这是强制安装更新"
+                            this.isForce = true
                         }
                     }
                 }

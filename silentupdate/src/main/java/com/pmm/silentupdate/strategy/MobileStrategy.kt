@@ -3,6 +3,7 @@ package com.pmm.silentupdate.strategy
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.Handler
+import android.view.View
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
 import com.weimu.universalview.ktx.getAppName
@@ -100,18 +101,32 @@ internal class MobileStrategy private constructor() : Strategy() {
     }
 
     private fun Activity.showDownloadDialog(apkUrl: String, fileName: String) {
-        AlertDialog.Builder(this)
-                .setCancelable(false)
-                .setTitle("提示")
-                .setMessage("发现新版本！请点击立即更新。")
-                .setPositiveButton("更新") { dialog, which ->
-                    addRequest(apkUrl, fileName, true)
-                }
-                .setNegativeButton("稍后") { dialog, which ->
-                    //记录
+        val updateInfo = SPCenter.getUpdateInfo()
+        val dialog = AlertDialog.Builder(this)
+                .setCancelable(!updateInfo.isForce)
+                .setTitle(updateInfo.title)
+                .setMessage(updateInfo.msg)
+                .setPositiveButton("立即更新", null)
+                .setNegativeButton("稍后", null)
+                .create()
+        dialog.setOnShowListener {
+            //positive
+            val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            posBtn.setOnClickListener {
+                addRequest(apkUrl, fileName, true)
+            }
+            val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            //negative
+            if (updateInfo.isForce) {
+                negBtn.visibility = View.GONE
+            } else {
+                negBtn.setOnClickListener {
                     SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                    dialog.dismiss()
                 }
-                .show()
+            }
+        }
+        dialog.show()
     }
 
 

@@ -7,7 +7,6 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
-import com.weimu.universalview.helper.FileHelper
 import com.weimu.universalview.ktx.*
 import java.io.File
 import java.util.*
@@ -84,9 +83,10 @@ internal class WifiStrategy private constructor() : Strategy() {
         //判断是否在时间间隔内
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
+            val updateInfo = SPCenter.getUpdateInfo()
             val activity = SilentUpdate.getCurrentActivity() ?: return
-            val title = "发现新版本！"
-            val content = "请点击立即安装~"
+            val title = updateInfo.title
+            val msg = updateInfo.msg
             val intent = activity.constructOpenApkItent(file)
             val pIntent = PendingIntent.getActivity(activity, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -96,7 +96,7 @@ internal class WifiStrategy private constructor() : Strategy() {
                 this.setTicker(title)// 手机状态栏的提示----最上面的一条
                 this.setWhen(System.currentTimeMillis())// 设置时间
                 this.setContentTitle(title)// 设置标题
-                this.setContentText(content)// 设置通知的内容
+                this.setContentText(msg)// 设置通知的内容
                 this.setContentIntent(pIntent)// 点击后的意图
                 this.setDefaults(Notification.DEFAULT_ALL)// 设置提示全部
                 this.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//锁屏通知

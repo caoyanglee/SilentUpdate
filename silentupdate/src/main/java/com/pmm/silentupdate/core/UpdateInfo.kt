@@ -12,8 +12,8 @@ import java.io.Serializable
 class UpdateInfo : BaseB() {
     var apkUrl: String = ""
     var latestVersion: String = ""
-    var title = ""//更新标题
-    var msg = ""//更新的内容
+    var title = "提示"//更新标题
+    var msg = "发现新版本！请点击立即安装"//更新的内容
     var isForce = false//是否强制
     var extra: Bundle? = null//可以扩展更多参数
 }

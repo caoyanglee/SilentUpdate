@@ -2,10 +2,12 @@ package www.weimu.io.silentupdatedemo
 
 import android.app.AlertDialog
 import android.content.Context
+import android.view.View
 import com.weimu.universalview.OriginAppData
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.DialogTipAction
 import com.pmm.silentupdate.core.UpdateInfo
+import com.weimu.universalview.ktx.openApkByFilePath
 
 /**
  * Author:你需要一台永动机
@@ -24,26 +26,62 @@ class AppData : OriginAppData() {
         //下载提示 -> 流量模式
         SilentUpdate.downLoadTipDialog = object : DialogTipAction {
             override fun show(context: Context, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
-                AlertDialog.Builder(context)
-                        .setCancelable(false)
-                        .setTitle("提示")
+                val dialog = AlertDialog.Builder(context)
+                        .setCancelable(!updateInfo.isForce)
+                        .setTitle(updateInfo.title)
                         .setMessage("下载提示弹窗 自定义 ${updateInfo.msg}")
-                        .setPositiveButton("立即更新") { dialog, which -> positiveClick() }
-                        .setNegativeButton("稍后") { dialog, which -> negativeClick() }
-                        .show()
+                        .setPositiveButton("立即更新", null)
+                        .setNegativeButton("稍后", null)
+                        .create()
+                dialog.setOnShowListener {
+                    //positive
+                    val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    posBtn.setOnClickListener {
+                        positiveClick()
+                    }
+                    val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    //negative
+                    if (updateInfo.isForce) {
+                        negBtn.visibility = View.GONE
+                    } else {
+                        negBtn.setOnClickListener {
+                            negativeClick()
+                            dialog.dismiss()
+                        }
+                    }
+                }
+                dialog.show()
             }
 
         }
         //安装提示 -> 无线模式，文件已存在
         SilentUpdate.installTipDialog = object : DialogTipAction {
             override fun show(context: Context, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
-                AlertDialog.Builder(context)
-                        .setCancelable(false)
-                        .setTitle("提示")
+                val dialog = AlertDialog.Builder(context)
+                        .setCancelable(!updateInfo.isForce)
+                        .setTitle(updateInfo.title)
                         .setMessage("安装提示弹窗 自定义 ${updateInfo.msg}")
-                        .setPositiveButton("立即安装") { dialog, which -> positiveClick() }
-                        .setNegativeButton("稍后") { dialog, which -> negativeClick() }
-                        .show()
+                        .setPositiveButton("立即安装", null)
+                        .setNegativeButton("稍后", null)
+                        .create()
+                dialog.setOnShowListener {
+                    //positive
+                    val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    posBtn.setOnClickListener {
+                        positiveClick()
+                    }
+                    val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    //negative
+                    if (updateInfo.isForce) {
+                        negBtn.visibility = View.GONE
+                    } else {
+                        negBtn.setOnClickListener {
+                            negativeClick()
+                            dialog.dismiss()
+                        }
+                    }
+                }
+                dialog.show()
             }
         }
     }

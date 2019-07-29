@@ -1,9 +1,6 @@
 package com.pmm.silentupdate.strategy
 
-import android.app.AlertDialog
-import android.app.DownloadManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -12,15 +9,19 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
 import android.support.annotation.RequiresApi
+import android.view.View
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
 import com.weimu.universalview.ktx.getAppName
 import com.weimu.universalview.ktx.moreThanDays
 import com.weimu.universalview.ktx.openApkByFilePath
+import com.weimu.universalview.ktx.setOnClickListenerPro
 import java.io.File
 import java.net.URI
 import java.util.*
+
 
 /**
  * Author:你需要一台永动机
@@ -165,7 +166,8 @@ internal abstract class Strategy : StrategyAction {
         query.setFilterById(id)
         val cursor = downloadManager.query(query)
         while (cursor.moveToNext()) {
-            filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)) ?: ""
+            filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+                    ?: ""
         }
         cursor.close()
         return filePath
@@ -230,6 +232,7 @@ internal abstract class Strategy : StrategyAction {
         }
     }
 
+
     /**
      * 状态：文件已经存在或Wifi情况下下载完成
      * 显示Dialog:提示用户安装
@@ -238,34 +241,55 @@ internal abstract class Strategy : StrategyAction {
         //判断是否在时间间隔内
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
-            SilentUpdate.getCurrentActivity()?.apply {
-                if (SilentUpdate.installTipDialog != null) {
-                    SilentUpdate.installTipDialog?.show(
-                            context = this,
-                            updateInfo = SPCenter.getUpdateInfo(),
-                            positiveClick = { openApkByFilePath(file) },
-                            negativeClick = {
-                                //记录
-                                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                            })
-                } else {
+            val updateInfo = SPCenter.getUpdateInfo()
+            val curActivity = SilentUpdate.getCurrentActivity()
+            if (SilentUpdate.installTipDialog != null) {
+                showCustomInstallDialog(curActivity, file)
+            } else {
+                showSystemInstallDialog(curActivity, updateInfo, file)
+            }
 
-                    AlertDialog.Builder(this)
-                            .setCancelable(false)
-                            .setTitle("提示")
-                            .setMessage("发现新版本！请点击立即安装。")
-                            .setPositiveButton("立即安装") { dialog, which ->
-                                openApkByFilePath(file)
-                            }
-                            .setNegativeButton("稍后") { dialog, which ->
-                                //记录
-                                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                            }
-                            .show()
+        }
+
+    }
+
+    private fun showCustomInstallDialog(curActivity: Activity?, file: File) {
+        SilentUpdate.installTipDialog?.show(
+                context = curActivity!!,
+                updateInfo = SPCenter.getUpdateInfo(),
+                positiveClick = { curActivity.openApkByFilePath(file) },
+                negativeClick = {
+                    //记录
+                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                })
+    }
+
+    private fun showSystemInstallDialog(curActivity: Activity?, updateInfo: UpdateInfo, file: File) {
+        val dialog = AlertDialog.Builder(curActivity)
+                .setCancelable(!updateInfo.isForce)
+                .setTitle(updateInfo.title)
+                .setMessage(updateInfo.msg)
+                .setPositiveButton("立即安装", null)
+                .setNegativeButton("稍后", null)
+                .create()
+        dialog.setOnShowListener {
+            //positive
+            val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            posBtn.setOnClickListener {
+                curActivity?.openApkByFilePath(file)
+            }
+            val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            //negative
+            if (updateInfo.isForce) {
+                negBtn.visibility = View.GONE
+            } else {
+                negBtn.setOnClickListener {
+                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+                    dialog.dismiss()
                 }
             }
         }
-
+        dialog.show()
     }
 
 
