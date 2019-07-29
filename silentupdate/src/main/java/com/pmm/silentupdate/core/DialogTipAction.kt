@@ -11,7 +11,7 @@ import java.io.File
 interface DialogTipAction {
 
     fun show(context: Context,
-             updateContent: String = "",
+             updateInfo: UpdateInfo,
              positiveClick: (() -> Unit),
              negativeClick: (() -> Unit))
 }

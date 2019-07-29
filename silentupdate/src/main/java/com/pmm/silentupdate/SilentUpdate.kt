@@ -4,10 +4,10 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import com.pmm.silentupdate.core.*
 import com.pmm.silentupdate.core.ActivityLifeListener
 import com.pmm.silentupdate.core.Const
 import com.pmm.silentupdate.core.SPCenter
-import com.pmm.silentupdate.core.DialogTipAction
 import com.pmm.silentupdate.strategy.MobileStrategy
 import com.pmm.silentupdate.strategy.Strategy
 import com.pmm.silentupdate.strategy.WifiStrategy
@@ -70,14 +70,18 @@ object SilentUpdate {
      * @param apkUrl app的下载地址
      * @param latestVersion 最新的版本号
      */
-    fun update(apkUrl: String, latestVersion: String, updateContent: String = "") {
-        SPCenter.modifyUpdateContent(updateContent)
-        //策略模式
-        val context = getApplicationContext()
+    fun update(receive: UpdateInfo.() -> Unit) {
+        val updateInfo = UpdateInfo()
+        updateInfo.receive()
+        val apkUrl = updateInfo.apkUrl
+        val latestVersion = updateInfo.latestVersion
+        if (apkUrl.isBlank() or latestVersion.isBlank()) return
+        SPCenter.modifyUpdateInfo(updateInfo)
 
+        //策略模式
         strategy = when {
             //WIFI
-            context.isConnectWifi() -> WifiStrategy.getDefault()
+            getApplicationContext().isConnectWifi() -> WifiStrategy.getDefault()
             //流量
             else -> MobileStrategy.getDefault()
         }
@@ -88,18 +92,25 @@ object SilentUpdate {
      * 主动更新 同流量模式
      * 检查本地文件，没有直接显示下载弹窗
      */
-    fun activeUpdate(apkUrl: String, latestVersion: String, updateContent: String = "") {
-        SPCenter.modifyUpdateContent(updateContent)
+    fun activeUpdate(receive: UpdateInfo.() -> Unit) {
+        val updateInfo = UpdateInfo()
+        updateInfo.receive()
+        val apkUrl = updateInfo.apkUrl
+        val latestVersion = updateInfo.latestVersion
+        if (apkUrl.isBlank() or latestVersion.isBlank()) return
+        SPCenter.modifyUpdateInfo(updateInfo)
+
         //策略模式
         MobileStrategy.getDefault().update(apkUrl, latestVersion)
     }
+
 
     /**
      * 清除sp缓存数据
      */
     fun clearCache() {
         SPCenter.clearDialogTime()
-        SPCenter.clearUpdateContent()
+        SPCenter.clearUpdateInfo()
     }
 
     /**

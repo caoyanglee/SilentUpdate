@@ -5,10 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.pmm.silentupdate.core.UpdateInfo;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+
 import com.pmm.silentupdate.SilentUpdate;
 
 /**
@@ -42,15 +46,23 @@ public class JavaDemoActivity extends AppCompatActivity {
     //获取下载链接 step2
     public void getLatestApk() {
         //具体的网络请求步骤自己操作
-        String apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk";
+        final String apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk";
         //判断版本号
-        String latestVersion = "1.0.1";
+        final String latestVersion = "1.2.1";
         String currentVersion = BuildConfig.VERSION_NAME;
 
         //将服务器传给你的最新版本号字段给latestVersion
         if (latestVersion.compareTo(currentVersion) > 0) {
             Toast.makeText(JavaDemoActivity.this, "开始下载中...", Toast.LENGTH_SHORT).show();
-            SilentUpdate.INSTANCE.update(apkUrl, latestVersion, "这是一次服务器的更新");
+            SilentUpdate.INSTANCE.update(new Function1<UpdateInfo, Unit>() {
+                @Override
+                public Unit invoke(UpdateInfo updateInfo) {
+                    updateInfo.setApkUrl(apkUrl);
+                    updateInfo.setLatestVersion(latestVersion);
+                    updateInfo.setMsg("这是自定义的内容哦");
+                    return Unit.INSTANCE;
+                }
+            });
         }
     }
 

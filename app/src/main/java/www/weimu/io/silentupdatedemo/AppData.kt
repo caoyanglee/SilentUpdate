@@ -5,6 +5,7 @@ import android.content.Context
 import com.weimu.universalview.OriginAppData
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.DialogTipAction
+import com.pmm.silentupdate.core.UpdateInfo
 
 /**
  * Author:你需要一台永动机
@@ -22,11 +23,11 @@ class AppData : OriginAppData() {
         SilentUpdate.intervalDay = 7
         //下载提示 -> 流量模式
         SilentUpdate.downLoadTipDialog = object : DialogTipAction {
-            override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+            override fun show(context: Context, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
                 AlertDialog.Builder(context)
                         .setCancelable(false)
                         .setTitle("提示")
-                        .setMessage("下载提示弹窗 自定义 $updateContent")
+                        .setMessage("下载提示弹窗 自定义 ${updateInfo.msg}")
                         .setPositiveButton("立即更新") { dialog, which -> positiveClick() }
                         .setNegativeButton("稍后") { dialog, which -> negativeClick() }
                         .show()
@@ -35,11 +36,11 @@ class AppData : OriginAppData() {
         }
         //安装提示 -> 无线模式，文件已存在
         SilentUpdate.installTipDialog = object : DialogTipAction {
-            override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+            override fun show(context: Context, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
                 AlertDialog.Builder(context)
                         .setCancelable(false)
                         .setTitle("提示")
-                        .setMessage("安装提示弹窗 自定义 $updateContent")
+                        .setMessage("安装提示弹窗 自定义 ${updateInfo.msg}")
                         .setPositiveButton("立即安装") { dialog, which -> positiveClick() }
                         .setNegativeButton("稍后") { dialog, which -> negativeClick() }
                         .show()

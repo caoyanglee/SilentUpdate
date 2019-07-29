@@ -242,7 +242,7 @@ internal abstract class Strategy : StrategyAction {
                 if (SilentUpdate.installTipDialog != null) {
                     SilentUpdate.installTipDialog?.show(
                             context = this,
-                            updateContent = SPCenter.getUpdateContent(),
+                            updateInfo = SPCenter.getUpdateInfo(),
                             positiveClick = { openApkByFilePath(file) },
                             negativeClick = {
                                 //记录

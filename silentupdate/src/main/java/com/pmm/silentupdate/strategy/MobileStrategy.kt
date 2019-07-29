@@ -86,7 +86,7 @@ internal class MobileStrategy private constructor() : Strategy() {
                 if (SilentUpdate.downLoadTipDialog != null) {
                     SilentUpdate.downLoadTipDialog?.show(
                             context = this,
-                            updateContent = SPCenter.getUpdateContent(),
+                            updateInfo = SPCenter.getUpdateInfo(),
                             positiveClick = { addRequest(apkUrl, fileName, true) },
                             negativeClick = {
                                 //记录

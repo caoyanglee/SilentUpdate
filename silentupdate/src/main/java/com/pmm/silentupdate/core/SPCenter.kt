@@ -3,6 +3,8 @@ package com.pmm.silentupdate.core
 import android.content.Context
 import com.pmm.silentupdate.BuildConfig
 import com.pmm.silentupdate.SilentUpdate
+import com.weimu.universalview.ktx.toJsonStr
+import com.weimu.universalview.ktx.toObject
 
 /**
  * Author:你需要一台永动机
@@ -33,22 +35,19 @@ internal object SPCenter {
 
 
     //更新的内容
-    private val UPDATE_CONTENT = "updateContent"
+    private val UPDATE_INFO = "updateInfo"
 
+    //获取更新内容
+    fun getUpdateInfo(): UpdateInfo = (sp.getString(UPDATE_INFO, "") ?: "").toObject()
 
-    //获取存储时间
-    fun getUpdateContent(): String {
-        return sp.getString(UPDATE_CONTENT, "")
+    //修改更新内容
+    fun modifyUpdateInfo(updateInfo: UpdateInfo) {
+        sp.edit().putString(UPDATE_INFO, updateInfo.toJsonStr()).apply()
     }
 
-    //修改存储时间
-    fun modifyUpdateContent(content: String) {
-        sp.edit().putString(UPDATE_CONTENT, content).apply()
-    }
-
-    //清除存储时间
-    fun clearUpdateContent() {
-        sp.edit().remove(UPDATE_CONTENT).apply()
+    //清除更新内容
+    fun clearUpdateInfo() {
+        sp.edit().remove(UPDATE_INFO).apply()
     }
 
 }

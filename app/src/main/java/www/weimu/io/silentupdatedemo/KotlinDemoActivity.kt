@@ -48,7 +48,12 @@ class KotlinDemoActivity : AppCompatActivity() {
                     //判断版本号
                     if (it.latestVersion > BuildConfig.VERSION_NAME) {
                         Toast.makeText(this@KotlinDemoActivity, "开始下载中...", Toast.LENGTH_SHORT).show()
-                        SilentUpdate.update(it.apkUrl, it.latestVersion, "快点更新")
+
+                        SilentUpdate.update {
+                            this.apkUrl = it.apkUrl
+                            this.latestVersion = it.latestVersion
+                            this.msg = "这是自定义的内容哦"
+                        }
                     }
                 }
     }
