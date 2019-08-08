@@ -59,7 +59,10 @@ public class JavaDemoActivity extends AppCompatActivity {
                 public Unit invoke(UpdateInfo updateInfo) {
                     updateInfo.setApkUrl(apkUrl);
                     updateInfo.setLatestVersion(latestVersion);
-                    updateInfo.setMsg("这是自定义的内容哦");
+                    updateInfo.setTitle("这是自定义的标题");
+                    updateInfo.setMsg("这是自定义的内容");
+                    updateInfo.setForce(false);
+                    updateInfo.setExtra(new Bundle());
                     return Unit.INSTANCE;
                 }
             });

@@ -28,9 +28,6 @@ A library silently & automatically download latest apk to update your App<br>
 5. 下载时,通知栏会显示下载进度
 5. 下载完成后，接收回调(onDownLoadSuccess)并跳转安装界面
 
-
-> 注意：以下为Kotlin的操作，若使用Java请点击[这里](https://github.com/CaoyangLee/SilentUpdateDemo/blob/master/README_JAVA.md)
-
 ## 准备工作 
 1.获取依赖
 
@@ -47,7 +44,7 @@ allprojects {
 **app的build.gradle**
 [![](https://jitpack.io/v/caoyanglee/SilentUpdate.svg)](https://jitpack.io/#caoyanglee/SilentUpdate)
 
-> 注意：默认使用kotlin1.3.10版本的库
+> 注意：默认使用kotlin1.3.31版本的库
 
 ```gradle
 implementation 'com.github.caoyanglee:SilentUpdate:{latestVersion}'
@@ -84,6 +81,7 @@ implementation 'com.github.caoyanglee:SilentUpdate:{latestVersion}'
 </provider>
 ```
 
+> 注意：以下为Kotlin的操作，若使用Java请点击[这里](https://github.com/CaoyangLee/SilentUpdateDemo/blob/master/README_JAVA.md)
 
 4.在Application中进行初始化
 
@@ -94,15 +92,26 @@ SilentUpdate.init(this)
 ## 用法
 > 注意：<br>
 apkUrl：服务器提供的apk下载地址<br>
-latestVersion：服务器返回客户端的最新版本号
-updateContent:服务器返回客户端的更新内容
+latestVersion：服务器返回客户端的最新版本号<br>
+updateContent:服务器返回客户端的更新内容<br>
+title:提示的标题<br>
+msg:提示的内容<br>
+isForce:是否强制<br>
+extra:通过extra携带更多数据<br>
 
 ```kotlin
-SilentUpdate.update(apkUrl, latestVersion,updateContent)
+SilentUpdate.update {
+    this.apkUrl = it.apkUrl
+    this.latestVersion = it.latestVersion
+    this.title ="这是自定义的标题"
+    this.msg = "这是自定义的消息"
+    this.isForce = true
+    this.extra = Bundle()
+}
 ```
 
 ## 自定义配置
-1.设置提示默认Dialog的时间间隔
+1.设置提示Dialog的时间间隔
 
 ```kotlin
 SilentUpdate.intervalDay = 7//不设置的话，默认7天
@@ -111,7 +120,7 @@ SilentUpdate.intervalDay = 7//不设置的话，默认7天
 2.替换默认的弹窗<br>
 > 注意：执行下载任务之前都会判断更新文件是否存在,流量模式是调用**下载**Dialog，流量模式，文件已存在的情况是调用**安装**Dialog<br>
 
-很多时候下载Diloag和安装Dialog的样式是一样的，所以可以共用一个DialogTipAction :)
+很多时候下载Dialog和安装Dialog的样式是一样的，所以可以共用一个DialogTipAction :)
 
 ```kotlin
 //下载提示 -> 流量模式
