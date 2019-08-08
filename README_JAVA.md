@@ -9,7 +9,6 @@ SilentUpdate.INSTANCE.init(this);
 > 注意：<br>
 apkUrl：服务器提供的apk下载地址<br>
 latestVersion：服务器返回客户端的最新版本号<br>
-updateContent:服务器返回客户端的更新内容<br>
 title:提示的标题<br>
 msg:提示的内容<br>
 isForce:是否强制<br>
