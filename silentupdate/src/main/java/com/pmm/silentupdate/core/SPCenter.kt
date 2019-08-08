@@ -38,7 +38,7 @@ internal object SPCenter {
     private val UPDATE_INFO = "updateInfo"
 
     //获取更新内容
-    fun getUpdateInfo(): UpdateInfo = (sp.getString(UPDATE_INFO, "") ?: "").toObject()
+    fun getUpdateInfo(): UpdateInfo = (sp.getString(UPDATE_INFO, "") as String).toObject()!!
 
     //修改更新内容
     fun modifyUpdateInfo(updateInfo: UpdateInfo) {
