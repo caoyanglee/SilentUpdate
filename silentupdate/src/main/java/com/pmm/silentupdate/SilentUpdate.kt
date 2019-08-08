@@ -19,7 +19,7 @@ import java.util.*
 
 
 object SilentUpdate {
-    private val activityStack = Stack<Activity>()
+    private val activityStack = Stack<WeakReference<Activity?>>()
     private lateinit var strategy: Strategy
     private lateinit var applicationContext: WeakReference<Context>
 
@@ -33,7 +33,7 @@ object SilentUpdate {
     internal fun getCurrentActivity(): Activity? {
         var targetActivity: Activity? = null
         try {
-            targetActivity = activityStack.peek()
+            targetActivity = activityStack.peek().get()
         } catch (e: Exception) {
             //do nothing
         }
@@ -53,11 +53,11 @@ object SilentUpdate {
         context.registerActivityLifecycleCallbacks(object : ActivityLifeListener() {
 
             override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-                activityStack.add(activity)
+                activityStack.add(WeakReference(activity))
             }
 
             override fun onActivityDestroyed(activity: Activity?) {
-                activityStack.remove(activity)
+                activityStack.remove(WeakReference(activity))
             }
         })
     }
