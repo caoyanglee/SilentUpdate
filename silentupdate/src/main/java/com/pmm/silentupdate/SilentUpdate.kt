@@ -90,7 +90,7 @@ object SilentUpdate {
 
     /**
      * 主动更新 同流量模式
-     * 检查本地文件，没有直接显示下载弹窗
+     * 检查本地文件，有直接显示下载弹窗
      */
     fun activeUpdate(receive: UpdateInfo.() -> Unit) {
         val updateInfo = UpdateInfo()

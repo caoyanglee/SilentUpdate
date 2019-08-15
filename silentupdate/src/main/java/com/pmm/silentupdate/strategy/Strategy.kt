@@ -14,6 +14,7 @@ import android.support.annotation.RequiresApi
 import android.view.View
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
+import com.weimu.universalview.OriginAppData
 import com.weimu.universalview.ktx.getAppName
 import com.weimu.universalview.ktx.moreThanDays
 import com.weimu.universalview.ktx.openApkByFilePath
@@ -29,13 +30,12 @@ import java.util.*
  * Description:
  */
 internal abstract class Strategy : StrategyAction {
-    protected var notificationManager: NotificationManager
     protected var downloadManager: DownloadManager
     private lateinit var appUpdateReceiver: AppUpdateReceiver
 
     init {
         val context = SilentUpdate.getApplicationContext()
-        notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
         downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         //增加通知频道【兼容8.0】
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -72,14 +72,6 @@ internal abstract class Strategy : StrategyAction {
         //最后在notificationmanager中创建该通知渠道
         mNotificationManager.createNotificationChannel(mChannel);
     }
-
-    //更新
-    abstract fun update(apkUrl: String, latestVersion: String)
-
-
-    //下载完成后
-    abstract fun afterDownLoadComplete(file: File)
-
 
     //更新apk Wifi&Mobile
     protected fun addRequest(apkUrl: String, fileName: String?, isMobileMode: Boolean = false) {
@@ -238,59 +230,29 @@ internal abstract class Strategy : StrategyAction {
      * 显示Dialog:提示用户安装
      */
     protected fun showInstallDialog(file: File) {
+        val activity = SilentUpdate.getCurrentActivity() ?: return
         //判断是否在时间间隔内
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
             val updateInfo = SPCenter.getUpdateInfo()
-            val curActivity = SilentUpdate.getCurrentActivity()
             if (SilentUpdate.installTipDialog != null) {
-                showCustomInstallDialog(curActivity, file)
+                activity.showCustomInstallDialog(file)
             } else {
-                showSystemInstallDialog(curActivity, updateInfo, file)
+                activity.showSystemInstallDialog(updateInfo, file)
             }
-
         }
-
     }
 
-    private fun showCustomInstallDialog(curActivity: Activity?, file: File) {
+    //显示 自定义-安装弹窗
+    private fun Activity.showCustomInstallDialog(file: File) {
         SilentUpdate.installTipDialog?.show(
-                context = curActivity!!,
+                context = this,
                 updateInfo = SPCenter.getUpdateInfo(),
-                positiveClick = { curActivity.openApkByFilePath(file) },
+                positiveClick = { this.openApkByFilePath(file) },
                 negativeClick = {
                     //记录
                     SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
                 })
     }
-
-    private fun showSystemInstallDialog(curActivity: Activity?, updateInfo: UpdateInfo, file: File) {
-        val dialog = AlertDialog.Builder(curActivity)
-                .setCancelable(!updateInfo.isForce)
-                .setTitle(updateInfo.title)
-                .setMessage(updateInfo.msg)
-                .setPositiveButton("立即安装", null)
-                .setNegativeButton("稍后", null)
-                .create()
-        dialog.setOnShowListener {
-            //positive
-            val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            posBtn.setOnClickListener {
-                curActivity?.openApkByFilePath(file)
-            }
-            val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            //negative
-            if (updateInfo.isForce) {
-                negBtn.visibility = View.GONE
-            } else {
-                negBtn.setOnClickListener {
-                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                    dialog.dismiss()
-                }
-            }
-        }
-        dialog.show()
-    }
-
 
 }

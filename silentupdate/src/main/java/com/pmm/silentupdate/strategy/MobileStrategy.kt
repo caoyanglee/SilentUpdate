@@ -80,53 +80,29 @@ internal class MobileStrategy private constructor() : Strategy() {
      * 显示Dialog：提示用户下载
      */
     private fun showUpdateTip(apkUrl: String, fileName: String) {
+        val activity = SilentUpdate.getCurrentActivity() ?: return
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
-            SilentUpdate.getCurrentActivity()?.apply {
-                //判断是否有自定义的下载弹窗
-                if (SilentUpdate.downLoadTipDialog != null) {
-                    SilentUpdate.downLoadTipDialog?.show(
-                            context = this,
-                            updateInfo = SPCenter.getUpdateInfo(),
-                            positiveClick = { addRequest(apkUrl, fileName, true) },
-                            negativeClick = {
-                                //记录
-                                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                            })
-                } else {
-                    showDownloadDialog(apkUrl, fileName)
+            //判断是否有自定义的下载弹窗
+            if (SilentUpdate.downLoadTipDialog != null) {
+                activity.showCustomDownloadDialog(apkUrl, fileName)
+            } else {
+                activity.showDownloadDialog(apkUrl, fileName) {
+                    addRequest(apkUrl, fileName, true)
                 }
             }
         }
     }
 
-    private fun Activity.showDownloadDialog(apkUrl: String, fileName: String) {
-        val updateInfo = SPCenter.getUpdateInfo()
-        val dialog = AlertDialog.Builder(this)
-                .setCancelable(!updateInfo.isForce)
-                .setTitle(updateInfo.title)
-                .setMessage(updateInfo.msg)
-                .setPositiveButton("立即更新", null)
-                .setNegativeButton("稍后", null)
-                .create()
-        dialog.setOnShowListener {
-            //positive
-            val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            posBtn.setOnClickListener {
-                addRequest(apkUrl, fileName, true)
-            }
-            val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            //negative
-            if (updateInfo.isForce) {
-                negBtn.visibility = View.GONE
-            } else {
-                negBtn.setOnClickListener {
+    private fun Activity.showCustomDownloadDialog(apkUrl: String, fileName: String) {
+        SilentUpdate.downLoadTipDialog?.show(
+                context = this,
+                updateInfo = SPCenter.getUpdateInfo(),
+                positiveClick = { addRequest(apkUrl, fileName, true) },
+                negativeClick = {
+                    //记录
                     SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                    dialog.dismiss()
-                }
-            }
-        }
-        dialog.show()
+                })
     }
 
 

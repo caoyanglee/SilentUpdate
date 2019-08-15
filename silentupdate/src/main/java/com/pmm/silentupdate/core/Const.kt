@@ -12,4 +12,6 @@ internal object Const {
     val UPDATE_FILE_DIR = Environment.getExternalStorageDirectory().toString() + "/" + Environment.DIRECTORY_DOWNLOADS + "/"
     //通知的频道
     const val NOTIFICATION_CHANNEL_ID = "silentUpdate_Notification_Channel_ID"
+
+    const val APK_SUFFIX = "apk"
 }
