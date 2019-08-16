@@ -14,29 +14,9 @@ import java.io.File
 /**
  * Wifi的情况
  */
-internal class WifiUpdateStrategy private constructor() : UpdateStrategy {
-
-    companion object {
-        private var strategy: UpdateStrategy? = null
-
-
-        fun getDefault(): UpdateStrategy {
-            if (strategy == null) {
-                synchronized(UpdateStrategy::class.java) {
-                    if (strategy == null) {
-                        strategy = WifiUpdateStrategy()
-                    }
-                }
-            }
-            return strategy!!
-        }
-    }
+internal class WifiUpdateStrategy : UpdateStrategy {
 
     init {
-        //增加通知频道【兼容8.0】
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel()
-        }
         //下载完成后
         DownLoadCenter.onDownloadComplete = {
             val activity = ContextCenter.getTopActivity()
@@ -46,34 +26,12 @@ internal class WifiUpdateStrategy private constructor() : UpdateStrategy {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel() {
-        val context = ContextCenter.getAppContext()
-        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        // 通知渠道的id
-        // 用户可以看到的通知渠道的名字.
-        val name = "${context.getAppName()}更新专用"
-        // 用户可以看到的通知渠道的描述
-        val description = "${context.getAppName()}更新专用"
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val mChannel = NotificationChannel(Const.NOTIFICATION_CHANNEL_ID, name, importance)
-        // 配置通知渠道的属性
-        mChannel.description = description
-        // 设置通知出现时的闪灯（如果 android 设备支持的话）
-        mChannel.enableLights(true)
-        mChannel.lightColor = Color.RED
-        // 设置通知出现时的震动（如果 android 设备支持的话）
-        mChannel.enableVibration(true)
-        mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
-        //最后在notificationmanager中创建该通知渠道
-        mNotificationManager.createNotificationChannel(mChannel);
-    }
-
     //升级操作 WIFI的情况下
     override fun update(apkUrl: String, latestVersion: String) {
         try {
             apkUrl.checkUpdateUrl()
         } catch (e: Exception) {
+            e.printStackTrace()
             return
         }
 

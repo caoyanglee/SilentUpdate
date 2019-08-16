@@ -15,31 +15,12 @@ import java.util.*
 /**
  * 流量的情况
  */
-internal class MobileUpdateStrategy private constructor() : UpdateStrategy {
-
-
-    companion object {
-        private var strategy: UpdateStrategy? = null
-
-        fun getDefault(): UpdateStrategy {
-            if (strategy == null) {
-                synchronized(UpdateStrategy::class.java) {
-                    if (strategy == null) {
-                        strategy = MobileUpdateStrategy()
-                    }
-                }
-            }
-            return strategy!!
-        }
-    }
+internal class MobileUpdateStrategy : UpdateStrategy {
 
     init {
         //下载完成后
         DownLoadCenter.onDownloadComplete = {
-            val context = ContextCenter.getAppContext()
-            Handler().postDelayed({
-                context.openApkByFilePath(it)
-            }, 200)
+            Handler().postDelayed({ ContextCenter.getAppContext().openApkByFilePath(it) }, 200)
         }
     }
 
@@ -49,6 +30,7 @@ internal class MobileUpdateStrategy private constructor() : UpdateStrategy {
         try {
             apkUrl.checkUpdateUrl()
         } catch (e: Exception) {
+            e.printStackTrace()
             return
         }
         val context = ContextCenter.getAppContext()
@@ -79,39 +61,8 @@ internal class MobileUpdateStrategy private constructor() : UpdateStrategy {
             //绑定广播接收者
             DownLoadCenter.bindReceiver()
             //不存在 直接下载
-            showUpdateTip(apkUrl, fileName)
+            activity.showDownloadDialog(apkUrl, fileName)
         }
-    }
-
-
-    /**
-     * 状态：流量
-     * 显示Dialog：提示用户下载
-     */
-    private fun showUpdateTip(apkUrl: String, fileName: String) {
-        val activity = ContextCenter.getTopActivity() ?: return
-        val dialogTime = SPCenter.getDialogTime()
-        if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
-            //判断是否有自定义的下载弹窗
-            if (SilentUpdate.downLoadTipDialog != null) {
-                activity.showCustomDownloadDialog(apkUrl, fileName)
-            } else {
-                activity.showDownloadDialog {
-                    DownLoadCenter.addRequest(apkUrl, fileName, true)
-                }
-            }
-        }
-    }
-
-    private fun Activity.showCustomDownloadDialog(apkUrl: String, fileName: String) {
-        SilentUpdate.downLoadTipDialog?.show(
-                context = this,
-                updateInfo = SPCenter.getUpdateInfo(),
-                positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
-                negativeClick = {
-                    //记录
-                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
-                })
     }
 
 

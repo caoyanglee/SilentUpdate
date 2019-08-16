@@ -33,7 +33,7 @@ internal fun String.checkUpdateUrl() {
 }
 
 //显示 系统内置-下载弹窗
-internal fun ContextWrapper?.showDownloadDialog(positiveCallBack: (() -> Unit)) {
+internal fun ContextWrapper?.showSystemDownloadDialog(positiveCallBack: (() -> Unit)) {
     val updateInfo = SPCenter.getUpdateInfo()
     val dialog = AlertDialog.Builder(this)
             .setCancelable(!updateInfo.isForce)
@@ -154,6 +154,37 @@ private fun ContextWrapper?.showCustomInstallDialog(file: File) {
             context = this,
             updateInfo = SPCenter.getUpdateInfo(),
             positiveClick = { this.openApkByFilePath(file) },
+            negativeClick = {
+                //记录
+                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+            })
+}
+
+
+/**
+ * 状态：流量
+ * 显示Dialog：提示用户下载
+ */
+internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String) {
+    val dialogTime = SPCenter.getDialogTime()
+    if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
+        //判断是否有自定义的下载弹窗
+        if (SilentUpdate.downLoadTipDialog != null) {
+            this.showCustomDownloadDialog(apkUrl, fileName)
+        } else {
+            this.showSystemDownloadDialog {
+                DownLoadCenter.addRequest(apkUrl, fileName, true)
+            }
+        }
+    }
+}
+
+private fun ContextWrapper?.showCustomDownloadDialog(apkUrl: String, fileName: String) {
+    if (this == null) return
+    SilentUpdate.downLoadTipDialog?.show(
+            context = this,
+            updateInfo = SPCenter.getUpdateInfo(),
+            positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
             negativeClick = {
                 //记录
                 SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
