@@ -25,8 +25,8 @@ internal object DownLoadCenter {
     internal fun addRequest(apkUrl: String, fileName: String?, isMobileMode: Boolean = false) {
         bindReceiver() //绑定广播接收者
         val uri = Uri.parse(apkUrl)
-        loge("url=${apkUrl}")
-        loge("uri=${uri}")
+        loge("url=$apkUrl")
+        loge("uri=$uri")
         val request = DownloadManager.Request(uri)
         //设置在什么网络情况下进行下载
         request.setAllowedNetworkTypes(if (isMobileMode) DownloadManager.Request.NETWORK_MOBILE else DownloadManager.Request.NETWORK_WIFI)

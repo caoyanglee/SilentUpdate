@@ -4,8 +4,6 @@ import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import com.pmm.silentupdate.SilentUpdate
 
 /**
  * Author:你需要一台永动机

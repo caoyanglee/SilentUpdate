@@ -94,6 +94,7 @@ internal fun ContextWrapper?.showSystemInstallDialog(updateInfo: UpdateInfo, fil
 
 //更新Notification
 internal fun ContextWrapper?.showInstallNotification(file: File) {
+    this?.loge("showInstallNotification")
     val activity = this ?: return
     val notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     //判断是否在时间间隔内
@@ -133,6 +134,7 @@ internal fun ContextWrapper?.showInstallNotification(file: File) {
  * 显示Dialog:提示用户安装
  */
 internal fun ContextWrapper?.showInstallDialog(file: File) {
+    this?.loge("showInstallDialog")
     //判断是否在时间间隔内
     val dialogTime = SPCenter.getDialogTime()
     if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
@@ -164,6 +166,7 @@ private fun ContextWrapper?.showCustomInstallDialog(file: File) {
  * 显示Dialog：提示用户下载
  */
 internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String) {
+    this?.loge("showDownloadDialog")
     val dialogTime = SPCenter.getDialogTime()
     if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
         //判断是否有自定义的下载弹窗
