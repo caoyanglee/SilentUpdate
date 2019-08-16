@@ -26,9 +26,7 @@ class KotlinDemoActivity : AppCompatActivity() {
         val d = RxPermissions(this)
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe { granted ->
-                    if (granted)
-                        getLatestApk()
-
+                    if (granted) getLatestApk()
                 }
     }
 
@@ -52,9 +50,8 @@ class KotlinDemoActivity : AppCompatActivity() {
                         SilentUpdate.update {
                             this.apkUrl = it.apkUrl
                             this.latestVersion = it.latestVersion
-                            this.title ="这是自定义的标题"
-                            this.msg = "这是自定义的消息"
-                            this.isForce = true
+                            this.msg = "1.bug修复"
+                            this.isForce = false
                             this.extra = Bundle()
                         }
                     }

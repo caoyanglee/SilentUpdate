@@ -23,8 +23,17 @@ internal fun Any.loge(message: String) {
     if (BuildConfig.DEBUG) Log.e("silentUpdate", message)
 }
 
+
+//检查更新的URL
+internal fun String.checkUpdateUrl() {
+    val url = this
+    if (!url.contains("http") && !url.contains("https")) {
+        throw IllegalArgumentException("url must start with http or https")
+    }
+}
+
 //显示 系统内置-下载弹窗
-internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String, positiveCallBack: (() -> Unit)) {
+internal fun ContextWrapper?.showDownloadDialog(positiveCallBack: (() -> Unit)) {
     val updateInfo = SPCenter.getUpdateInfo()
     val dialog = AlertDialog.Builder(this)
             .setCancelable(!updateInfo.isForce)
@@ -37,6 +46,7 @@ internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String
         //positive
         val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         posBtn.setOnClickListener {
+            dialog.dismiss()
             positiveCallBack.invoke()
         }
         val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -45,8 +55,8 @@ internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String
             negBtn.visibility = View.GONE
         } else {
             negBtn.setOnClickListener {
-                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
                 dialog.dismiss()
+                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
             }
         }
     }
@@ -66,6 +76,7 @@ internal fun ContextWrapper?.showSystemInstallDialog(updateInfo: UpdateInfo, fil
         //positive
         val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         posBtn.setOnClickListener {
+            dialog.dismiss()
             this?.openApkByFilePath(file)
         }
         val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -74,8 +85,9 @@ internal fun ContextWrapper?.showSystemInstallDialog(updateInfo: UpdateInfo, fil
             negBtn.visibility = View.GONE
         } else {
             negBtn.setOnClickListener {
-                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
                 dialog.dismiss()
+                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+
             }
         }
     }
@@ -115,4 +127,35 @@ internal fun ContextWrapper?.showInstallNotification(file: File) {
         //显示
         notificationManager.notify(UUID.randomUUID().hashCode(), notification)
     }
+}
+
+
+/**
+ * 状态：文件已经存在或Wifi情况下下载完成
+ * 显示Dialog:提示用户安装
+ */
+internal fun ContextWrapper?.showInstallDialog(file: File) {
+    //判断是否在时间间隔内
+    val dialogTime = SPCenter.getDialogTime()
+    if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
+        val updateInfo = SPCenter.getUpdateInfo()
+        if (SilentUpdate.installTipDialog != null) {
+            this.showCustomInstallDialog(file)
+        } else {
+            this.showSystemInstallDialog(updateInfo, file)
+        }
+    }
+}
+
+//显示 自定义-安装弹窗
+private fun ContextWrapper?.showCustomInstallDialog(file: File) {
+    if (this == null) return
+    SilentUpdate.installTipDialog?.show(
+            context = this,
+            updateInfo = SPCenter.getUpdateInfo(),
+            positiveClick = { this.openApkByFilePath(file) },
+            negativeClick = {
+                //记录
+                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+            })
 }

@@ -12,11 +12,30 @@ import com.weimu.universalview.ktx.toObject
  * Description:存储文件的时间
  */
 internal object SPCenter {
+    private val sp by lazy { ContextCenter.getAppContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE) }
 
-    //Dialog的显示间距
+    /**
+     * 对应downloadManager
+     * 是否正在下载 任务ID
+     */
+    private val DOWNLOAD_TASK_ID = "download_task_id"
+
+    internal fun clearDownloadTaskId() {
+        sp.edit().remove(DOWNLOAD_TASK_ID).apply()
+    }
+
+    internal fun setDownloadTaskId(apkTaskID: Long) {
+        sp.edit().putLong(DOWNLOAD_TASK_ID, apkTaskID).apply()
+    }
+
+    internal fun getDownloadTaskId(): Long {
+        return sp.getLong(DOWNLOAD_TASK_ID, -1L)
+    }
+
+    /**
+     * Dialog的显示时间间隔
+     */
     private val DIALOG_TIME = "dialogTime"
-
-    private val sp by lazy { SilentUpdate.getApplicationContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE) }
 
     //获取存储时间
     fun getDialogTime(): Long {
@@ -33,8 +52,9 @@ internal object SPCenter {
         sp.edit().remove(DIALOG_TIME).apply()
     }
 
-
-    //更新的内容
+    /**
+     * 更新的内容
+     */
     private val UPDATE_INFO = "updateInfo"
 
     //获取更新内容
@@ -49,5 +69,6 @@ internal object SPCenter {
     fun clearUpdateInfo() {
         sp.edit().remove(UPDATE_INFO).apply()
     }
+
 
 }

@@ -37,6 +37,7 @@ class AppData : OriginAppData() {
                     //positive
                     val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     posBtn.setOnClickListener {
+                        dialog.dismiss()
                         positiveClick()
                     }
                     val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -45,8 +46,8 @@ class AppData : OriginAppData() {
                         negBtn.visibility = View.GONE
                     } else {
                         negBtn.setOnClickListener {
-                            negativeClick()
                             dialog.dismiss()
+                            negativeClick()
                         }
                     }
                 }
@@ -68,6 +69,7 @@ class AppData : OriginAppData() {
                     //positive
                     val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     posBtn.setOnClickListener {
+                        dialog.dismiss()
                         positiveClick()
                     }
                     val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -76,8 +78,8 @@ class AppData : OriginAppData() {
                         negBtn.visibility = View.GONE
                     } else {
                         negBtn.setOnClickListener {
-                            negativeClick()
                             dialog.dismiss()
+                            negativeClick()
                         }
                     }
                 }

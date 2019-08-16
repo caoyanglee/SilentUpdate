@@ -7,16 +7,9 @@ import java.io.File
  * Date:2018/7/17 18:17
  * Description:
  */
-internal interface StrategyAction {
-
-    //检查更新的URL
-    fun checkUpdateUrl(url: String)
+internal interface UpdateStrategy {
 
     //更新
     fun update(apkUrl: String, latestVersion: String)
-
-    //下载完成后
-    fun afterDownLoadComplete(file: File)
-
 
 }

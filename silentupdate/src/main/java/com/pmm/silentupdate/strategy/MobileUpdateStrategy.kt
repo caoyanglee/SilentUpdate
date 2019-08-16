@@ -1,9 +1,7 @@
 package com.pmm.silentupdate.strategy
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.os.Handler
-import android.view.View
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
 import com.weimu.universalview.ktx.getAppName
@@ -17,17 +15,17 @@ import java.util.*
 /**
  * 流量的情况
  */
-internal class MobileStrategy private constructor() : Strategy() {
+internal class MobileUpdateStrategy private constructor() : UpdateStrategy {
 
 
     companion object {
-        private var strategy: Strategy? = null
+        private var strategy: UpdateStrategy? = null
 
-        fun getDefault(): Strategy {
+        fun getDefault(): UpdateStrategy {
             if (strategy == null) {
-                synchronized(Strategy::class.java) {
+                synchronized(UpdateStrategy::class.java) {
                     if (strategy == null) {
-                        strategy = MobileStrategy()
+                        strategy = MobileUpdateStrategy()
                     }
                 }
             }
@@ -35,40 +33,51 @@ internal class MobileStrategy private constructor() : Strategy() {
         }
     }
 
+    init {
+        //下载完成后
+        DownLoadCenter.onDownloadComplete = {
+            val context = ContextCenter.getAppContext()
+            Handler().postDelayed({
+                context.openApkByFilePath(it)
+            }, 200)
+        }
+    }
+
 
     //升级操作 流量的情况下
     override fun update(apkUrl: String, latestVersion: String) {
         try {
-            checkUpdateUrl(apkUrl)
+            apkUrl.checkUpdateUrl()
         } catch (e: Exception) {
             return
         }
-        val context = SilentUpdate.getApplicationContext()
+        val context = ContextCenter.getAppContext()
+        val activity = ContextCenter.getTopActivity()
         val fileName = "${context.getAppName()}_v$latestVersion.apk"
         val path = Const.UPDATE_FILE_DIR + fileName
 
-        val taskId = context.getUpdateShare().apkTaskID
+        val taskId = SPCenter.getDownloadTaskId()
         loge("==============")
         loge("taskID=$taskId")
         if (File(path).isFileExist()) {
             loge("文件已经存在")
-            if (isDownTaskSuccess(taskId)) {
+            if (DownLoadCenter.isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")
-                showInstallDialog(File(path)) //弹出dialog
-            } else if (isDownTaskPause(taskId)) {
+                activity.showInstallDialog(File(path)) //弹出dialog
+            } else if (DownLoadCenter.isDownTaskPause(taskId)) {
                 loge("任务已经暂停")
                 //启动下载
                 loge("继续下载")
-                addRequest(apkUrl, fileName, true)
-            } else if (isDownTaskProcessing(taskId)) {
+                DownLoadCenter.addRequest(apkUrl, fileName, true)
+            } else if (DownLoadCenter.isDownTaskProcessing(taskId)) {
                 loge("任务正在执行当中")
             } else {
-                showInstallDialog(File(path)) //弹出dialog
+                activity.showInstallDialog(File(path)) //弹出dialog
             }
         } else {
             loge("开始下载")
             //绑定广播接收者
-            bindReceiver()
+            DownLoadCenter.bindReceiver()
             //不存在 直接下载
             showUpdateTip(apkUrl, fileName)
         }
@@ -80,15 +89,15 @@ internal class MobileStrategy private constructor() : Strategy() {
      * 显示Dialog：提示用户下载
      */
     private fun showUpdateTip(apkUrl: String, fileName: String) {
-        val activity = SilentUpdate.getCurrentActivity() ?: return
+        val activity = ContextCenter.getTopActivity() ?: return
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || dialogTime.moreThanDays(SilentUpdate.intervalDay)) {
             //判断是否有自定义的下载弹窗
             if (SilentUpdate.downLoadTipDialog != null) {
                 activity.showCustomDownloadDialog(apkUrl, fileName)
             } else {
-                activity.showDownloadDialog(apkUrl, fileName) {
-                    addRequest(apkUrl, fileName, true)
+                activity.showDownloadDialog {
+                    DownLoadCenter.addRequest(apkUrl, fileName, true)
                 }
             }
         }
@@ -98,20 +107,12 @@ internal class MobileStrategy private constructor() : Strategy() {
         SilentUpdate.downLoadTipDialog?.show(
                 context = this,
                 updateInfo = SPCenter.getUpdateInfo(),
-                positiveClick = { addRequest(apkUrl, fileName, true) },
+                positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
                 negativeClick = {
                     //记录
                     SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
                 })
     }
 
-
-    //下载完成后
-    override fun afterDownLoadComplete(file: File) {
-        val context = SilentUpdate.getApplicationContext()
-        Handler().postDelayed({
-            context.openApkByFilePath(file)
-        }, 200)
-    }
 
 }
