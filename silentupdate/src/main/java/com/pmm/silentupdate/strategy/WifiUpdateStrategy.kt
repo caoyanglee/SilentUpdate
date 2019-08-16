@@ -19,6 +19,7 @@ internal class WifiUpdateStrategy : UpdateStrategy {
     init {
         //下载完成后
         DownLoadCenter.onDownloadComplete = {
+            //todo 锤子，努比亚 会出现不弹窗问题
             val activity = ContextCenter.getTopActivity()
             activity.showInstallNotification(it)//更新Notification
             activity.showInstallDialog(it)//显示安装弹窗
