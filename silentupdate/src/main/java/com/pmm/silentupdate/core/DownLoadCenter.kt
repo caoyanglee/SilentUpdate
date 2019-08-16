@@ -23,6 +23,7 @@ internal object DownLoadCenter {
 
     //更新apk Wifi&Mobile
     internal fun addRequest(apkUrl: String, fileName: String?, isMobileMode: Boolean = false) {
+        bindReceiver() //绑定广播接收者
         val uri = Uri.parse(apkUrl)
         loge("url=${apkUrl}")
         loge("uri=${uri}")
@@ -94,7 +95,7 @@ internal object DownLoadCenter {
         //判断ID是否一致
         if (id != SPCenter.getDownloadTaskId()) return
         loge("注销接收者")
-        unbindReceiver()
+        unbindReceiver()//注销接收者
         try {
             val uri = Uri.parse(getFilePathByTaskId(id)).toString()
             if (uri.isBlank()) {

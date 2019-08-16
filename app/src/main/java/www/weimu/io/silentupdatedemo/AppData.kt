@@ -37,7 +37,7 @@ class AppData : OriginAppData() {
                     //positive
                     val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     posBtn.setOnClickListener {
-                        dialog.dismiss()
+                        if (!updateInfo.isForce) dialog.dismiss()
                         positiveClick()
                     }
                     val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -69,7 +69,7 @@ class AppData : OriginAppData() {
                     //positive
                     val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     posBtn.setOnClickListener {
-                        dialog.dismiss()
+                        if (!updateInfo.isForce) dialog.dismiss()
                         positiveClick()
                     }
                     val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)

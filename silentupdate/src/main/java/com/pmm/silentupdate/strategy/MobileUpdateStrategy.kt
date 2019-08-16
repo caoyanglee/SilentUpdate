@@ -20,7 +20,11 @@ internal class MobileUpdateStrategy : UpdateStrategy {
     init {
         //下载完成后
         DownLoadCenter.onDownloadComplete = {
-            Handler().postDelayed({ ContextCenter.getAppContext().openApkByFilePath(it) }, 200)
+            Handler().postDelayed({
+                val activity = ContextCenter.getTopActivity()
+                activity.showInstallDialog(it)//显示安装弹窗
+                ContextCenter.getAppContext().openApkByFilePath(it)
+            }, 200)
         }
     }
 
@@ -57,11 +61,8 @@ internal class MobileUpdateStrategy : UpdateStrategy {
                 activity.showInstallDialog(File(path)) //弹出dialog
             }
         } else {
-            loge("开始下载")
-            //绑定广播接收者
-            DownLoadCenter.bindReceiver()
-            //不存在 直接下载
-            activity.showDownloadDialog(apkUrl, fileName)
+            loge("显示 下载弹窗")
+            activity.showDownloadDialog(apkUrl, fileName)//显示 下载弹窗
         }
     }
 

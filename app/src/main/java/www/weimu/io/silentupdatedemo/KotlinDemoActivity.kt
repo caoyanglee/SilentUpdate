@@ -51,7 +51,7 @@ class KotlinDemoActivity : AppCompatActivity() {
                             this.apkUrl = it.apkUrl
                             this.latestVersion = it.latestVersion
                             this.msg = "1.bug修复"
-                            this.isForce = false
+                            this.isForce = true
                             this.extra = Bundle()
                         }
                     }

@@ -61,8 +61,6 @@ internal class WifiUpdateStrategy : UpdateStrategy {
             }
         } else {
             loge("开始下载")
-            //绑定广播接收者
-            DownLoadCenter.bindReceiver()
             //不存在 直接下载
             DownLoadCenter.addRequest(apkUrl, fileName)
         }
