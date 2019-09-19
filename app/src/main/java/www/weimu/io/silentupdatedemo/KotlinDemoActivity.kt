@@ -1,9 +1,9 @@
 package www.weimu.io.silentupdatedemo
 
 import android.Manifest
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.pmm.silentupdate.SilentUpdate
 import com.weimu.universalview.core.BaseB

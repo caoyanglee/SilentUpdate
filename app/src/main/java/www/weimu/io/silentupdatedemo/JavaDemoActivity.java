@@ -1,9 +1,10 @@
 package www.weimu.io.silentupdatedemo;
 
 import android.Manifest;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.pmm.silentupdate.core.UpdateInfo;
 import com.tbruyelle.rxpermissions2.RxPermissions;

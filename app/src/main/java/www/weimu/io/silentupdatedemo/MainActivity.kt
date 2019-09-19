@@ -2,8 +2,7 @@ package www.weimu.io.silentupdatedemo
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.FileProvider
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.weimu.universalview.ktx.toast
 import kotlinx.android.synthetic.main.activity_main.*
 import com.pmm.silentupdate.SilentUpdate

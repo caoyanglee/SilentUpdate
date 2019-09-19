@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.support.v4.app.NotificationCompat
 import android.util.Log
 import android.view.View
+import androidx.core.app.NotificationCompat
 import com.pmm.silentupdate.BuildConfig
 import com.pmm.silentupdate.SilentUpdate
 import com.weimu.universalview.ktx.*

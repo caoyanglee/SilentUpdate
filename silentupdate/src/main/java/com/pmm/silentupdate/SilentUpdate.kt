@@ -6,7 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.pmm.silentupdate.core.*
 import com.pmm.silentupdate.core.Const
 import com.pmm.silentupdate.core.SPCenter

@@ -1,14 +1,8 @@
 package com.pmm.silentupdate.strategy
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.graphics.Color
-import android.os.Build
-import android.os.Handler
-import android.support.annotation.RequiresApi
 import com.pmm.silentupdate.core.*
-import com.weimu.universalview.ktx.*
+import com.weimu.universalview.ktx.getAppName
+import com.weimu.universalview.ktx.isFileExist
 import java.io.File
 
 /**
