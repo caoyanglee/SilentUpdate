@@ -1,1 +1,1 @@
-include ':app', ':silentupdate'
+include ':app', ':lib'
