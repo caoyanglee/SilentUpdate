@@ -10,7 +10,7 @@ import android.view.View
 import androidx.core.app.NotificationCompat
 import com.pmm.silentupdate.BuildConfig
 import com.pmm.silentupdate.SilentUpdate
-import com.weimu.universalview.ktx.*
+import com.pmm.ui.ktx.*
 import java.io.File
 import java.util.*
 

@@ -1,15 +1,11 @@
 package com.pmm.silentupdate.strategy
 
-import android.app.Activity
 import android.os.Handler
-import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.*
-import com.weimu.universalview.ktx.getAppName
-import com.weimu.universalview.ktx.isFileExist
-import com.weimu.universalview.ktx.moreThanDays
-import com.weimu.universalview.ktx.openApkByFilePath
+import com.pmm.ui.ktx.getAppName
+import com.pmm.ui.ktx.isFileExist
+import com.pmm.ui.ktx.openApkByFilePath
 import java.io.File
-import java.util.*
 
 
 /**

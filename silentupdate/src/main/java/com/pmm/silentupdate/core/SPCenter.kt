@@ -2,9 +2,8 @@ package com.pmm.silentupdate.core
 
 import android.content.Context
 import com.pmm.silentupdate.BuildConfig
-import com.pmm.silentupdate.SilentUpdate
-import com.weimu.universalview.ktx.toJsonStr
-import com.weimu.universalview.ktx.toObject
+import com.pmm.ui.ktx.toJsonStr
+import com.pmm.ui.ktx.toObject
 
 /**
  * Author:你需要一台永动机

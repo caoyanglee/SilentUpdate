@@ -1,8 +1,8 @@
 package com.pmm.silentupdate.strategy
 
 import com.pmm.silentupdate.core.*
-import com.weimu.universalview.ktx.getAppName
-import com.weimu.universalview.ktx.isFileExist
+import com.pmm.ui.ktx.getAppName
+import com.pmm.ui.ktx.isFileExist
 import java.io.File
 
 /**

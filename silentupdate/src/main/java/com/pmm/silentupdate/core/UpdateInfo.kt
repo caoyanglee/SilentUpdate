@@ -1,8 +1,7 @@
 package com.pmm.silentupdate.core
 
 import android.os.Bundle
-import com.weimu.universalview.core.BaseB
-import java.io.Serializable
+import com.pmm.ui.core.BaseB
 
 /**
  * Author:你需要一台永动机

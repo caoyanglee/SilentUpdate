@@ -6,8 +6,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.pmm.silentupdate.SilentUpdate
-import com.weimu.universalview.core.BaseB
-import com.weimu.universalview.helper.RxSchedulers
+import com.pmm.ui.core.BaseB
+import com.pmm.ui.helper.RxSchedulers
 import io.reactivex.Observable
 
 /**

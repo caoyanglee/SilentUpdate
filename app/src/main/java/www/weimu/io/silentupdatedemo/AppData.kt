@@ -3,11 +3,10 @@ package www.weimu.io.silentupdatedemo
 import android.app.AlertDialog
 import android.content.Context
 import android.view.View
-import com.weimu.universalview.OriginAppData
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.DialogTipAction
 import com.pmm.silentupdate.core.UpdateInfo
-import com.weimu.universalview.ktx.openApkByFilePath
+import com.pmm.ui.OriginAppData
 
 /**
  * Author:你需要一台永动机

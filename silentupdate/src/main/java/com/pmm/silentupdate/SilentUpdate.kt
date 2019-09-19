@@ -13,9 +13,9 @@ import com.pmm.silentupdate.core.SPCenter
 import com.pmm.silentupdate.strategy.MobileUpdateStrategy
 import com.pmm.silentupdate.strategy.UpdateStrategy
 import com.pmm.silentupdate.strategy.WifiUpdateStrategy
-import com.weimu.universalview.helper.FileHelper
-import com.weimu.universalview.ktx.getAppName
-import com.weimu.universalview.ktx.isConnectWifi
+import com.pmm.ui.helper.FileHelper
+import com.pmm.ui.ktx.getAppName
+import com.pmm.ui.ktx.isConnectWifi
 
 
 object SilentUpdate {

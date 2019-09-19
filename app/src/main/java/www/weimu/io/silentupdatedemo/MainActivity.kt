@@ -3,10 +3,10 @@ package www.weimu.io.silentupdatedemo
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.weimu.universalview.ktx.toast
 import kotlinx.android.synthetic.main.activity_main.*
 import com.pmm.silentupdate.SilentUpdate
-import com.weimu.universalview.ktx.setOnClickListenerPro
+import com.pmm.ui.ktx.setOnClickListenerPro
+import com.pmm.ui.ktx.toast
 
 
 /**
