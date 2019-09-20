@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import com.pmm.silentupdate.SilentUpdate
-import com.pmm.ui.ktx.setOnClickListenerPro
+import com.pmm.ui.ktx.click
 import com.pmm.ui.ktx.toast
 
 
@@ -19,20 +19,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //kotlin
-        btn_kotlin.setOnClickListener {
+        btnKotlin.setOnClickListener {
             startActivity(Intent(this, KotlinDemoActivity::class.java))
         }
         //java
-        btn_java.setOnClickListener {
+        btnJava.setOnClickListener {
             startActivity(Intent(this, JavaDemoActivity::class.java))
         }
         //clear cache
-        btn_clear_cache.setOnClickListener {
+        btnClearCache.setOnClickListener {
             SilentUpdate.clearCache()
             toast("清除缓存成功")
         }
         //delete apk
-        btn_delete_apk.setOnClickListenerPro {
+        btnDeleteApk.setOnClickListener {
             if (SilentUpdate.deleteApk(version = "1.1.1"))
                 toast("删除成功")
             else

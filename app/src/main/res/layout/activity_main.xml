@@ -10,25 +10,25 @@
 
 
     <Button
-        android:id="@+id/btn_kotlin"
+        android:id="@+id/btnKotlin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Kotlin调用" />
 
     <Button
-        android:id="@+id/btn_java"
+        android:id="@+id/btnJava"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Java调用" />
 
     <Button
-        android:id="@+id/btn_clear_cache"
+        android:id="@+id/btnClearCache"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="清除缓存" />
 
     <Button
-        android:id="@+id/btn_delete_apk"
+        android:id="@+id/btnDeleteApk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="删除apk" />
