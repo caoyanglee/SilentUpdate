@@ -6,9 +6,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.pmm.silentupdate.SilentUpdate
-import com.pmm.ui.core.BaseB
 import com.pmm.ui.helper.RxSchedulers
 import io.reactivex.Observable
+import java.io.Serializable
 
 /**
  * kotlin的调用方式
@@ -33,7 +33,7 @@ class KotlinDemoActivity : AppCompatActivity() {
     class CheckVersionResultPO(
             val apkUrl: String,
             val latestVersion: String
-    ) : BaseB()
+    ) : Serializable
 
     //获取下载链接 step2
     private fun getLatestApk() {
@@ -51,7 +51,7 @@ class KotlinDemoActivity : AppCompatActivity() {
                             this.apkUrl = it.apkUrl
                             this.latestVersion = it.latestVersion
                             this.msg = "1.bug修复"
-                            this.isForce = true
+                            this.isForce = false
                             this.extra = Bundle()
                         }
                     }

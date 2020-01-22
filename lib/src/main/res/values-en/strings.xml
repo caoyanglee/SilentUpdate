@@ -1,0 +1,5 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+    <string name="module_silentupdate_update">Update</string>
+    <string name="module_silentupdate_hold_on">Next time</string>
+    <string name="module_silentupdate_install">Install</string>
+</resources>

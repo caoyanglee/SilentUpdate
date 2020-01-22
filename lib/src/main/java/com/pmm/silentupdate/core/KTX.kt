@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.app.NotificationCompat
 import com.pmm.silentupdate.BuildConfig
+import com.pmm.silentupdate.R
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.ui.ktx.*
 import java.io.File
@@ -31,20 +32,21 @@ internal fun String.checkUpdateUrl() {
 
 //显示 系统内置-下载弹窗
 internal fun ContextWrapper?.showSystemDownloadDialog(apkUrl: String, fileName: String) {
+    if (this==null)return
     val updateInfo = SPCenter.getUpdateInfo()
     val dialog = AlertDialog.Builder(this)
             .setCancelable(!updateInfo.isForce)
             .setTitle(updateInfo.title)
             .setMessage(updateInfo.msg)
-            .setPositiveButton("立即更新", null)
-            .setNegativeButton("稍后", null)
+            .setPositiveButton(getString(R.string.module_silentupdate_update), null)
+            .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
             .create()
     dialog.setOnShowListener {
         //positive
         val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         posBtn.setOnClickListener {
             if (!updateInfo.isForce) dialog.dismiss()
-            this?.toast("开始下载......")
+            //this?.toast("开始下载......")
             DownLoadCenter.addRequest(apkUrl, fileName, true)
         }
         val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -63,19 +65,20 @@ internal fun ContextWrapper?.showSystemDownloadDialog(apkUrl: String, fileName: 
 
 //显示 系统内置-安装弹窗
 internal fun ContextWrapper?.showSystemInstallDialog(updateInfo: UpdateInfo, file: File) {
+    if (this==null)return
     val dialog = AlertDialog.Builder(this)
             .setCancelable(!updateInfo.isForce)
             .setTitle(updateInfo.title)
             .setMessage(updateInfo.msg)
-            .setPositiveButton("立即安装", null)
-            .setNegativeButton("稍后", null)
+            .setPositiveButton(getString(R.string.module_silentupdate_install), null)
+            .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
             .create()
     dialog.setOnShowListener {
         //positive
         val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         posBtn.setOnClickListener {
             if (!updateInfo.isForce) dialog.dismiss()
-            this?.openApkByFilePath(file)
+            this.openApkByFilePath(file)
         }
         val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
         //negative

@@ -1,14 +1,14 @@
 package com.pmm.silentupdate.core
 
 import android.os.Bundle
-import com.pmm.ui.core.BaseB
+import java.io.Serializable
 
 /**
  * Author:你需要一台永动机
  * Date:2019-07-29 11:47
  * Description:更新内容
  */
-class UpdateInfo : BaseB() {
+class UpdateInfo : Serializable {
     var apkUrl: String = ""
     var latestVersion: String = ""
     var title = "提示"//更新标题
