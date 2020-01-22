@@ -4,8 +4,8 @@ buildscript {
     //版本
     ext.versions = [
             'minSdk'    : 21,
-            'compileSdk': 28,
-            'targetSdk' : 28,
+            'compileSdk': 29,
+            'targetSdk' : 29,
     ]
     //依赖
     ext.deps = [
