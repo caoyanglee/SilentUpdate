@@ -1,14 +1,19 @@
 package com.pmm.silentupdate
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Color
+import android.net.ConnectivityManager
+import android.os.Build
+import android.text.TextUtils
 import com.pmm.silentupdate.core.*
 import com.pmm.silentupdate.strategy.MobileUpdateStrategy
 import com.pmm.silentupdate.strategy.UpdateStrategy
 import com.pmm.silentupdate.strategy.WifiUpdateStrategy
-import com.pmm.ui.helper.FileHelper
-import com.pmm.ui.ktx.createNotificationChannel
-import com.pmm.ui.ktx.getAppName
-import com.pmm.ui.ktx.isConnectWifi
+import java.io.File
+import java.lang.ref.WeakReference
 
 
 object SilentUpdate {
@@ -30,11 +35,44 @@ object SilentUpdate {
         ContextCenter.init(context)
         //增加通知频道【兼容8.0】
         val channelName = context.getString(R.string.module_silentupdate_channelName)
-        context.createNotificationChannel(
+        createNotificationChannel(
+                context = context,
                 channelId = Const.NOTIFICATION_CHANNEL_ID,
                 channelName = channelName,
                 channelDesc = channelName
         )
+    }
+
+    /**
+     * 增加通知栏的频道 通用库更新后可删除
+     * @param importance NotificationManager.IMPORTANCE_LOW
+     */
+    private fun createNotificationChannel(
+            context: Context,
+            channelId: String,
+            channelName: String,
+            channelDesc: String = "",
+            importance: Int = 0,
+            enableVibration: Boolean = true,
+            lightColor: Int = Color.GREEN
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            // channelId 通知渠道的id
+            // channelName 用户可以看到的通知渠道的名字.
+            // importance 用户可以看到的通知渠道的描述
+            val mChannel = NotificationChannel(channelId, channelName, importance)
+            // 配置通知渠道的属性
+            mChannel.description = channelDesc
+            // 设置通知出现时的闪灯（如果 android 设备支持的话）
+            mChannel.enableLights(true)
+            mChannel.lightColor = lightColor
+            // 设置通知出现时的震动（如果 android 设备支持的话）
+            mChannel.enableVibration(enableVibration)
+            //mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+            //最后在NotificationManager中创建该通知渠道
+            mNotificationManager.createNotificationChannel(mChannel)
+        }
     }
 
 
@@ -58,11 +96,24 @@ object SilentUpdate {
         //策略模式
         val strategy: UpdateStrategy = when {
             //WIFI
-            context.isConnectWifi() -> wifiUpdateStrategy
+            isConnectWifi(context) -> wifiUpdateStrategy
             //流量
             else -> mobileUpdateStrategy
         }
         strategy.update(apkUrl, latestVersion)
+    }
+
+    //是否连接Wifi
+    private fun isConnectWifi(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = cm.activeNetworkInfo
+        if (networkInfo != null && networkInfo.isConnected) {
+            val type = networkInfo.type
+            if (type == ConnectivityManager.TYPE_WIFI) {
+                return true
+            }
+        }
+        return false
     }
 
     /**
@@ -98,9 +149,43 @@ object SilentUpdate {
     fun deleteApk(version: String): Boolean {
         val context = ContextCenter.getAppContext()
         val path = "${Const.UPDATE_FILE_DIR}${context.getAppName()}_v$version.apk"
-        return FileHelper.deleteFile(path)
+        return deleteFile(path)
     }
 
+
+    /**
+     * delete file or directory
+     * 删除文件或目录
+     *
+     * if path is null or empty, return true
+     * if path not exist, return true
+     * if path exist, delete recursion. return true
+     *
+     *
+     * @param path 文件路径
+     * @return 是否删除成功
+     */
+    private fun deleteFile(path: String): Boolean {
+        if (TextUtils.isEmpty(path))
+            return true
+        val file = File(path)
+        if (!file.exists())
+            return true
+        if (file.isFile)
+            return file.delete()
+
+        if (!file.isDirectory)
+            return false
+
+        for (f in file.listFiles()) {
+            if (f.isFile) {
+                f.delete()
+            } else if (f.isDirectory) {
+                deleteFile(f.absolutePath)
+            }
+        }
+        return file.delete()
+    }
 }
 
 

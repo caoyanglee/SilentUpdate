@@ -1,6 +1,7 @@
 package com.pmm.silentupdate.core
 
 import android.os.Bundle
+import com.pmm.silentupdate.R
 import java.io.Serializable
 
 /**
@@ -11,8 +12,8 @@ import java.io.Serializable
 class UpdateInfo : Serializable {
     var apkUrl: String = ""
     var latestVersion: String = ""
-    var title = "提示"//更新标题
-    var msg = "发现新版本！请点击立即安装"//更新的内容
+    var title = ContextCenter.getAppContext().getString(R.string.module_silentupdate_update_title)//更新标题
+    var msg = ContextCenter.getAppContext().getString(R.string.module_silentupdate_update_msg_default)//更新的内容
     var isForce = false//是否强制
     var extra: Bundle? = null//可以扩展更多参数
 }

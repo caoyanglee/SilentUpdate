@@ -2,11 +2,10 @@ package www.weimu.io.silentupdatedemo
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import com.pmm.silentupdate.SilentUpdate
-import com.pmm.ui.ktx.click
-import com.pmm.ui.ktx.toast
 
 
 /**

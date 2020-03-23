@@ -12,7 +12,7 @@ import java.util.*
  * Date:2019-08-15 18:16
  * Description:
  */
-object ContextCenter {
+internal object ContextCenter {
     private lateinit var applicationContext: WeakReference<Context>
     private val activityStack = Stack<WeakReference<Activity?>>()
 

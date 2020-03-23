@@ -22,5 +22,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':lib')
-
+    //universal-ui
+    implementation deps.core.ui
 }

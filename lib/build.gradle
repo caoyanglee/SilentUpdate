@@ -27,10 +27,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //universal-ui
-    compile deps.core.ui
-
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //google
+    compile 'androidx.appcompat:appcompat:1.1.0'
+    //kt
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //json
+    compile 'com.google.code.gson:gson:2.8.5'
 }
 //记得加上这个
 //apply from: "bintrayUpload.gradle"

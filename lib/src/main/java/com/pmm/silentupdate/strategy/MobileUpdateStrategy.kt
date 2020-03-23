@@ -2,9 +2,6 @@ package com.pmm.silentupdate.strategy
 
 import android.os.Handler
 import com.pmm.silentupdate.core.*
-import com.pmm.ui.ktx.getAppName
-import com.pmm.ui.ktx.isFileExist
-import com.pmm.ui.ktx.openApkByFilePath
 import java.io.File
 
 

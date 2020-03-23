@@ -1,9 +1,8 @@
 package com.pmm.silentupdate.core
 
 import android.content.Context
+import com.google.gson.Gson
 import com.pmm.silentupdate.BuildConfig
-import com.pmm.ui.ktx.toJsonStr
-import com.pmm.ui.ktx.toObject
 
 /**
  * Author:你需要一台永动机
@@ -12,6 +11,8 @@ import com.pmm.ui.ktx.toObject
  */
 internal object SPCenter {
     private val sp by lazy { ContextCenter.getAppContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE) }
+    private val mGson by lazy { Gson() }
+
 
     /**
      * 对应downloadManager
@@ -57,11 +58,11 @@ internal object SPCenter {
     private val UPDATE_INFO = "updateInfo"
 
     //获取更新内容
-    fun getUpdateInfo(): UpdateInfo = (sp.getString(UPDATE_INFO, "") as String).toObject()!!
+    fun getUpdateInfo(): UpdateInfo = mGson.fromJson(sp.getString(UPDATE_INFO, "") as String,UpdateInfo::class.java)
 
     //修改更新内容
     fun modifyUpdateInfo(updateInfo: UpdateInfo) {
-        sp.edit().putString(UPDATE_INFO, updateInfo.toJsonStr()).apply()
+        sp.edit().putString(UPDATE_INFO, mGson.toJson(updateInfo)).apply()
     }
 
     //清除更新内容

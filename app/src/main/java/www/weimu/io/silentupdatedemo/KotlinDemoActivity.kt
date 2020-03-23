@@ -40,7 +40,7 @@ class KotlinDemoActivity : AppCompatActivity() {
         //具体的网络请求步骤自己操作
         val d = Observable.just(CheckVersionResultPO(
                 apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk",
-                latestVersion = "1.1.1"
+                latestVersion = "1.1.2"
         )).compose(RxSchedulers.toMain())
                 .subscribe {
                     //判断版本号

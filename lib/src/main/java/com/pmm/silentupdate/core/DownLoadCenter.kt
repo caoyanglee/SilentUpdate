@@ -136,7 +136,7 @@ internal object DownLoadCenter {
 
 
     //绑定广播接收者
-    internal fun bindReceiver() {
+    private fun bindReceiver() {
         //广播接收者
         appUpdateReceiver.onDownloadComplete = {
             downloadComplete(it)

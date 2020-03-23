@@ -3,4 +3,6 @@
     <string name="module_silentupdate_hold_on">Next time</string>
     <string name="module_silentupdate_install">Install</string>
     <string name="module_silentupdate_channelName">Update Only!</string>
+    <string name="module_silentupdate_update_title">Update</string>
+    <string name="module_silentupdate_update_msg_default">New version!  Click to update</string>
 </resources>
