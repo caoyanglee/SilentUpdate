@@ -188,7 +188,7 @@ internal fun ContextWrapper?.showInstallDialog(file: File) {
     val dialogTime = SPCenter.getDialogTime()
     if (dialogTime == 0L || checkMoreThanDays(dialogTime,SilentUpdate.intervalDay)) {
         val updateInfo = SPCenter.getUpdateInfo()
-        if (SilentUpdate.installTipDialog != null) {
+        if (SilentUpdate.installDialogShowAction != null) {
             this.showCustomInstallDialog(file)
         } else {
             this.showSystemInstallDialog(updateInfo, file)
@@ -199,7 +199,7 @@ internal fun ContextWrapper?.showInstallDialog(file: File) {
 //显示 自定义-安装弹窗
 private fun ContextWrapper?.showCustomInstallDialog(file: File) {
     if (this == null) return
-    SilentUpdate.installTipDialog?.show(
+    SilentUpdate.installDialogShowAction?.show(
             context = this,
             updateInfo = SPCenter.getUpdateInfo(),
             positiveClick = { this.openApkByFilePath(file) },
@@ -219,7 +219,7 @@ internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String
     val dialogTime = SPCenter.getDialogTime()
     if (dialogTime == 0L || checkMoreThanDays(dialogTime,SilentUpdate.intervalDay)) {
         //判断是否有自定义的下载弹窗
-        if (SilentUpdate.downLoadTipDialog != null) {
+        if (SilentUpdate.downLoadDialogShowAction != null) {
             this.showCustomDownloadDialog(apkUrl, fileName)
         } else {
             this.showSystemDownloadDialog(apkUrl, fileName)
@@ -229,7 +229,7 @@ internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String
 
 private fun ContextWrapper?.showCustomDownloadDialog(apkUrl: String, fileName: String) {
     if (this == null) return
-    SilentUpdate.downLoadTipDialog?.show(
+    SilentUpdate.downLoadDialogShowAction?.show(
             context = this,
             updateInfo = SPCenter.getUpdateInfo(),
             positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },

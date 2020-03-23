@@ -1,10 +1,10 @@
 package www.weimu.io.silentupdatedemo
 
 import android.app.AlertDialog
-import android.content.Context
+import android.content.ContextWrapper
 import android.view.View
 import com.pmm.silentupdate.SilentUpdate
-import com.pmm.silentupdate.core.DialogTipAction
+import com.pmm.silentupdate.core.DialogShowAction
 import com.pmm.silentupdate.core.UpdateInfo
 import com.pmm.ui.OriginAppData
 
@@ -23,8 +23,8 @@ class AppData : OriginAppData() {
         ///间隔弹窗提示时间- 默认7天后提醒
         SilentUpdate.intervalDay = 7
         //下载提示 -> 流量模式
-        SilentUpdate.downLoadTipDialog = object : DialogTipAction {
-            override fun show(context: Context, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+        SilentUpdate.downLoadDialogShowAction = object : DialogShowAction {
+            override fun show(context: ContextWrapper, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
                 val dialog = AlertDialog.Builder(context)
                         .setCancelable(!updateInfo.isForce)
                         .setTitle(updateInfo.title)
@@ -55,8 +55,8 @@ class AppData : OriginAppData() {
 
         }
         //安装提示 -> 无线模式，文件已存在
-        SilentUpdate.installTipDialog = object : DialogTipAction {
-            override fun show(context: Context, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+        SilentUpdate.installDialogShowAction = object : DialogShowAction {
+            override fun show(context: ContextWrapper, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
                 val dialog = AlertDialog.Builder(context)
                         .setCancelable(!updateInfo.isForce)
                         .setTitle(updateInfo.title)

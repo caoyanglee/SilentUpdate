@@ -13,14 +13,13 @@ import com.pmm.silentupdate.strategy.MobileUpdateStrategy
 import com.pmm.silentupdate.strategy.UpdateStrategy
 import com.pmm.silentupdate.strategy.WifiUpdateStrategy
 import java.io.File
-import java.lang.ref.WeakReference
 
 
 object SilentUpdate {
 
     //以下数据可配置
-    var downLoadTipDialog: DialogTipAction? = null//自定义 下载Dialog -> 流量模式
-    var installTipDialog: DialogTipAction? = null//自定义  安装Dialog -> 无线模式,文件已存在
+    var downLoadDialogShowAction: DialogShowAction? = null//自定义 下载Dialog -> 流量模式
+    var installDialogShowAction: DialogShowAction? = null//自定义  安装Dialog -> 无线模式,文件已存在
     var intervalDay = 7//间隔弹窗提示时间-默认7天后提醒-仅仅适用于【isUseDefaultHint=true】
 
     private val mobileUpdateStrategy by lazy { MobileUpdateStrategy() }

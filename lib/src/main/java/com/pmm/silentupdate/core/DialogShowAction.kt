@@ -1,6 +1,7 @@
 package com.pmm.silentupdate.core
 
 import android.content.Context
+import android.content.ContextWrapper
 import java.io.File
 
 /**
@@ -8,9 +9,9 @@ import java.io.File
  * Date:2018/12/14 14:26
  * Description:
  */
-interface DialogTipAction {
+interface DialogShowAction {
 
-    fun show(context: Context,
+    fun show(context: ContextWrapper,
              updateInfo: UpdateInfo,
              positiveClick: (() -> Unit),
              negativeClick: (() -> Unit))
