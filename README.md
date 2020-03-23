@@ -123,8 +123,8 @@ SilentUpdate.intervalDay = 7//不设置的话，默认7天
 
 ```kotlin
 //下载提示 -> 流量模式
-SilentUpdate.downLoadTipDialog = object : DialogTipAction {
-    override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+SilentUpdate.downLoadDialogShowAction = object : DialogShowAction {
+    override fun show(context: ContextWrapper, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
         AlertDialog.Builder(context)
                 .setCancelable(false)
                 .setTitle("提示")
@@ -136,8 +136,8 @@ SilentUpdate.downLoadTipDialog = object : DialogTipAction {
 
 }
 //安装提示 -> 无线模式，文件已存在
-SilentUpdate.installTipDialog = object : DialogTipAction {
-    override fun show(context: Context, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+SilentUpdate.installDialogShowAction = object : DialogShowAction {
+    override fun show(context: ContextWrapper, updateContent: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
         AlertDialog.Builder(context)
                 .setCancelable(false)
                 .setTitle("提示")
