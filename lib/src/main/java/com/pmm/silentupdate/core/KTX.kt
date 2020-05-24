@@ -41,10 +41,12 @@ private fun getUri4File(context: Context, file: File?): Uri {
  */
 internal fun Context.constructOpenApkIntent(file: File): Intent {
     val intent = Intent(Intent.ACTION_VIEW)
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)//7.0有效
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)//7.0有效
+
+    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    } else {
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        //intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)//会出错
     }
     val uri = getUri4File(this, file)
     intent.setDataAndType(uri, "application/vnd.android.package-archive")
