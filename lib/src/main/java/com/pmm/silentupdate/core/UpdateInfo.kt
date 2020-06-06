@@ -15,5 +15,5 @@ class UpdateInfo : Serializable {
     var title = ContextCenter.getAppContext().getString(R.string.module_silentupdate_update_title)//更新标题
     var msg = ContextCenter.getAppContext().getString(R.string.module_silentupdate_update_msg_default)//更新的内容
     var isForce = false//是否强制
-    var extra: Bundle? = null//可以扩展更多参数
+    var extra: Map<String,Any>? = null//可以扩展更多参数
 }

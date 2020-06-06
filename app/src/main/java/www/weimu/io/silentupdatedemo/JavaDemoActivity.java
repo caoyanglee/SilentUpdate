@@ -16,6 +16,8 @@ import kotlin.jvm.functions.Function1;
 
 import com.pmm.silentupdate.SilentUpdate;
 
+import java.util.HashMap;
+
 /**
  * Java的调用方式
  */
@@ -63,7 +65,7 @@ public class JavaDemoActivity extends AppCompatActivity {
                     updateInfo.setTitle("这是自定义的标题");
                     updateInfo.setMsg("这是自定义的内容");
                     updateInfo.setForce(false);
-                    updateInfo.setExtra(new Bundle());
+                    updateInfo.setExtra(new HashMap<String, Object>());
                     return Unit.INSTANCE;
                 }
             });

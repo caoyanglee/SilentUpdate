@@ -39,7 +39,7 @@ class KotlinDemoActivity : AppCompatActivity() {
     private fun getLatestApk() {
         //具体的网络请求步骤自己操作
         val d = Observable.just(CheckVersionResultPO(
-                apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk",
+                apkUrl = "https://server.m.pp.cn/download/apk?appId=8099183",
                 latestVersion = "1.1.2"
         )).compose(RxSchedulers.toMain())
                 .subscribe {
@@ -52,7 +52,7 @@ class KotlinDemoActivity : AppCompatActivity() {
                             this.latestVersion = it.latestVersion
                             this.msg = "1.bug修复"
                             this.isForce = false
-                            this.extra = Bundle()
+                            this.extra = hashMapOf()
                         }
                     }
                 }

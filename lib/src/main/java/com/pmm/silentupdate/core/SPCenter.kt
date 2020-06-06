@@ -58,7 +58,11 @@ internal object SPCenter {
     private val UPDATE_INFO = "updateInfo"
 
     //获取更新内容
-    fun getUpdateInfo(): UpdateInfo = mGson.fromJson(sp.getString(UPDATE_INFO, "") as String,UpdateInfo::class.java)
+    fun getUpdateInfo(): UpdateInfo {
+        val updateInfoStr = sp.getString(UPDATE_INFO, "") as String
+        loge(updateInfoStr)
+        return  mGson.fromJson(updateInfoStr,UpdateInfo::class.java)
+    }
 
     //修改更新内容
     fun modifyUpdateInfo(updateInfo: UpdateInfo) {
