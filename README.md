@@ -44,7 +44,7 @@ allprojects {
 **app的build.gradle**
 [![](https://jitpack.io/v/caoyanglee/SilentUpdate.svg)](https://jitpack.io/#caoyanglee/SilentUpdate)
 
-> 注意：默认使用kotlin1.3.31版本的库
+> 注意：默认使用kotlin 1.3.71版本的库
 
 ```gradle
 implementation 'com.github.caoyanglee:SilentUpdate:{latestVersion}'
