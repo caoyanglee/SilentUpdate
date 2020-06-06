@@ -105,7 +105,7 @@ SilentUpdate.update {
     this.title ="这是自定义的标题"
     this.msg = "这是自定义的消息"
     this.isForce = true
-    this.extra = Bundle()
+    this.extra = hashMapOf<String,Any>()
 }
 ```
 
