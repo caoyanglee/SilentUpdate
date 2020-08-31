@@ -10,7 +10,7 @@ import com.pmm.silentupdate.BuildConfig
  * Description:存储文件的时间
  */
 internal object SPCenter {
-    private val sp by lazy { ContextCenter.getAppContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE) }
+    private val sp by lazy { ContextCenter.getAppContext().getSharedPreferences(BuildConfig.LIBRARY_PACKAGE_NAME, Context.MODE_PRIVATE) }
     private val mGson by lazy { Gson() }
 
 
