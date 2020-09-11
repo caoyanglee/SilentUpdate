@@ -197,29 +197,37 @@ internal fun Context?.showInstallNotification(file: File) {
  * 显示Dialog:提示用户安装
  */
 internal fun ContextWrapper?.showInstallDialog(file: File) {
-    this?.loge("showInstallDialog")
-    //判断是否在时间间隔内
-    val dialogTime = SPCenter.getDialogTime()
-    if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
-        if (SilentUpdate.installDialogShowAction != null) {
-            this.showCustomInstallDialog(file)
-        } else {
-            this.showSystemInstallDialog(file)
+    try {
+        this?.loge("showInstallDialog")
+        //判断是否在时间间隔内
+        val dialogTime = SPCenter.getDialogTime()
+        if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
+            if (SilentUpdate.installDialogShowAction != null) {
+                this.showCustomInstallDialog(file)
+            } else {
+                this.showSystemInstallDialog(file)
+            }
         }
+    } catch (e: Exception) {
+        //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
     }
 }
 
 //显示 自定义-安装弹窗
 private fun ContextWrapper?.showCustomInstallDialog(file: File) {
-    if (this == null) return
-    SilentUpdate.installDialogShowAction?.show(
-            context = this,
-            updateInfo = SPCenter.getUpdateInfo(),
-            positiveClick = { this.openApkByFilePath(file) },
-            negativeClick = {
-                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
-            }
-    )
+    try {
+        if (this == null) return
+        SilentUpdate.installDialogShowAction?.show(
+                context = this,
+                updateInfo = SPCenter.getUpdateInfo(),
+                positiveClick = { this.openApkByFilePath(file) },
+                negativeClick = {
+                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
+                }
+        )
+    } catch (e: Exception) {
+        //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
+    }
 }
 
 
@@ -228,27 +236,35 @@ private fun ContextWrapper?.showCustomInstallDialog(file: File) {
  * 显示Dialog：提示用户下载
  */
 internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String) {
-    this?.loge("showDownloadDialog")
-    val dialogTime = SPCenter.getDialogTime()
-    if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
-        //判断是否有自定义的下载弹窗
-        if (SilentUpdate.downLoadDialogShowAction != null) {
-            this.showCustomDownloadDialog(apkUrl, fileName)
-        } else {
-            this.showSystemDownloadDialog(apkUrl, fileName)
+    try {
+        this?.loge("showDownloadDialog")
+        val dialogTime = SPCenter.getDialogTime()
+        if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
+            //判断是否有自定义的下载弹窗
+            if (SilentUpdate.downLoadDialogShowAction != null) {
+                this.showCustomDownloadDialog(apkUrl, fileName)
+            } else {
+                this.showSystemDownloadDialog(apkUrl, fileName)
+            }
         }
+    } catch (e: Exception) {
+        //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
     }
 }
 
 private fun ContextWrapper?.showCustomDownloadDialog(apkUrl: String, fileName: String) {
-    if (this == null) return
-    SilentUpdate.downLoadDialogShowAction?.show(
-            context = this,
-            updateInfo = SPCenter.getUpdateInfo(),
-            positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
-            negativeClick = {
-                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
-            })
+    try {
+        if (this == null) return
+        SilentUpdate.downLoadDialogShowAction?.show(
+                context = this,
+                updateInfo = SPCenter.getUpdateInfo(),
+                positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
+                negativeClick = {
+                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
+                })
+    } catch (e: Exception) {
+        //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
+    }
 }
 
 /**
