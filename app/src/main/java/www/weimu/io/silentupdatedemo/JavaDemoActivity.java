@@ -7,10 +7,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pmm.silentupdate.core.UpdateInfo;
-import com.tbruyelle.rxpermissions2.RxPermissions;
-
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
@@ -33,16 +29,16 @@ public class JavaDemoActivity extends AppCompatActivity {
 
     //检查权限 step1
     private void checkPermission() {
-        Disposable d = new RxPermissions(this)
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean granted) throws Exception {
-                        if (granted) {
-                            getLatestApk();
-                        }
-                    }
-                });
+//        Disposable d = new RxPermissions(this)
+//                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                .subscribe(new Consumer<Boolean>() {
+//                    @Override
+//                    public void accept(Boolean granted) throws Exception {
+//                        if (granted) {
+//                            getLatestApk();
+//                        }
+//                    }
+//                });
     }
 
 

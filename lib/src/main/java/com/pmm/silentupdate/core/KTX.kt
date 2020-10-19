@@ -45,14 +45,14 @@ private fun getUri4File(context: Context, file: File?): Uri {
  */
 internal fun Context.constructOpenApkIntent(file: File): Intent {
     val intent = Intent(Intent.ACTION_VIEW)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         //添加对目标应用临时授权该Uri所代表的文件
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        //intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
     val apkUri = getUri4File(this, file)
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     intent.setDataAndType(apkUri, "application/vnd.android.package-archive")
     //查询所有符合 intent 跳转目标应用类型的应用，注意此方法必须放置setDataAndType的方法之后
     val resInfoList: List<ResolveInfo> = this.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
