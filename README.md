@@ -149,3 +149,19 @@ SilentUpdate.installDialogShowAction = object : DialogShowAction {
 }
 ```
 
+## 解析包错误，无法安装
+```xml
+<provider
+        android:name="androidx.core.content.FileProvider"
+        android:authorities="${applicationId}.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true"
+        tools:replace="android:authorities">
+
+    <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/filepaths"
+            tools:replace="android:resource" />
+```
+有的项目必须增加`tools:replace="android:authorities"`和`tools:replace="android:resource"`
+
