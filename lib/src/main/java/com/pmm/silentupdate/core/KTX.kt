@@ -9,6 +9,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -65,12 +66,48 @@ internal fun Context.constructOpenApkIntent(file: File): Intent {
 }
 
 /**
+ * /构造打开APK的Intent
+ */
+internal fun Context.constructOpenApkIntentV2(uri: Uri): Intent {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        //添加对目标应用临时授权该Uri所代表的文件
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        //intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    }
+    val apkUri = uri
+    intent.setDataAndType(apkUri, "application/vnd.android.package-archive")
+    //查询所有符合 intent 跳转目标应用类型的应用，注意此方法必须放置setDataAndType的方法之后
+    val resInfoList: List<ResolveInfo> = this.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    //然后全部授权
+    for (resolveInfo in resInfoList) {
+        val packageName = resolveInfo.activityInfo.packageName
+        this.grantUriPermission(packageName, apkUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    return intent
+}
+
+/**
  * 直接打开APK
  */
 internal fun Context.openApkByFilePath(file: File) {
     //防止有的系统 强制关闭安装未知来源的app 导致的crash
     try {
         startActivity(constructOpenApkIntent(file))
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+/**
+ * 直接打开APK
+ */
+internal fun Context.openApkByUri(uri: Uri) {
+    //防止有的系统 强制关闭安装未知来源的app 导致的crash
+    try {
+        startActivity(constructOpenApkIntentV2(uri))
     } catch (e: Exception) {
         e.printStackTrace()
     }
@@ -155,6 +192,39 @@ internal fun ContextWrapper?.showSystemInstallDialog(file: File) {
     dialog.show()
 }
 
+//显示 系统内置-安装弹窗
+internal fun ContextWrapper?.showSystemInstallDialogV2(uri: Uri) {
+    if (this == null) return
+    val updateInfo = SPCenter.getUpdateInfo()
+    val dialog = AlertDialog.Builder(this)
+            .setCancelable(!updateInfo.isForce)
+            .setTitle(updateInfo.title)
+            .setMessage(updateInfo.msg)
+            .setPositiveButton(getString(R.string.module_silentupdate_install), null)
+            .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
+            .create()
+    dialog.setOnShowListener {
+        //positive
+        val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        posBtn.setOnClickListener {
+            if (!updateInfo.isForce) dialog.dismiss()
+            this.constructOpenApkIntentV2(uri)
+        }
+        val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+        //negative
+        if (updateInfo.isForce) {
+            negBtn.visibility = View.GONE
+        } else {
+            negBtn.setOnClickListener {
+                dialog.dismiss()
+                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)
+
+            }
+        }
+    }
+    dialog.show()
+}
+
 //更新Notification
 internal fun Context?.showInstallNotification(file: File) {
     this?.loge("showInstallNotification")
@@ -191,21 +261,58 @@ internal fun Context?.showInstallNotification(file: File) {
     }
 }
 
+//更新Notification
+internal fun Context?.showInstallNotificationV2(uri: Uri) {
+    this?.loge("showInstallNotification")
+    val activity = this ?: return
+    val notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    //判断是否在时间间隔内
+    val dialogTime = SPCenter.getDialogTime()
+    if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
+        val updateInfo = SPCenter.getUpdateInfo()
+        val title = updateInfo.title
+        val msg = updateInfo.msg
+        val intent = activity.constructOpenApkIntentV2(uri)
+        val pIntent = PendingIntent.getActivity(activity, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val builder = NotificationCompat.Builder(activity, Const.NOTIFICATION_CHANNEL_ID).apply {
+            this.setSmallIcon(android.R.drawable.stat_sys_download_done)// 设置小图标
+            this.setLargeIcon(BitmapFactory.decodeResource(activity.resources, getAppIcon(activity)))//设置大图标
+            this.setTicker(title)// 手机状态栏的提示----最上面的一条
+            this.setWhen(System.currentTimeMillis())// 设置时间
+            this.setContentTitle(title)// 设置标题
+            this.setContentText(msg)// 设置通知的内容
+            this.setContentIntent(pIntent)// 点击后的意图
+            this.setDefaults(Notification.DEFAULT_ALL)// 设置提示全部
+            this.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//锁屏通知
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.setChannelId(Const.NOTIFICATION_CHANNEL_ID)
+            }
+        }
+
+        val notification = builder.build()// 4.1以上要用才起作用
+        notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL// 点击后自动取消
+        //显示
+        notificationManager.notify(UUID.randomUUID().hashCode(), notification)
+    }
+}
+
 
 /**
  * 状态：文件已经存在或Wifi情况下下载完成
  * 显示Dialog:提示用户安装
  */
-internal fun ContextWrapper?.showInstallDialog(file: File) {
+internal fun ContextWrapper?.showInstallDialog(uri: Uri) {
     try {
         this?.loge("showInstallDialog")
         //判断是否在时间间隔内
         val dialogTime = SPCenter.getDialogTime()
         if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
             if (SilentUpdate.installDialogShowAction != null) {
-                this.showCustomInstallDialog(file)
+                this?.loge("自定义安装弹窗1")
+                this.showCustomInstallDialog(uri)
             } else {
-                this.showSystemInstallDialog(file)
+                this.showSystemInstallDialogV2(uri)
             }
         }
     } catch (e: Exception) {
@@ -214,13 +321,13 @@ internal fun ContextWrapper?.showInstallDialog(file: File) {
 }
 
 //显示 自定义-安装弹窗
-private fun ContextWrapper?.showCustomInstallDialog(file: File) {
+private fun ContextWrapper?.showCustomInstallDialog(uri: Uri) {
     try {
         if (this == null) return
         SilentUpdate.installDialogShowAction?.show(
                 context = this,
                 updateInfo = SPCenter.getUpdateInfo(),
-                positiveClick = { this.openApkByFilePath(file) },
+                positiveClick = { this.openApkByUri(uri) },
                 negativeClick = {
                     SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
                 }
@@ -299,7 +406,7 @@ private fun getAppIcon(context: Context): Int {
 /**
  * 获取应用的名字
  */
-internal fun Context.getAppName(): String? {
+internal fun Context.getAppName(): String {
     val pm: PackageManager = packageManager
     try {
         val info = pm.getApplicationInfo(this.packageName, 0)

@@ -13,6 +13,7 @@ internal object SPCenter {
     private val sp by lazy { ContextCenter.getAppContext().getSharedPreferences(BuildConfig.LIBRARY_PACKAGE_NAME, Context.MODE_PRIVATE) }
     private val mGson by lazy { Gson() }
 
+    var key: String = ""
 
     /**
      * 对应downloadManager
@@ -21,15 +22,16 @@ internal object SPCenter {
     private val DOWNLOAD_TASK_ID = "download_task_id"
 
     internal fun clearDownloadTaskId() {
-        sp.edit().remove(DOWNLOAD_TASK_ID).apply()
+        sp.edit().clear().apply()
+        key = ""
     }
 
-    internal fun setDownloadTaskId(apkTaskID: Long) {
-        sp.edit().putLong(DOWNLOAD_TASK_ID, apkTaskID).apply()
+    internal fun setDownloadTaskId(key: String, apkTaskID: Long) {
+        sp.edit().putLong(key, apkTaskID).apply()
     }
 
-    internal fun getDownloadTaskId(): Long {
-        return sp.getLong(DOWNLOAD_TASK_ID, -1L)
+    internal fun getDownloadTaskId(key: String): Long {
+        return sp.getLong(key, -1L)
     }
 
     /**
@@ -61,7 +63,7 @@ internal object SPCenter {
     fun getUpdateInfo(): UpdateInfo {
         val updateInfoStr = sp.getString(UPDATE_INFO, "") as String
         loge(updateInfoStr)
-        return  mGson.fromJson(updateInfoStr,UpdateInfo::class.java)
+        return mGson.fromJson(updateInfoStr, UpdateInfo::class.java)
     }
 
     //修改更新内容

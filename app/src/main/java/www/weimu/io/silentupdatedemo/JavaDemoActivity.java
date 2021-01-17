@@ -29,6 +29,7 @@ public class JavaDemoActivity extends AppCompatActivity {
 
     //检查权限 step1
     private void checkPermission() {
+        getLatestApk();
 //        Disposable d = new RxPermissions(this)
 //                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //                .subscribe(new Consumer<Boolean>() {

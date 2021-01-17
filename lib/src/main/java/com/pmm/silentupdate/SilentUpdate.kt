@@ -7,6 +7,7 @@ import android.content.Context
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
+import android.os.Environment
 import android.text.TextUtils
 import com.pmm.silentupdate.core.*
 import com.pmm.silentupdate.strategy.MobileUpdateStrategy
@@ -40,6 +41,14 @@ object SilentUpdate {
                 channelName = channelName,
                 channelDesc = channelName
         )
+        //创建更新要用的apk文件夹
+        val state = Environment.getExternalStorageState()
+        val rootDir = if (state == Environment.MEDIA_MOUNTED)
+            "${(context.externalCacheDir?.absolutePath) ?: ""}/${Environment.DIRECTORY_DOWNLOADS}/"
+        else
+            context.cacheDir
+        val folderDir = File("$rootDir")
+        if (!folderDir.exists()) folderDir.mkdirs()
     }
 
     /**
@@ -139,51 +148,6 @@ object SilentUpdate {
         SPCenter.clearDownloadTaskId()
         SPCenter.clearDialogTime()
         SPCenter.clearUpdateInfo()
-    }
-
-    /**
-     * 删除apk 手动删除 已安装的apk
-     * @param version 版本
-     */
-    fun deleteApk(version: String): Boolean {
-        val context = ContextCenter.getAppContext()
-        val path = "${Const.UPDATE_FILE_DIR}${context.getAppName()}_v$version.apk"
-        return deleteFile(path)
-    }
-
-
-    /**
-     * delete file or directory
-     * 删除文件或目录
-     *
-     * if path is null or empty, return true
-     * if path not exist, return true
-     * if path exist, delete recursion. return true
-     *
-     *
-     * @param path 文件路径
-     * @return 是否删除成功
-     */
-    private fun deleteFile(path: String): Boolean {
-        if (TextUtils.isEmpty(path))
-            return true
-        val file = File(path)
-        if (!file.exists())
-            return true
-        if (file.isFile)
-            return file.delete()
-
-        if (!file.isDirectory)
-            return false
-
-        for (f in file.listFiles()) {
-            if (f.isFile) {
-                f.delete()
-            } else if (f.isDirectory) {
-                deleteFile(f.absolutePath)
-            }
-        }
-        return file.delete()
     }
 }
 

@@ -39,11 +39,11 @@ internal object ContextCenter {
         activityStack.clear()
         context.registerActivityLifecycleCallbacks(object : ActivityLifeListener() {
 
-            override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 activityStack.add(WeakReference(activity))
             }
 
-            override fun onActivityDestroyed(activity: Activity?) {
+            override fun onActivityDestroyed(activity: Activity) {
                 activityStack.remove(WeakReference(activity))
             }
         })

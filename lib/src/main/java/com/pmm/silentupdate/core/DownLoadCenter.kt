@@ -6,9 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
-import java.io.File
-import java.net.URI
-import java.util.HashMap
+import java.util.*
 
 /**
  * Author:你需要一台永动机
@@ -19,14 +17,13 @@ internal object DownLoadCenter {
 
     private val downloadManager: DownloadManager by lazy { ContextCenter.getAppContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager }
     private val appUpdateReceiver: AppUpdateReceiver by lazy { AppUpdateReceiver() }
-    var onDownloadComplete: ((file: File) -> Unit)? = null
+    var onDownloadComplete: ((uri: Uri) -> Unit)? = null
 
     //更新apk Wifi&Mobile
-    internal fun addRequest(apkUrl: String, fileName: String?, isMobileMode: Boolean = false) {
+    internal fun addRequest(apkUrl: String, fileName: String, isMobileMode: Boolean = false) {
         bindReceiver() //绑定广播接收者
         val uri = Uri.parse(apkUrl)
         loge("url=$apkUrl")
-        loge("uri=$uri")
         val request = DownloadManager.Request(uri)
         //设置在什么网络情况下进行下载
         request.setAllowedNetworkTypes(if (isMobileMode) DownloadManager.Request.NETWORK_MOBILE else DownloadManager.Request.NETWORK_WIFI)
@@ -44,7 +41,7 @@ internal object DownLoadCenter {
         try {
             id = downloadManager.enqueue(request)
             //存入到share里
-            SPCenter.setDownloadTaskId(id)
+            SPCenter.setDownloadTaskId(fileName, id)
         } catch (e: Exception) {
             //e.printStackTrace()
         }
@@ -57,6 +54,11 @@ internal object DownLoadCenter {
         query.setFilterById(id)
         val cursor = downloadManager.query(query)
         while (cursor.moveToNext()) {
+            val title = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE))
+            val uri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+            loge("id = $id")
+            loge("title = $title")
+            loge("uri = $uri")
             return cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
         }
         cursor.close()
@@ -87,24 +89,26 @@ internal object DownLoadCenter {
         return filePath
     }
 
+    //通过下载id获取 文件地址
+    internal fun getFileUriByTaskId(id: Long): Uri? = downloadManager.getUriForDownloadedFile(id)
 
     //下载完成
     private fun downloadComplete(intent: Intent) {
         loge("下载完成")
         val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
         //判断ID是否一致
-        if (id != SPCenter.getDownloadTaskId()) return
+        if (id != SPCenter.getDownloadTaskId(SPCenter.key)) return
         loge("注销接收者")
         unbindReceiver()//注销接收者
         try {
-            val uri = Uri.parse(getFilePathByTaskId(id)).toString()
-            if (uri.isBlank()) {
-                loge("下载了无效文件，请确定url是否可以成功请求")
-                return
-            }
+            val uri = getFileUriByTaskId(id) ?: return
+//            if (uri.isnu) {
+//                loge("下载了无效文件，请确定url是否可以成功请求")
+//                return
+//            }
             //必须try-catch
-            val file = File(URI(uri))
-            onDownloadComplete?.invoke(file)
+//            val file = File(URI(uri))
+            onDownloadComplete?.invoke(uri)
         } catch (e: Exception) {
             e.printStackTrace()
         }

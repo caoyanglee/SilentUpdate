@@ -3,24 +3,24 @@
 buildscript {
     //版本
     ext.versions = [
-            'minSdk'    : 21,
-            'compileSdk': 29,
-            'targetSdk' : 29,
+            'minSdk'    : 18,
+            'compileSdk': 30,
+            'targetSdk' : 30,
     ]
     //依赖
     ext.deps = [
             'core'     : [
-                    'ui'         : 'com.github.caoyanglee:universalui:0.5.99',
+                    'ui'         : 'com.github.caoyanglee:universalui:0.6.9',
             ]
     ]
     //常规
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.21'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 //        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'

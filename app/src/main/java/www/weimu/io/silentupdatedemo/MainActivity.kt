@@ -32,11 +32,11 @@ class MainActivity : AppCompatActivity() {
         }
         //delete apk
         btnDeleteApk.setOnClickListener {
-            if (SilentUpdate.deleteApk(version = "1.1.2"))
-            if (SilentUpdate.deleteApk(version = "1.2.1"))
-                toast("删除成功")
-            else
-                toast("删除失败")
+//            if (SilentUpdate.deleteApk(version = "1.1.2"))
+//            if (SilentUpdate.deleteApk(version = "1.2.1"))
+//                toast("删除成功")
+//            else
+//                toast("删除失败")
         }
     }
 
