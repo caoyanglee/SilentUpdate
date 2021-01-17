@@ -44,7 +44,7 @@ allprojects {
 **app的build.gradle**
 [![](https://jitpack.io/v/caoyanglee/SilentUpdate.svg)](https://jitpack.io/#caoyanglee/SilentUpdate)
 
-> 注意：默认使用kotlin 1.4.0版本的库
+> 注意：默认使用kotlin 1.4.21版本的库
 
 ```gradle
 implementation 'com.github.caoyanglee:SilentUpdate:{latestVersion}'
@@ -58,7 +58,6 @@ implementation 'com.github.caoyanglee:SilentUpdate:{latestVersion}'
 <!-- 检查网络状态 -->
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <!-- 存储权限 -->
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <!-- 通知权限 -->
 <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
