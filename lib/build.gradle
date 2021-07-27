@@ -42,7 +42,7 @@ dependencies {
     //kt
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //json
-    compile 'com.google.code.gson:gson:2.8.5'
+    compile 'com.google.code.gson:gson:2.8.6'
 }
 //记得加上这个
 //apply from: "bintrayUpload.gradle"
