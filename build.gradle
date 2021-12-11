@@ -16,9 +16,9 @@ buildscript {
     //常规
     ext.kotlin_version = '1.6.0'
     repositories {
-        jcenter()
-        google()
-        mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/public' }//阿里云 maven & jcenter
+        maven { url "https://jitpack.io" } // 添加jitpack
+        maven { url 'https://maven.aliyun.com/repository/google' }//阿里云 google
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.3'
@@ -30,10 +30,9 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
-        jcenter()
-        google()
-        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/public' }//阿里云 maven & jcenter
+        maven { url "https://jitpack.io" } // 添加jitpack
+        maven { url 'https://maven.aliyun.com/repository/google' }//阿里云 google
     }
     //加上这些
     tasks.withType(Javadoc) {
