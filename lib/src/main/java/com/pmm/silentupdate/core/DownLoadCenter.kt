@@ -32,7 +32,7 @@ internal object DownLoadCenter {
         request.setTitle(fileName)
         request.setDescription(ContextCenter.getAppContext().packageName)
         request.setAllowedOverRoaming(false)
-        request.setVisibleInDownloadsUi(true)
+//        request.setVisibleInDownloadsUi(true)
         //设置文件存放目录
         //request.setDestinationInExternalFilesDir(AppData.getContext(), "download", "youudo_v" + version + ".apk");
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)

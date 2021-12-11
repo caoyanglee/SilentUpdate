@@ -9,7 +9,6 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -56,11 +55,16 @@ internal fun Context.constructOpenApkIntent(file: File): Intent {
     val apkUri = getUri4File(this, file)
     intent.setDataAndType(apkUri, "application/vnd.android.package-archive")
     //查询所有符合 intent 跳转目标应用类型的应用，注意此方法必须放置setDataAndType的方法之后
-    val resInfoList: List<ResolveInfo> = this.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    val resInfoList: List<ResolveInfo> =
+        this.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
     //然后全部授权
     for (resolveInfo in resInfoList) {
         val packageName = resolveInfo.activityInfo.packageName
-        this.grantUriPermission(packageName, apkUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        this.grantUriPermission(
+            packageName,
+            apkUri,
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
     }
     return intent
 }
@@ -80,11 +84,16 @@ internal fun Context.constructOpenApkIntentV2(uri: Uri): Intent {
     val apkUri = uri
     intent.setDataAndType(apkUri, "application/vnd.android.package-archive")
     //查询所有符合 intent 跳转目标应用类型的应用，注意此方法必须放置setDataAndType的方法之后
-    val resInfoList: List<ResolveInfo> = this.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    val resInfoList: List<ResolveInfo> =
+        this.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
     //然后全部授权
     for (resolveInfo in resInfoList) {
         val packageName = resolveInfo.activityInfo.packageName
-        this.grantUriPermission(packageName, apkUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        this.grantUriPermission(
+            packageName,
+            apkUri,
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
     }
     return intent
 }
@@ -131,12 +140,12 @@ internal fun ContextWrapper?.showSystemDownloadDialog(apkUrl: String, fileName: 
     if (this == null) return
     val updateInfo = SPCenter.getUpdateInfo()
     val dialog = AlertDialog.Builder(this)
-            .setCancelable(!updateInfo.isForce)
-            .setTitle(updateInfo.title)
-            .setMessage(updateInfo.msg)
-            .setPositiveButton(getString(R.string.module_silentupdate_update), null)
-            .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
-            .create()
+        .setCancelable(!updateInfo.isForce)
+        .setTitle(updateInfo.title)
+        .setMessage(updateInfo.msg)
+        .setPositiveButton(getString(R.string.module_silentupdate_update), null)
+        .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
+        .create()
     dialog.setOnShowListener {
         //positive
         val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -164,12 +173,12 @@ internal fun ContextWrapper?.showSystemInstallDialog(file: File) {
     if (this == null) return
     val updateInfo = SPCenter.getUpdateInfo()
     val dialog = AlertDialog.Builder(this)
-            .setCancelable(!updateInfo.isForce)
-            .setTitle(updateInfo.title)
-            .setMessage(updateInfo.msg)
-            .setPositiveButton(getString(R.string.module_silentupdate_install), null)
-            .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
-            .create()
+        .setCancelable(!updateInfo.isForce)
+        .setTitle(updateInfo.title)
+        .setMessage(updateInfo.msg)
+        .setPositiveButton(getString(R.string.module_silentupdate_install), null)
+        .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
+        .create()
     dialog.setOnShowListener {
         //positive
         val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -197,12 +206,12 @@ internal fun ContextWrapper?.showSystemInstallDialogV2(uri: Uri) {
     if (this == null) return
     val updateInfo = SPCenter.getUpdateInfo()
     val dialog = AlertDialog.Builder(this)
-            .setCancelable(!updateInfo.isForce)
-            .setTitle(updateInfo.title)
-            .setMessage(updateInfo.msg)
-            .setPositiveButton(getString(R.string.module_silentupdate_install), null)
-            .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
-            .create()
+        .setCancelable(!updateInfo.isForce)
+        .setTitle(updateInfo.title)
+        .setMessage(updateInfo.msg)
+        .setPositiveButton(getString(R.string.module_silentupdate_install), null)
+        .setNegativeButton(getString(R.string.module_silentupdate_hold_on), null)
+        .create()
     dialog.setOnShowListener {
         //positive
         val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -229,7 +238,8 @@ internal fun ContextWrapper?.showSystemInstallDialogV2(uri: Uri) {
 internal fun Context?.showInstallNotification(file: File) {
     this?.loge("showInstallNotification")
     val activity = this ?: return
-    val notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val notificationManager: NotificationManager =
+        this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     //判断是否在时间间隔内
     val dialogTime = SPCenter.getDialogTime()
     if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
@@ -237,11 +247,19 @@ internal fun Context?.showInstallNotification(file: File) {
         val title = updateInfo.title
         val msg = updateInfo.msg
         val intent = activity.constructOpenApkIntent(file)
-        val pIntent = PendingIntent.getActivity(activity, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pIntent = PendingIntent.getActivity(
+            activity, UUID.randomUUID().hashCode(), intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val builder = NotificationCompat.Builder(activity, Const.NOTIFICATION_CHANNEL_ID).apply {
             this.setSmallIcon(android.R.drawable.stat_sys_download_done)// 设置小图标
-            this.setLargeIcon(BitmapFactory.decodeResource(activity.resources, getAppIcon(activity)))//设置大图标
+            this.setLargeIcon(
+                BitmapFactory.decodeResource(
+                    activity.resources,
+                    getAppIcon(activity)
+                )
+            )//设置大图标
             this.setTicker(title)// 手机状态栏的提示----最上面的一条
             this.setWhen(System.currentTimeMillis())// 设置时间
             this.setContentTitle(title)// 设置标题
@@ -265,7 +283,8 @@ internal fun Context?.showInstallNotification(file: File) {
 internal fun Context?.showInstallNotificationV2(uri: Uri) {
     this?.loge("showInstallNotification")
     val activity = this ?: return
-    val notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val notificationManager: NotificationManager =
+        this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     //判断是否在时间间隔内
     val dialogTime = SPCenter.getDialogTime()
     if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
@@ -273,11 +292,21 @@ internal fun Context?.showInstallNotificationV2(uri: Uri) {
         val title = updateInfo.title
         val msg = updateInfo.msg
         val intent = activity.constructOpenApkIntentV2(uri)
-        val pIntent = PendingIntent.getActivity(activity, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pIntent = PendingIntent.getActivity(
+            activity,
+            UUID.randomUUID().hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val builder = NotificationCompat.Builder(activity, Const.NOTIFICATION_CHANNEL_ID).apply {
             this.setSmallIcon(android.R.drawable.stat_sys_download_done)// 设置小图标
-            this.setLargeIcon(BitmapFactory.decodeResource(activity.resources, getAppIcon(activity)))//设置大图标
+            this.setLargeIcon(
+                BitmapFactory.decodeResource(
+                    activity.resources,
+                    getAppIcon(activity)
+                )
+            )//设置大图标
             this.setTicker(title)// 手机状态栏的提示----最上面的一条
             this.setWhen(System.currentTimeMillis())// 设置时间
             this.setContentTitle(title)// 设置标题
@@ -325,12 +354,12 @@ private fun ContextWrapper?.showCustomInstallDialog(uri: Uri) {
     try {
         if (this == null) return
         SilentUpdate.installDialogShowAction?.show(
-                context = this,
-                updateInfo = SPCenter.getUpdateInfo(),
-                positiveClick = { this.openApkByUri(uri) },
-                negativeClick = {
-                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
-                }
+            context = this,
+            updateInfo = SPCenter.getUpdateInfo(),
+            positiveClick = { this.openApkByUri(uri) },
+            negativeClick = {
+                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
+            }
         )
     } catch (e: Exception) {
         //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
@@ -363,12 +392,12 @@ private fun ContextWrapper?.showCustomDownloadDialog(apkUrl: String, fileName: S
     try {
         if (this == null) return
         SilentUpdate.downLoadDialogShowAction?.show(
-                context = this,
-                updateInfo = SPCenter.getUpdateInfo(),
-                positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
-                negativeClick = {
-                    SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
-                })
+            context = this,
+            updateInfo = SPCenter.getUpdateInfo(),
+            positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
+            negativeClick = {
+                SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
+            })
     } catch (e: Exception) {
         //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
     }

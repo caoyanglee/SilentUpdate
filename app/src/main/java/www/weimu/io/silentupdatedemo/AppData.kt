@@ -1,20 +1,20 @@
 package www.weimu.io.silentupdatedemo
 
 import android.app.AlertDialog
+import android.app.Application
 import android.content.ContextWrapper
+import android.util.Log
 import android.view.View
 import com.pmm.silentupdate.SilentUpdate
 import com.pmm.silentupdate.core.DialogShowAction
 import com.pmm.silentupdate.core.UpdateInfo
-import com.pmm.ui.OriginAppData
 
 /**
  * Author:你需要一台永动机
  * Date:2018/1/17 13:59
  * Description:
  */
-class AppData : OriginAppData() {
-    override fun isDebug(): Boolean = BuildConfig.DEBUG
+class AppData : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -24,6 +24,7 @@ class AppData : OriginAppData() {
         SilentUpdate.intervalDay = 7
         //下载提示 -> 流量模式
         SilentUpdate.downLoadDialogShowAction = object : DialogShowAction {
+
             override fun show(context: ContextWrapper, updateInfo: UpdateInfo, positiveClick: () -> Unit, negativeClick: () -> Unit) {
                 val dialog = AlertDialog.Builder(context)
                         .setCancelable(!updateInfo.isForce)

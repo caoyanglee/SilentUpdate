@@ -46,7 +46,7 @@ public class JavaDemoActivity extends AppCompatActivity {
     //获取下载链接 step2
     public void getLatestApk() {
         //具体的网络请求步骤自己操作
-        final String apkUrl = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk";
+        final String apkUrl = "http://file.market.xiaomi.com/download/AppStore/09867a8623a9f4d3f954993da6e33b06f74a7a51b/com.pmm.remember_0.7.3_patch8.apk";
         //判断版本号
         final String latestVersion = "1.2.1";
         String currentVersion = BuildConfig.VERSION_NAME;

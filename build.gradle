@@ -3,37 +3,37 @@
 buildscript {
     //版本
     ext.versions = [
-            'minSdk'    : 18,
-            'compileSdk': 30,
-            'targetSdk' : 30,
+            'minSdk'    : 21,
+            'compileSdk': 31,
+            'targetSdk' : 31,
     ]
     //依赖
     ext.deps = [
             'core'     : [
-                    'ui'         : 'com.github.caoyanglee:universalui:0.6.12',
+                    'ui'         : 'com.github.caoyanglee:universalui:0.6.24'
             ]
     ]
     //常规
-    ext.kotlin_version = '1.5.21'
+    ext.kotlin_version = '1.6.0'
     repositories {
-        google()
         jcenter()
+        google()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 //        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
-//        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
 allprojects {
     repositories {
-        google()
+        mavenCentral()
         jcenter()
-        maven { url 'https://jitpack.io' }
-
+        google()
+        maven { url "https://jitpack.io" }
     }
     //加上这些
     tasks.withType(Javadoc) {
