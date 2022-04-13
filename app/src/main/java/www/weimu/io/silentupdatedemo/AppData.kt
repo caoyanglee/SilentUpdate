@@ -38,6 +38,7 @@ class AppData : Application() {
                     val posBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     posBtn.setOnClickListener {
                         if (!updateInfo.isForce) dialog.dismiss()
+
                         positiveClick()
                     }
                     val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)

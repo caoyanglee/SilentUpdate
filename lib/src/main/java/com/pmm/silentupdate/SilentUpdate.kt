@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Environment
-import android.text.TextUtils
 import com.pmm.silentupdate.core.*
 import com.pmm.silentupdate.strategy.MobileUpdateStrategy
 import com.pmm.silentupdate.strategy.UpdateStrategy
@@ -36,10 +35,10 @@ object SilentUpdate {
         //增加通知频道【兼容8.0】
         val channelName = context.getString(R.string.module_silentupdate_channelName)
         createNotificationChannel(
-                context = context,
-                channelId = Const.NOTIFICATION_CHANNEL_ID,
-                channelName = channelName,
-                channelDesc = channelName
+            context = context,
+            channelId = Const.NOTIFICATION_CHANNEL_ID,
+            channelName = channelName,
+            channelDesc = channelName
         )
         //创建更新要用的apk文件夹
         val state = Environment.getExternalStorageState()
@@ -56,16 +55,17 @@ object SilentUpdate {
      * @param importance NotificationManager.IMPORTANCE_LOW
      */
     private fun createNotificationChannel(
-            context: Context,
-            channelId: String,
-            channelName: String,
-            channelDesc: String = "",
-            importance: Int = 0,
-            enableVibration: Boolean = true,
-            lightColor: Int = Color.GREEN
+        context: Context,
+        channelId: String,
+        channelName: String,
+        channelDesc: String = "",
+        importance: Int = 0,
+        enableVibration: Boolean = true,
+        lightColor: Int = Color.GREEN
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val mNotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             // channelId 通知渠道的id
             // channelName 用户可以看到的通知渠道的名字.
             // importance 用户可以看到的通知渠道的描述
@@ -96,10 +96,12 @@ object SilentUpdate {
         updateInfo.receive()
         val apkUrl = updateInfo.apkUrl
         val latestVersion = updateInfo.latestVersion
-        if (apkUrl.isBlank() or latestVersion.isBlank()) return
+        if (latestVersion.isBlank()) return//apkUrl可以为空，为空的情况下，直接弹窗，跳过下载策略
         SPCenter.modifyUpdateInfo(updateInfo)
 
         val context = ContextCenter.getAppContext()
+
+        if (checkShouldShowDialog2OpenMark(updateInfo)) return
 
         //策略模式
         val strategy: UpdateStrategy = when {
@@ -108,7 +110,7 @@ object SilentUpdate {
             //流量
             else -> mobileUpdateStrategy
         }
-        strategy.update(apkUrl, latestVersion)
+        strategy.update(apkUrl, latestVersion, isForce = updateInfo.isForce)
     }
 
     //是否连接Wifi
@@ -133,11 +135,13 @@ object SilentUpdate {
         updateInfo.receive()
         val apkUrl = updateInfo.apkUrl
         val latestVersion = updateInfo.latestVersion
-        if (apkUrl.isBlank() or latestVersion.isBlank()) return
+        if (latestVersion.isBlank()) return///apkUrl可以为空，为空的情况下，直接弹窗，跳过下载策略
         SPCenter.modifyUpdateInfo(updateInfo)
 
+        if (checkShouldShowDialog2OpenMark(updateInfo)) return
+
         //策略模式
-        mobileUpdateStrategy.update(apkUrl, latestVersion)
+        mobileUpdateStrategy.update(apkUrl, latestVersion, isForce = updateInfo.isForce)
     }
 
 
@@ -148,6 +152,19 @@ object SilentUpdate {
         SPCenter.clearDownloadTaskId()
         SPCenter.clearDialogTime()
         SPCenter.clearUpdateInfo()
+    }
+
+
+    //检查是否要打开进入应用市场的
+    private fun checkShouldShowDialog2OpenMark(updateInfo: UpdateInfo): Boolean {
+        val dialogTime = SPCenter.getDialogTime()
+        //无下载链接，直接弹窗
+        if (updateInfo.apkUrl.isEmpty()) {
+            val activity = ContextCenter.getTopActivity()
+            activity.showDownloadDialog(isForce = updateInfo.isForce)
+            return true
+        }
+        return false
     }
 }
 

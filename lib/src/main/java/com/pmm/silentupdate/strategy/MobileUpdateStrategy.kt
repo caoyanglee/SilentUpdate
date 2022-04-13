@@ -14,9 +14,10 @@ internal class MobileUpdateStrategy : UpdateStrategy {
     init {
         //下载完成后
         DownLoadCenter.onDownloadComplete = {
+            val updateInfo = SPCenter.getUpdateInfo()
             Handler().postDelayed({
                 val activity = ContextCenter.getTopActivity()
-                activity.showInstallDialog(it)//显示安装弹窗
+                activity.showInstallDialog(it,updateInfo.isForce)//显示安装弹窗
                 ContextCenter.getAppContext().openApkByUri(it)
             }, 200)
         }
@@ -24,7 +25,7 @@ internal class MobileUpdateStrategy : UpdateStrategy {
 
 
     //升级操作 流量的情况下
-    override fun update(apkUrl: String, latestVersion: String) {
+    override fun update(apkUrl: String, latestVersion: String, isForce: Boolean) {
         try {
             apkUrl.checkUpdateUrl()
         } catch (e: Exception) {
@@ -42,11 +43,11 @@ internal class MobileUpdateStrategy : UpdateStrategy {
         val path = Const.UPDATE_FILE_DIR + fileName
         loge("taskID=$taskId")
         loge("uri=$uri")
-        if (uri!=null&&File(path).isFileExist()) {
+        if (uri != null && File(path).isFileExist()) {
             loge("文件已经存在")
             if (DownLoadCenter.isDownTaskSuccess(taskId)) {
                 loge("任务已经下载完成")
-                activity.showInstallDialog(uri) //弹出dialog
+                activity.showInstallDialog(uri, isForce) //弹出dialog
             } else if (DownLoadCenter.isDownTaskPause(taskId)) {
                 loge("任务已经暂停")
                 //启动下载
@@ -55,11 +56,11 @@ internal class MobileUpdateStrategy : UpdateStrategy {
             } else if (DownLoadCenter.isDownTaskProcessing(taskId)) {
                 loge("任务正在执行当中")
             } else {
-                activity.showInstallDialog(uri) //弹出dialog
+                activity.showInstallDialog(uri, isForce) //弹出dialog
             }
         } else {
             loge("显示 下载弹窗")
-            activity.showDownloadDialog(apkUrl, fileName)//显示 下载弹窗
+            activity.showDownloadDialog(apkUrl, fileName, isForce = isForce)//显示 下载弹窗
         }
     }
 

@@ -15,6 +15,7 @@ import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import com.pmm.silentupdate.BuildConfig
@@ -136,7 +137,10 @@ internal fun String.checkUpdateUrl() {
 }
 
 //显示 系统内置-下载弹窗
-internal fun ContextWrapper?.showSystemDownloadDialog(apkUrl: String, fileName: String) {
+internal fun ContextWrapper?.showSystemDownloadDialog(
+    apkUrl: String? = null,
+    fileName: String? = null
+) {
     if (this == null) return
     val updateInfo = SPCenter.getUpdateInfo()
     val dialog = AlertDialog.Builder(this)
@@ -152,7 +156,11 @@ internal fun ContextWrapper?.showSystemDownloadDialog(apkUrl: String, fileName: 
         posBtn.setOnClickListener {
             if (!updateInfo.isForce) dialog.dismiss()
             //this?.toast("开始下载......")
-            DownLoadCenter.addRequest(apkUrl, fileName, true)
+            if (apkUrl != null && fileName != null) {
+                DownLoadCenter.addRequest(apkUrl, fileName, true)
+            } else {
+                openMark()
+            }
         }
         val negBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
         //negative
@@ -331,12 +339,16 @@ internal fun Context?.showInstallNotificationV2(uri: Uri) {
  * 状态：文件已经存在或Wifi情况下下载完成
  * 显示Dialog:提示用户安装
  */
-internal fun ContextWrapper?.showInstallDialog(uri: Uri) {
+internal fun ContextWrapper?.showInstallDialog(uri: Uri, isForce: Boolean) {
     try {
         this?.loge("showInstallDialog")
         //判断是否在时间间隔内
         val dialogTime = SPCenter.getDialogTime()
-        if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
+        if (isForce || dialogTime == 0L || checkMoreThanDays(
+                dialogTime,
+                SilentUpdate.intervalDay
+            )
+        ) {
             if (SilentUpdate.installDialogShowAction != null) {
                 this?.loge("自定义安装弹窗1")
                 this.showCustomInstallDialog(uri)
@@ -350,13 +362,20 @@ internal fun ContextWrapper?.showInstallDialog(uri: Uri) {
 }
 
 //显示 自定义-安装弹窗
-private fun ContextWrapper?.showCustomInstallDialog(uri: Uri) {
+private fun ContextWrapper?.showCustomInstallDialog(uri: Uri?) {
     try {
         if (this == null) return
         SilentUpdate.installDialogShowAction?.show(
             context = this,
             updateInfo = SPCenter.getUpdateInfo(),
-            positiveClick = { this.openApkByUri(uri) },
+            positiveClick = {
+                if (uri != null) {
+                    this.openApkByUri(uri)
+                } else {
+                    openMark()
+                }
+
+            },
             negativeClick = {
                 SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
             }
@@ -371,11 +390,18 @@ private fun ContextWrapper?.showCustomInstallDialog(uri: Uri) {
  * 状态：流量
  * 显示Dialog：提示用户下载
  */
-internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String) {
+internal fun ContextWrapper?.showDownloadDialog(
+    apkUrl: String? = null, fileName: String? = null,
+    isForce: Boolean = false
+) {
     try {
         this?.loge("showDownloadDialog")
         val dialogTime = SPCenter.getDialogTime()
-        if (dialogTime == 0L || checkMoreThanDays(dialogTime, SilentUpdate.intervalDay)) {
+        if (isForce || dialogTime == 0L || checkMoreThanDays(
+                dialogTime,
+                SilentUpdate.intervalDay
+            )
+        ) {
             //判断是否有自定义的下载弹窗
             if (SilentUpdate.downLoadDialogShowAction != null) {
                 this.showCustomDownloadDialog(apkUrl, fileName)
@@ -388,13 +414,22 @@ internal fun ContextWrapper?.showDownloadDialog(apkUrl: String, fileName: String
     }
 }
 
-private fun ContextWrapper?.showCustomDownloadDialog(apkUrl: String, fileName: String) {
+private fun ContextWrapper?.showCustomDownloadDialog(
+    apkUrl: String? = null,
+    fileName: String? = null
+) {
     try {
         if (this == null) return
         SilentUpdate.downLoadDialogShowAction?.show(
             context = this,
             updateInfo = SPCenter.getUpdateInfo(),
-            positiveClick = { DownLoadCenter.addRequest(apkUrl, fileName, true) },
+            positiveClick = {
+                if (apkUrl != null && fileName != null) {
+                    DownLoadCenter.addRequest(apkUrl, fileName, true)
+                } else {
+                    openMark()
+                }
+            },
             negativeClick = {
                 SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
             })
@@ -452,4 +487,18 @@ internal fun Context.getAppName(): String {
 internal fun File.isFileExist(): Boolean {
     if (TextUtils.isEmpty(this.path)) return false
     return this.exists() && this.isFile
+}
+
+//打开市场-评价
+internal fun Context.openMark(packageName: String = this.packageName) {
+    try {
+        val uri = Uri.parse("market://details?id=$packageName")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Toast.makeText(this, "检测不到应用商店", Toast.LENGTH_SHORT).show()
+    }
+
 }

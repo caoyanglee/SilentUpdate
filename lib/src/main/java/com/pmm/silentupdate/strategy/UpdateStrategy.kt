@@ -10,6 +10,6 @@ import java.io.File
 internal interface UpdateStrategy {
 
     //更新
-    fun update(apkUrl: String, latestVersion: String)
+    fun update(apkUrl: String, latestVersion: String, isForce: Boolean = false)
 
 }
