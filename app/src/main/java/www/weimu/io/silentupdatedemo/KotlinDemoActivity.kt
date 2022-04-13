@@ -50,7 +50,7 @@ class KotlinDemoActivity : AppCompatActivity() {
                     this.apkUrl = to.apkUrl
                     this.latestVersion = to.latestVersion
                     this.msg = "1.bug修复"
-                    this.isForce = true
+                    this.isForce = false
                     this.extra = hashMapOf()
                 }
             }

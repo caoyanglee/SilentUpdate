@@ -4,13 +4,13 @@ buildscript {
     //版本
     ext.versions = [
             'minSdk'    : 21,
-            'compileSdk': 31,
-            'targetSdk' : 31,
+            'compileSdk': 30,
+            'targetSdk' : 30,
     ]
     //依赖
     ext.deps = [
             'core'     : [
-                    'ui'         : 'com.github.caoyanglee:universalui:0.7.0'
+                    'ui'         : 'com.github.caoyanglee:universalui:0.6.24'
             ]
     ]
     //常规
