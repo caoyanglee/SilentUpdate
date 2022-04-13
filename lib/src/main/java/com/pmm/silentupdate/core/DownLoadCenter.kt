@@ -15,7 +15,9 @@ import java.util.*
  */
 internal object DownLoadCenter {
 
-    private val downloadManager: DownloadManager by lazy { ContextCenter.getAppContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager }
+    private val downloadManager: DownloadManager by lazy {
+        ContextCenter.getAppContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    }
     private val appUpdateReceiver: AppUpdateReceiver by lazy { AppUpdateReceiver() }
     var onDownloadComplete: ((uri: Uri) -> Unit)? = null
 
@@ -25,8 +27,8 @@ internal object DownLoadCenter {
         val uri = Uri.parse(apkUrl)
         loge("url=$apkUrl")
         val request = DownloadManager.Request(uri)
-        //设置在什么网络情况下进行下载
-        request.setAllowedNetworkTypes(if (isMobileMode) DownloadManager.Request.NETWORK_MOBILE else DownloadManager.Request.NETWORK_WIFI)
+        //设置在什么网络情况下进行下载 没必要做限制！！！
+//        request.setAllowedNetworkTypes(if (isMobileMode) DownloadManager.Request.NETWORK_MOBILE else DownloadManager.Request.NETWORK_WIFI)
         //设置通知栏标题
         request.setNotificationVisibility(if (isMobileMode) DownloadManager.Request.VISIBILITY_VISIBLE else DownloadManager.Request.VISIBILITY_HIDDEN)
         request.setTitle(fileName)
@@ -83,7 +85,7 @@ internal object DownLoadCenter {
         val cursor = downloadManager.query(query)
         while (cursor.moveToNext()) {
             filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-                    ?: ""
+                ?: ""
         }
         cursor.close()
         return filePath
@@ -130,8 +132,10 @@ internal object DownLoadCenter {
             val address = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
             filePath = address
             val status = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-            val size = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
-            val sizeTotal = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+            val size =
+                cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
+            val sizeTotal =
+                cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
             val map = HashMap<String, String>()
         }
         cursor.close()
