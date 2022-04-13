@@ -37,6 +37,7 @@ class KotlinDemoActivity : AppCompatActivity() {
     private fun getLatestApk() {
         //具体的网络请求步骤自己操作
         MainScope().launch {
+            //http://file.market.xiaomi.com/download/AppStore/09867a8623a9f4d3f954993da6e33b06f74a7a51b/com.pmm.remember_0.7.3_patch8.apk
             val to = CheckVersionResultPO(
                 apkUrl = "",
                 latestVersion = "1.1.2"

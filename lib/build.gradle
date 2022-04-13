@@ -32,7 +32,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
+    //jitpack
+    project.afterEvaluate {
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    from components.release
+                }
+            }
+        }
+    }
 }
 
 dependencies {
