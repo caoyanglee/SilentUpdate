@@ -157,7 +157,6 @@ object SilentUpdate {
 
     //检查是否要打开进入应用市场的
     private fun checkShouldShowDialog2OpenMark(updateInfo: UpdateInfo): Boolean {
-        val dialogTime = SPCenter.getDialogTime()
         //无下载链接，直接弹窗
         if (updateInfo.apkUrl.isEmpty()) {
             val activity = ContextCenter.getTopActivity()
