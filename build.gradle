@@ -3,9 +3,9 @@
 buildscript {
     //版本
     ext.versions = [
-            'minSdk'    : 21,
-            'compileSdk': 30,
-            'targetSdk' : 30,
+            'minSdk'    : 23,
+            'compileSdk': 31,
+            'targetSdk' : 31,
     ]
     //依赖
     ext.deps = [
@@ -14,14 +14,14 @@ buildscript {
             ]
     ]
     //常规
-    ext.kotlin_version = '1.6.0'
+    ext.kotlin_version = '1.7.0'
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public' }//阿里云 maven & jcenter
         maven { url "https://jitpack.io" } // 添加jitpack
         maven { url 'https://maven.aliyun.com/repository/google' }//阿里云 google
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 //        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
