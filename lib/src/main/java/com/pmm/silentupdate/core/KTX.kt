@@ -125,7 +125,7 @@ internal fun Context.openApkByUri(uri: Uri) {
 
 //log
 internal fun Any.loge(message: String) {
-    if (BuildConfig.DEBUG) Log.e("silentUpdate", message)
+    if (SilentUpdate.isDebug) Log.e("silentUpdate", message)
 }
 
 //检查更新的URL

@@ -25,11 +25,16 @@ object SilentUpdate {
     private val mobileUpdateStrategy by lazy { MobileUpdateStrategy() }
     private val wifiUpdateStrategy by lazy { WifiUpdateStrategy() }
 
+    var isDebug = false
+        //是否是debug模式
+        private set
+
     /**
      * 静默更新的初始化
      * @param App的上下文
      */
-    fun init(context: Application) {
+    fun init(context: Application, isDebug: Boolean = false) {
+        this.isDebug = isDebug
         //上下文初始化
         ContextCenter.init(context)
         //增加通知频道【兼容8.0】
