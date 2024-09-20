@@ -357,6 +357,7 @@ internal fun ContextWrapper?.showInstallDialog(uri: Uri, isForce: Boolean) {
             }
         }
     } catch (e: Exception) {
+        this?.loge("showInstallDialog error : $e")
         //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
     }
 }
@@ -381,6 +382,7 @@ private fun ContextWrapper?.showCustomInstallDialog(uri: Uri?) {
             }
         )
     } catch (e: Exception) {
+        this?.loge("showCustomInstallDialog error : $e")
         //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
     }
 }
@@ -410,6 +412,7 @@ internal fun ContextWrapper?.showDownloadDialog(
             }
         }
     } catch (e: Exception) {
+        this?.loge("showDownloadDialog error : $e")
         //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
     }
 }
@@ -434,6 +437,7 @@ private fun ContextWrapper?.showCustomDownloadDialog(
                 SPCenter.modifyDialogTime(Calendar.getInstance().time.time)//记录
             })
     } catch (e: Exception) {
+        this?.loge("showCustomDownloadDialog error : $e")
         //Resolve：android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@2132278 is not valid; is your activity running?
     }
 }

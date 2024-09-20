@@ -14,12 +14,12 @@ import java.util.*
  */
 internal object ContextCenter {
     private lateinit var applicationContext: WeakReference<Context>
-    private val activityStack = Stack<WeakReference<Activity?>>()
+    private val activityStack = Stack<Activity>()
 
     internal fun getTopActivity(): Activity? {
         var targetActivity: Activity? = null
         try {
-            targetActivity = activityStack.peek().get()
+            targetActivity = activityStack.peek()
         } catch (e: Exception) {
             //do nothing
         }
@@ -40,11 +40,11 @@ internal object ContextCenter {
         context.registerActivityLifecycleCallbacks(object : ActivityLifeListener() {
 
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                activityStack.add(WeakReference(activity))
+                activityStack.add(activity)
             }
 
             override fun onActivityDestroyed(activity: Activity) {
-                activityStack.remove(WeakReference(activity))
+                activityStack.remove(activity)
             }
         })
     }
